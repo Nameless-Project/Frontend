@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "796783302236",
+    "project_id": "hseslaves",
+    "storage_bucket": "hseslaves.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796783302236:android:4926d346a109f696267899",
+        "android_client_info": {
+          "package_name": "com.hse_project.hse_slaves"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796783302236-p3a6p59kkmm3atdh17pae0aa6d36cse3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hse_project.hse_slaves",
+            "certificate_hash": "e95d7198e6dc81bb3ee63fc5360d76006cdd3d16"
+          }
+        },
+        {
+          "client_id": "796783302236-1ushjqjshim044ioh6f0gndrquudg538.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQnGdK8qn-iWdN1Cy_fY3rvm_6mIYI7tw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796783302236-1ushjqjshim044ioh6f0gndrquudg538.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
