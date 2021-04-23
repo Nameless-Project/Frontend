@@ -15,20 +15,17 @@ class DataSource{
 
             val obj : JSONObject = JSONObject(URL(url).readText())
 
-            val blogArray = obj.getJSONArray("blogs")
 
-            for (i in 0 until blogArray.length()) {
-                val blog = blogArray.getJSONObject(i)
 
                 list.add(
                     BlogPost(
-                        blog.getString("title"),
-                        blog.getString("body"),
-                        blog.getString("image"),
-                        blog.getString("username"),
+                        obj.getString("name"),
+                        obj.getString("description"),
+                        obj.getString("date"),
+                        obj.getString("organizerid"),
                     )
                 )
-            }
+
             return list
         }
     }

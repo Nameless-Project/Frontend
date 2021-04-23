@@ -2,12 +2,12 @@ package com.hse_project.hse_slaves.posts
 
 data class BlogPost(
 
-    var title: String,
+    var name: String,
 
-    var body: String,
+    var description: String,
 
-    var image: String,
+    var date: String,
 
-    var username: String
+    var organizerid: String
 ) {
 }
