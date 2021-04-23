@@ -1,4 +1,4 @@
-package com.hse_project.hse_slaves.Posts
+package com.hse_project.hse_slaves.posts
 
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +26,7 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when(holder){
 
             is BlogViewHolder ->{
-                holder.bind(items.get(position))
+                holder.bind(items[position])
             }
         }
     }
@@ -43,13 +43,13 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         itemView: View
     ): RecyclerView.ViewHolder(itemView) {
 
-        val blogImage :ImageView = itemView.blog_image
-        val blogTitle :TextView = itemView.blog_title
-        val blogAuthor :TextView = itemView.blog_author
+        private val blogImage :ImageView = itemView.blog_image
+        private val blogTitle :TextView = itemView.blog_title
+        private val blogAuthor :TextView = itemView.blog_author
 
         fun bind(blogPost: BlogPost){
-            blogTitle.setText(blogPost.title)
-            blogAuthor.setText(blogPost.username)
+            blogTitle.text = blogPost.title
+            blogAuthor.text = blogPost.username
 
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)

@@ -1,4 +1,4 @@
-package com.hse_project.hse_slaves.Posts
+package com.hse_project.hse_slaves.posts
 
 data class BlogPost(
 

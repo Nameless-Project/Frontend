@@ -3,15 +3,15 @@ package com.hse_project.hse_slaves.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hse_project.hse_slaves.Posts.BlogRecyclerAdapter
-import com.hse_project.hse_slaves.Posts.DataSource
-import com.hse_project.hse_slaves.Posts.TopSpacingItemDecoration
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
+import com.hse_project.hse_slaves.posts.DataSource
+import com.hse_project.hse_slaves.posts.TopSpacingItemDecoration
 import kotlinx.android.synthetic.main.activity_feed.*
 
 class FeedActivity : AppCompatActivity() {
 
-    private lateinit var blodAdapter: BlogRecyclerAdapter
+    private lateinit var blogAdapter: BlogRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,18 +21,19 @@ class FeedActivity : AppCompatActivity() {
         addDataSet()
     }
 
-    private fun addDataSet(){
-        val data = DataSource.createDataSet()
-        blodAdapter.submitList(data)
+    private fun addDataSet() {
+        val data = DataSource.createDataSet("OUR URL")
+        blogAdapter.submitList(data)
     }
 
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@FeedActivity)
             val topSpacingDecoration = TopSpacingItemDecoration(30)
             addItemDecoration(topSpacingDecoration)
-            blodAdapter = BlogRecyclerAdapter()
-            recycler_view.adapter = blodAdapter
+            blogAdapter = BlogRecyclerAdapter()
+            recycler_view.adapter = blogAdapter
         }
     }
+
 }
