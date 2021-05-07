@@ -13,7 +13,6 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<BlogPost> = ArrayList()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return BlogViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.layout_blog_list_item, parent, false)
@@ -41,14 +40,15 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         itemView: View
     ): RecyclerView.ViewHolder(itemView) {
 
-        private val blogImage :TextView = itemView.blog_image
-        private val blogTitle :TextView = itemView.blog_title
-        private val blogAuthor :TextView = itemView.blog_author
+        private val blogDate :TextView = itemView.blog_data
+        private val blogName :TextView = itemView.blog_name
+        private val blogOrganizerid :TextView = itemView.blog_organizerid
+        private val blogDescription :TextView = itemView.blog_description
 
         fun bind(blogPost: BlogPost){
-            blogTitle.text = blogPost.name
-            blogAuthor.text = blogPost.organizerid
-            blogImage.text = blogPost.date
+            blogName.text = blogPost.name
+            blogOrganizerid.text = blogPost.organizerid
+            blogDate.text = blogPost.date
 
 
             val requestOptions = RequestOptions()

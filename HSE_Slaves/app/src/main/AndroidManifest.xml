@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hse_project.hse_slaves">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,19 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HSE_Slaves">
-        <activity android:name=".activities.FeedActivity">
+        <activity android:name=".activities.pages.UserProfileActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RegisterActivity">
+        <activity android:name=".PostsActivity"></activity>
+        <activity android:name=".activities.pages.FeedActivity">
 
         </activity>
-        <activity android:name=".activities.LoginActivity">
-
-        </activity>
+        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.MainActivity" />
     </application>
 

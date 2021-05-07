@@ -1,7 +1,5 @@
 package com.hse_project.hse_slaves.posts
 
-import org.json.JSONObject
-import java.net.URL
 
 class DataSource{
 
@@ -13,18 +11,33 @@ class DataSource{
             val list = ArrayList<BlogPost>()
 
 
-            val obj : JSONObject = JSONObject(URL(url).readText())
 
 
+            //val obj = JSONArray(URL(url).readText())
+//            var x = 0
+//
+//            while (x < obj.length()) {
+//
+//                val tmpObj = obj.getJSONObject(x)
+//
+//                list.add(
+//                    BlogPost(
+//                        tmpObj.getString("ID"),
+//                        tmpObj.getString("Party"),
+//                        tmpObj.getString("FullName"),
+//                        tmpObj.getString("Terms"),
+//                    )
+//                )
+//            }
 
-                list.add(
-                    BlogPost(
-                        obj.getString("name"),
-                        obj.getString("description"),
-                        obj.getString("date"),
-                        obj.getString("organizerid"),
-                    )
+            list.add(
+                BlogPost(
+                    "obj",
+                    "description",
+                    "date",
+                    "organizerid",
                 )
+            )
 
             return list
         }

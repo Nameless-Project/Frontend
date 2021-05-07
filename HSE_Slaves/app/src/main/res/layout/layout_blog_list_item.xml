@@ -20,18 +20,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:id="@+id/blog_image"
+            android:id="@+id/blog_data"
             android:padding="0dp"
             android:layout_margin="0dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:contentDescription="TODO" />
+            />
 
 
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/blog_image"
+            app:layout_constraintTop_toBottomOf="@id/blog_data"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +43,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/blog_title"
+                android:id="@+id/blog_name"
                 android:textColor="#000"
                 android:textSize="19sp"
                 />
@@ -50,13 +51,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/blog_author"
+                android:id="@+id/blog_organizerid"
+                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/blog_description"
                 android:textSize="15sp"
                 android:layout_marginTop="10dp"
                 />
 
 
-        </TextView>
+        </LinearLayout>
 
 
 

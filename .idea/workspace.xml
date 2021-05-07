@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="27d61146-161a-4897-b4c6-d88eb8859e11" name="Default Changelist" comment="" />
+    <list default="true" id="27d61146-161a-4897-b4c6-d88eb8859e11" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/MainViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/MainViewModelFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/PostsActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/api/RetrofitInstance.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/api/SimpleApi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/model/Post.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/repository/Repository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/util/Constants.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/res/layout/activity_posts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HSE_Slaves/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/HSE_Slaves/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HSE_Slaves/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/activities/FeedActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/activities/FeedActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/posts/BlogRecyclerAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/posts/BlogRecyclerAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/posts/DataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/java/com/hse_project/hse_slaves/posts/DataSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HSE_Slaves/app/src/main/res/layout/layout_blog_list_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/HSE_Slaves/app/src/main/res/layout/layout_blog_list_item.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
