@@ -3,7 +3,6 @@ package com.hse_project.hse_slaves.activities.pages
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hse_project.hse_slaves.MainViewModel
@@ -36,7 +35,7 @@ class FeedActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.getPost()
-        viewModel.myResponse.observe(this, Observer { response ->
+        viewModel.postResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data.add(
                     BlogPost(

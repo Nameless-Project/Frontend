@@ -18,10 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PostsActivity"></activity>
-        <activity android:name=".activities.pages.FeedActivity">
+        <activity android:name=".activities.pages.EventActivity">
 
         </activity>
+        <activity android:name=".PostsActivity" />
+        <activity android:name=".activities.pages.FeedActivity"></activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.MainActivity" />
