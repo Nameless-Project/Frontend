@@ -1,7 +1,6 @@
 package com.hse_project.hse_slaves.model
 
-data class Event (
-    val id: Int,
+data class EventPost(
     val name: String,
     val description: String,
     val images: List<String>,
@@ -11,6 +10,6 @@ data class Event (
     val geoData: String,
     val specialization: String,
     val date: String
-    ) {
+) {
 
 }

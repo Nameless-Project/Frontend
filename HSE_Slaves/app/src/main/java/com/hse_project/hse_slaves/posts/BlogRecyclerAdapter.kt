@@ -7,11 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.pages.FeedActivity
 import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
 
 class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     private var items: List<BlogPost> = ArrayList()
+    lateinit var act: FeedActivity
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return BlogViewHolder(
@@ -21,8 +22,10 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-
-            is BlogViewHolder ->{
+            is BlogViewHolder -> {
+                if (position >= items.size - 2) {
+                    act.addDataSet()
+                }
                 holder.bind(items[position])
             }
         }
@@ -34,6 +37,7 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun submitList(blogList : List<BlogPost>){
         items = blogList
+        notifyDataSetChanged()
     }
 
     class BlogViewHolder constructor(
