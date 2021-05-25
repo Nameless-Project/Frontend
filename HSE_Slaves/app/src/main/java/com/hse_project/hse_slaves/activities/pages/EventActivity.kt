@@ -52,6 +52,7 @@ class EventActivity : AppCompatActivity() {
 
             val bmp1 = BitmapFactory.decodeByteArray(i, 0, i.size)
 
+            //Log.d("AAAAAAAA", bmp1.toString())
             imageView.setImageBitmap(bmp1)
 
             gallery.addView(view)

@@ -34,7 +34,7 @@ class PostsActivity : AppCompatActivity() {
                         response.body()?.name.toString(),
                     )
                 )
-                blogAdapter.submitList(data)
+                //blogAdapter.submitList(data)
                 blogAdapter.notifyDataSetChanged()
             } else {
                 Log.d("Response", "")

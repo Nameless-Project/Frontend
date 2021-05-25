@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".activities.pages.EventActivity">
 
+
         </activity>
         <activity android:name=".PostsActivity" />
         <activity android:name=".activities.pages.FeedActivity">

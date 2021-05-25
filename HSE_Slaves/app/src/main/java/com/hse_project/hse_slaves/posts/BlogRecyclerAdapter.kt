@@ -1,16 +1,21 @@
 package com.hse_project.hse_slaves.posts
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.request.RequestOptions
 import com.hse_project.hse_slaves.R
 import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
 
+
 class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var items = ArrayList<BlogPost>()
+    private var items = ArrayList<EventPost>()
+
+    var isLoading = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return BlogViewHolder(
@@ -31,8 +36,8 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items.size
     }
 
-    fun submitList(blogList: List<BlogPost>) {
-        items.addAll(blogList)
+    fun submitList(eventPost: EventPost) {
+        items.add(eventPost)
         notifyDataSetChanged()
     }
 
@@ -45,25 +50,25 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
-        private val blogDate: TextView = itemView.blog_data
-        private val blogName: TextView = itemView.blog_name
-        private val blogOrganizerid: TextView = itemView.blog_organizerid
-        private val blogDescription: TextView = itemView.blog_description
+        private val nikName: TextView = itemView.nik_name
+        private val date: TextView = itemView.date
+        private val specialization: TextView = itemView.specialization
+        private val ratio: TextView = itemView.ratio
+        private val geo: TextView = itemView.geo
 
-        fun bind(blogPost: BlogPost) {
-            blogName.text = blogPost.name
-            blogOrganizerid.text = blogPost.organizerid
-            blogDate.text = blogPost.date
+        fun bind(eventPost: EventPost) {
+            nikName.text = eventPost.name
+            date.text = eventPost.date
+            specialization.text = eventPost.specialization
+            ratio.text = eventPost.rating.toString()
+            geo.text = eventPost.geoData
 
-
-            val requestOptions = RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-
-//            Glide.with(itemView.context)
-//                .applyDefaultRequestOptions(requestOptions)
-//                .load(blogPost.date)
-//                .into(blogImage)
+            val img = eventPost.imageHashes[4]
+            Log.d(img.size.toString(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa")
+            val bmp1 = BitmapFactory.decodeByteArray(img, 0, img.size)
+            val height: Int = bmp1.height * 512 / bmp1.width
+            val scale = Bitmap.createScaledBitmap(bmp1, 512, height, true)
+            itemView.imageButton.setImageBitmap(scale)
         }
     }
 }

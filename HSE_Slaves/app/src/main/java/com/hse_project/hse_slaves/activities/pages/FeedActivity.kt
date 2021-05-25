@@ -1,6 +1,7 @@
 package com.hse_project.hse_slaves.activities.pages
 
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -10,8 +11,9 @@ import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.posts.BlogPost
+import com.hse_project.hse_slaves.model.EventPostMain
 import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
+import com.hse_project.hse_slaves.posts.EventPost
 import com.hse_project.hse_slaves.posts.TopSpacingItemDecoration
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_feed.*
@@ -28,7 +30,32 @@ class FeedActivity : AppCompatActivity() {
 
     private var isLoading = false
 
-    private val data = ArrayList<BlogPost>()
+    fun pushExampleEvent() {
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        val tmp = ArrayList<String>();
+        tmp.add(Base64.encodeToString(application.assets.open("sample.bmp").readBytes(),
+            Base64.DEFAULT
+        ));
+        viewModel.postEvent(
+            EventPostMain(
+            com.hse_project.hse_slaves.model.EventPost(
+                "Gay Party",
+                "Fisting is 300 bucks",
+                ArrayList(),
+                ArrayList(),
+                ArrayList(),
+                0.228,
+                "Gym",
+                "LITERATURE",
+                "2020-04-04"
+            ),
+            tmp
+        )
+        )
+        Log.d("AAAAAAAAAAAA", "BBBBBBBBBBBbbbBBBb")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +63,16 @@ class FeedActivity : AppCompatActivity() {
 
         myLayoutManager = LinearLayoutManager(this)
 
+        pushExampleEvent()
         initRecyclerView()
+
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         addDataSet()
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val visibleItemCount = myLayoutManager.childCount
                 val pastVisibleItem = myLayoutManager.findFirstVisibleItemPosition()
@@ -58,6 +87,7 @@ class FeedActivity : AppCompatActivity() {
             }
 
         })
+
 //        while (true) {
 //            if (blogAdapter.isFull) {
 //                addDataSet()
@@ -72,23 +102,47 @@ class FeedActivity : AppCompatActivity() {
         //progressBar.visibil
 
 
+        var eventPost: EventPost
         viewModel.getEvent()
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
-                data.add(
-                    BlogPost(
-                        response.body()?.name.toString(),
-                        response.body()?.name.toString(),
-                        response.body()?.name.toString(),
-                        response.body()?.name.toString(),
-                    )
+                eventPost = EventPost(
+                    response.body()?.id,
+                    response.body()?.name.toString(),
+                    response.body()?.description.toString(),
+                    ArrayList(),
+                    response.body()?.organizerIDs,
+                    response.body()?.participantsIDs,
+                    response.body()?.rating,
+                    response.body()?.geoData.toString(),
+                    response.body()?.specialization.toString(),
+                    response.body()?.date.toString()
                 )
-                blogAdapter.submitList(data)
-                isLoading = false
+
+                viewModel.getImage()
+                viewModel.imageResponse.observe(this, { r ->
+                    if (r.isSuccessful) {
+                        val resp = r.body()
+                        val tmp: ArrayList<ByteArray> = ArrayList()
+                        if (resp != null) {
+                            for (i in resp) {
+                                tmp.add(Base64.decode(i, Base64.DEFAULT))
+                            }
+                        }
+                        eventPost.imageHashes = tmp
+                        blogAdapter.submitList(eventPost)
+                    } else {
+                        Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaa", r.errorBody().toString())
+                    }
+                }
+                )
             } else {
                 Log.d("Response", conver(response))
             }
         })
+
+        isLoading = false
+
     }
 
     private fun initRecyclerView() {
@@ -99,6 +153,7 @@ class FeedActivity : AppCompatActivity() {
             blogAdapter = BlogRecyclerAdapter()
             recycler_view.adapter = blogAdapter
         }
+
 
     }
 
