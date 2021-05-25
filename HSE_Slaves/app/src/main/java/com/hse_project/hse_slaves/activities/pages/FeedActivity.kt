@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
@@ -23,11 +24,17 @@ class FeedActivity : AppCompatActivity() {
 
     private lateinit var blogAdapter: BlogRecyclerAdapter
     private lateinit var viewModel: MainViewModel
-    val data = ArrayList<BlogPost>()
+    private lateinit var myLayoutManager: LinearLayoutManager
+
+    private var isLoading = false
+
+    private val data = ArrayList<BlogPost>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
+
+        myLayoutManager = LinearLayoutManager(this)
 
         initRecyclerView()
 
@@ -36,6 +43,21 @@ class FeedActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         addDataSet()
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val visibleItemCount = myLayoutManager.childCount
+                val pastVisibleItem = myLayoutManager.findFirstVisibleItemPosition()
+                val total = blogAdapter.itemCount
+                if (!isLoading) {
+                    if (visibleItemCount + pastVisibleItem >= total) {
+                        addDataSet()
+                    }
+                }
+
+                super.onScrolled(recyclerView, dx, dy)
+            }
+
+        })
 //        while (true) {
 //            if (blogAdapter.isFull) {
 //                addDataSet()
@@ -46,6 +68,10 @@ class FeedActivity : AppCompatActivity() {
     }
 
     fun addDataSet() {
+        isLoading = true
+        //progressBar.visibil
+
+
         viewModel.getEvent()
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
@@ -58,7 +84,7 @@ class FeedActivity : AppCompatActivity() {
                     )
                 )
                 blogAdapter.submitList(data)
-                //blogAdapter.notifyDataSetChanged()
+                isLoading = false
             } else {
                 Log.d("Response", conver(response))
             }
@@ -67,11 +93,10 @@ class FeedActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         recycler_view.apply {
-            layoutManager = LinearLayoutManager(this@FeedActivity)
+            recycler_view.layoutManager = myLayoutManager
             val topSpacingDecoration = TopSpacingItemDecoration(30)
             addItemDecoration(topSpacingDecoration)
             blogAdapter = BlogRecyclerAdapter()
-            blogAdapter.act = this@FeedActivity
             recycler_view.adapter = blogAdapter
         }
 
