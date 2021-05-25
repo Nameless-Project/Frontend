@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,12 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HSE_Slaves"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.pages.UserProfileActivity">
-        </activity>
-        <activity android:name=".activities.pages.EventActivity">
+        <activity android:name=".activities.test.TestApiActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".activities.pages.UserProfileActivity"></activity>
+        <activity android:name=".activities.pages.EventActivity"></activity>
         <activity android:name=".PostsActivity" />
         <activity android:name=".activities.pages.FeedActivity">
             <intent-filter>
@@ -26,7 +28,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            </activity>
+        </activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.MainActivity" />
