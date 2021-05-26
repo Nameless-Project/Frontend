@@ -3,13 +3,13 @@ package com.hse_project.hse_slaves.repository
 import com.hse_project.hse_slaves.api.RetrofitInstance
 import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.model.EventPostMain
-import com.hse_project.hse_slaves.model.Post
+import com.hse_project.hse_slaves.model.User
 import retrofit2.Response
 
 class Repository {
 
-    suspend fun getPost(HeaderMap : Map<String, String>): retrofit2.Response<Post> {
-        return RetrofitInstance.api.getPost(HeaderMap)
+    suspend fun getUser(HeaderMap : Map<String, String>): retrofit2.Response<User> {
+        return RetrofitInstance.api.getUser(HeaderMap)
     }
 
     suspend fun getEvent(HeaderMap : Map<String, String>): retrofit2.Response<Event> {
@@ -24,8 +24,8 @@ class Repository {
         RetrofitInstance.api.postEvent(HeaderMap, event)
     }
 
-    suspend fun getToken(username : String, password : String): Response<Any> {
-        return RetrofitInstance.api.getToken(username, password)
+    suspend fun getToken(username : String, password : String): Response<Void> {
+        return RetrofitInstance.api.getToken(mapOf("username" to username, "password" to password))
     }
 
 }
