@@ -11,9 +11,8 @@ import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.model.EventPostMain
 import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
-import com.hse_project.hse_slaves.posts.EventPost
+import com.hse_project.hse_slaves.posts.EventPostGet
 import com.hse_project.hse_slaves.posts.TopSpacingItemDecoration
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_feed.*
@@ -35,24 +34,22 @@ class FeedActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         val tmp = ArrayList<String>();
-        tmp.add(Base64.encodeToString(application.assets.open("sample.bmp").readBytes(),
-            Base64.DEFAULT
-        ));
+        tmp.add(
+            Base64.encodeToString(
+                application.assets.open("sample.bmp").readBytes(),
+                Base64.DEFAULT
+            )
+        );
         viewModel.postEvent(
-            EventPostMain(
             com.hse_project.hse_slaves.model.EventPost(
                 "Gay Party",
                 "Fisting is 300 bucks",
-                ArrayList(),
-                ArrayList(),
-                ArrayList(),
                 0.228,
                 "Gym",
                 "LITERATURE",
-                "2020-04-04"
-            ),
-            tmp
-        )
+                "2020-04-04",
+                tmp
+            )
         )
         Log.d("AAAAAAAAAAAA", "BBBBBBBBBBBbbbBBBb")
     }
@@ -102,11 +99,11 @@ class FeedActivity : AppCompatActivity() {
         //progressBar.visibil
 
 
-        var eventPost: EventPost
-        viewModel.getEvent()
+        var eventPostGet: EventPostGet
+        viewModel.getEvent(1)
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
-                eventPost = EventPost(
+                eventPostGet = EventPostGet(
                     response.body()?.id,
                     response.body()?.name.toString(),
                     response.body()?.description.toString(),
@@ -119,7 +116,7 @@ class FeedActivity : AppCompatActivity() {
                     response.body()?.date.toString()
                 )
 
-                viewModel.getImage()
+                viewModel.getImage(1, "USER")
                 viewModel.imageResponse.observe(this, { r ->
                     if (r.isSuccessful) {
                         val resp = r.body()
@@ -129,8 +126,8 @@ class FeedActivity : AppCompatActivity() {
                                 tmp.add(Base64.decode(i, Base64.DEFAULT))
                             }
                         }
-                        eventPost.imageHashes = tmp
-                        blogAdapter.submitList(eventPost)
+                        eventPostGet.imageHashes = tmp
+                        blogAdapter.submitList(eventPostGet)
                     } else {
                         Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaa", r.errorBody().toString())
                     }

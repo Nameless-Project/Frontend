@@ -13,7 +13,7 @@ data class User(
     var description : String,
     var images : ArrayList<String>,
     var enabled : Boolean,
-    var authorities : Authorities,
+    var authorities : ArrayList<Authorities>,
     var accountNonLocked : Boolean,
     var accountNonExpired : Boolean,
     var credentialsNonExpired : Boolean

@@ -1,6 +1,6 @@
 package com.hse_project.hse_slaves.posts
 
-data class EventPost(
+data class EventPostGet(
     val id: Int?,
     val name: String,
     val description: String,

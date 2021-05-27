@@ -23,7 +23,7 @@ class PostsActivity : AppCompatActivity() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.getEvent()
+        viewModel.getEvent(1)
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data.add(

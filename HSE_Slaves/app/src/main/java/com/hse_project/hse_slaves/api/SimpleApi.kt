@@ -1,41 +1,54 @@
 package com.hse_project.hse_slaves.api
 
 import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.model.EventPostMain
+import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.model.UserRegistration
+import retrofit2.Response
 import retrofit2.http.*
 
 interface SimpleApi {
 
-    @GET("/api/events/1")
+    //Events
+    @GET("/api/events/{id}")
     suspend fun getEvent(
-        @HeaderMap headers: Map<String, String>
-    ): retrofit2.Response<Event>
-
-    @GET("/api/events/1")
-    suspend fun getUser(
-        @HeaderMap headers: Map<String, String>
-    ): retrofit2.Response<User>
-
-    @GET("/api/images/1?entity=EVENT")
-    suspend fun getImage(
-        @HeaderMap headers: Map<String, String>
-    ): retrofit2.Response<List<String>>
+        @HeaderMap headers: Map<String, String>,
+        @Path("id") id: Int
+    ): Response<Event>
 
     @POST("/api/events")
     suspend fun postEvent(
         @HeaderMap headers: Map<String, String>,
-        @Body event: EventPostMain
-    )
+        @Body event: EventPost
+    ): Response<Void>
+
+    //Feed
+
+    //Image
+    @GET("/api/images/{id}")
+    suspend fun getImage(
+        @HeaderMap headers: Map<String, String>,
+        @Path("id") id: Int,
+        @Query("entity") entity: String
+    ): Response<List<String>>
+
+    //User
+
+    @GET("/api/users/{id}")
+    suspend fun getUser(
+        @HeaderMap headers: Map<String, String>,
+        @Path("id") id: Int
+    ): Response<User>
+
+    //Security
 
     @POST("/api/registration")
     suspend fun register(
         @Body event: UserRegistration
-    )
+    ): Response<Void>
 
     @POST("/api/authentication")
     suspend fun getToken(
-        @QueryMap filters : Map<String, String>
-    ): retrofit2.Response<Void>
+        @QueryMap filters: Map<String, String>
+    ): Response<Void>
 }

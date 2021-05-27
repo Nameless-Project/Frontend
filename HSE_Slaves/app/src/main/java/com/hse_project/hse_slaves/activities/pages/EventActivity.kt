@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
-import com.hse_project.hse_slaves.model.EventPostMain
-import com.hse_project.hse_slaves.posts.EventPost
+import com.hse_project.hse_slaves.model.EventPost
+import com.hse_project.hse_slaves.posts.EventPostGet
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_event.*
 import retrofit2.Response
@@ -26,7 +26,7 @@ import java.io.InputStreamReader
 class EventActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var data: EventPost
+    private lateinit var data: EventPostGet
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +65,7 @@ class EventActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         pushExampleEvent()
-        viewModel.getEvent()
+        viewModel.getEvent(1)
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 val resp = response.body()?.images
@@ -76,7 +76,7 @@ class EventActivity : AppCompatActivity() {
                     }
                 }
                 data = (
-                        EventPost(
+                        EventPostGet(
                             response.body()?.id,
                             response.body()?.name.toString(),
                             response.body()?.description.toString(),
@@ -94,7 +94,7 @@ class EventActivity : AppCompatActivity() {
             }
         }
         )
-        viewModel.getImage()
+        viewModel.getImage(1, "USER")
         viewModel.imageResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 val resp = response.body()
@@ -122,24 +122,21 @@ class EventActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         val tmp = ArrayList<String>();
         tmp.add(Base64.encodeToString(application.assets.open("sample.bmp").readBytes(), DEFAULT));
-        viewModel.postEvent(EventPostMain(
-            com.hse_project.hse_slaves.model.EventPost(
+        viewModel.postEvent(
+            EventPost(
                 "Gay Party",
                 "Fisting is 300 bucks",
-                ArrayList(),
-                ArrayList(),
-                ArrayList(),
                 0.228,
                 "Gym",
                 "LITERATURE",
-                "2020-04-04"
+                "2020-04-04",
+                ArrayList(),
             ),
-          tmp
-        ))
+        )
         Log.d("AAAAAAAAAAAA", "BBBBBBBBBBBbbbBBBb")
     }
 
-    private fun conver(response: Response<EventPostMain>): String {
+    private fun conver(response: Response<EventPost>): String {
         var reader: BufferedReader? = null
         val sb = StringBuilder()
         try {

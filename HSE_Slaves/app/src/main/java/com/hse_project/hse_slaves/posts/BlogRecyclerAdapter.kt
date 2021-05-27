@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
 
 
 class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var items = ArrayList<EventPost>()
+    private var items = ArrayList<EventPostGet>()
 
     var isLoading = false
 
@@ -36,8 +36,8 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items.size
     }
 
-    fun submitList(eventPost: EventPost) {
-        items.add(eventPost)
+    fun submitList(eventPostGet: EventPostGet) {
+        items.add(eventPostGet)
         notifyDataSetChanged()
     }
 
@@ -56,14 +56,14 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val ratio: TextView = itemView.ratio
         private val geo: TextView = itemView.geo
 
-        fun bind(eventPost: EventPost) {
-            nikName.text = eventPost.name
-            date.text = eventPost.date
-            specialization.text = eventPost.specialization
-            ratio.text = eventPost.rating.toString()
-            geo.text = eventPost.geoData
+        fun bind(eventPostGet: EventPostGet) {
+            nikName.text = eventPostGet.name
+            date.text = eventPostGet.date
+            specialization.text = eventPostGet.specialization
+            ratio.text = eventPostGet.rating.toString()
+            geo.text = eventPostGet.geoData
 
-            val img = eventPost.imageHashes[4]
+            val img = eventPostGet.imageHashes[4]
             Log.d(img.size.toString(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa")
             val bmp1 = BitmapFactory.decodeByteArray(img, 0, img.size)
             val height: Int = bmp1.height * 512 / bmp1.width
