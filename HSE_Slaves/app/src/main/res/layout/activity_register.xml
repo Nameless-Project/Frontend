@@ -11,29 +11,97 @@
         android:id="@+id/editTextTextPassword"
         android:layout_width="280dp"
         android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:autofillHints="12345"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
-        android:hint=""
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.581"
-        android:autofillHints="12345" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+
 
     <EditText
         android:id="@+id/editTextTextEmailAddress"
         android:layout_width="280dp"
         android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:autofillHints="example@gmail.com"
         android:ems="10"
+        android:hint="Username"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.945"
-        android:autofillHints="example@gmail.com" />
+        app:layout_constraintTop_toBottomOf="@+id/specialization_" />
+
+    <EditText
+        android:id="@+id/editTextTextFirstName"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="40dp"
+        android:autofillHints="example@gmail.com"
+        android:ems="10"
+        android:hint="First name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextTextLastName"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:autofillHints="example@gmail.com"
+        android:ems="10"
+        android:hint="Last name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextFirstName" />
+
+    <EditText
+        android:id="@+id/editTextTextPatronymic"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:autofillHints="example@gmail.com"
+        android:ems="10"
+        android:hint="Patronymic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextLastName" />
+
+    <EditText
+        android:id="@+id/editTextTextDescription"
+        android:layout_width="280dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:autofillHints="example@gmail.com"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:hint="Description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPatronymic" />
+
+    <Spinner
+        android:id="@+id/user_role"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextDescription" />
+
+    <Spinner
+        android:id="@+id/specialization_"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_role" />
 
     <Button
         android:id="@+id/login"
@@ -58,21 +126,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
         app:layout_constraintVertical_bias="0.133" />
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/menu"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="Specialization">-->
-
-<!--        <AutoCompleteTextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:inputType="none"-->
-<!--            />-->
-
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
