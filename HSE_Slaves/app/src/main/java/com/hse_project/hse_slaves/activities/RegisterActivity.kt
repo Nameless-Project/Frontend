@@ -5,17 +5,33 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import androidx.lifecycle.ViewModelProvider
+import com.hse_project.hse_slaves.MainViewModel
+import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.enums.Specialization
+import com.hse_project.hse_slaves.enums.UserRole
+import com.hse_project.hse_slaves.model.UserRegistration
+import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: MainViewModel
+
+    private var userRole: UserRole = UserRole.USER
+    private var specialization: Specialization = Specialization.ART
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        initApi()
+        run()
+    }
+
+    private fun run() {
 
         login.setOnClickListener {
 
@@ -47,59 +63,69 @@ class RegisterActivity : AppCompatActivity() {
                     ).show()
                 }
                 else -> {
-
-                    val email: String = editTextTextEmailAddress.text.toString().trim { it <= ' ' }
+                    val userName: String = editTextTextEmailAddress.text.toString().trim { it <= ' ' }
                     val password: String = editTextTextPassword.text.toString().trim { it <= ' ' }
+                    viewModel.register(
+                        UserRegistration(
+                            getUserRole(),
+                            "firstName",
+                            "lastName",
+                            "userName",
+                            userName,
+                            password,
+                            getSpecialization(),
+                             1.0,
+                            "description",
+                            ArrayList(),
+                        )
+                    )
+                    viewModel.registerResponse.observe(this, { response ->
+                        if (response.isSuccessful) {
+                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                        } else {
+                            throw RuntimeException(response.toString())
+                        }
+                    })
 
-                    /*
-                    Создаем нового юзера
-                     */
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(
-                            OnCompleteListener<AuthResult> { task ->
-
-                                /*
-                                Если регистрация прошла успешно
-                                 */
-                                if (task.isSuccessful) {
-
-                                    /*
-                                    Зарегестрированный юзер
-                                     */
-                                    val firebaseUser: FirebaseUser = task.result!!.user!!
-
-                                    Toast.makeText(
-                                        this@RegisterActivity,
-                                        "You are registered successfully.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    /*
-                                    Создаем событие в которе запоминаем юзера и почту
-                                    но это не точно...
-                                     */
-                                    val intent =
-                                        Intent(this@RegisterActivity, MainActivity::class.java)
-                                    intent.flags =
-                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    intent.putExtra("user_id", firebaseUser.uid)
-                                    intent.putExtra("email_id", email)
-                                    startActivity(intent)
-                                    finish()
-                                } else {
-                                    Toast.makeText(
-                                        this@RegisterActivity,
-                                        task.exception!!.message.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            })
                 }
-
-
             }
         }
     }
 
+    private fun getUserRole(): String {
+        return when (userRole) {
+            UserRole.USER -> {
+                "USER"
+            }
+            UserRole.ORGANIZER -> {
+                "ORGANIZER"
+            }
+            else -> {
+                "CREATOR"
+            }
+        }
+    }
 
+    private fun getSpecialization(): String {
+        return when (specialization) {
+            Specialization.ART -> {
+                "ART"
+            }
+            Specialization.LITERATURE -> {
+                "LITERATURE"
+            }
+            Specialization.MUSIC -> {
+                "MUSIC"
+            }
+            else -> {
+                "PHOTOGRAPHY"
+            }
+        }
+    }
+
+    fun initApi() {
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+    }
 }
