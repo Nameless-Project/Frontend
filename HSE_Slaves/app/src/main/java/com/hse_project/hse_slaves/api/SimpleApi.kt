@@ -50,5 +50,5 @@ interface SimpleApi {
     @POST("/api/authentication")
     suspend fun getToken(
         @QueryMap filters: Map<String, String>
-    ): Response<Void>
+    ): Response<Int>
 }

@@ -11,7 +11,7 @@ data class UserProfilePost(
     var id: String,
     var specialization: String,
     var ratio: String,
-    var images: Array<ByteArray>?
+    var images: Array<String>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -3,13 +3,15 @@ package com.hse_project.hse_slaves.activities
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.pages.UserProfileActivity
+import com.hse_project.hse_slaves.current.USER_ID
+import com.hse_project.hse_slaves.current.USER_TOKEN
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -67,8 +69,9 @@ class LoginActivity : AppCompatActivity() {
                     viewModel.tokenResponse.observe(this, { response ->
                         if (response.isSuccessful) {
                             viewModel.setNewToken(response.headers()["Authorization"].toString())
-                            Log.i("Token: ", viewModel.token)
-                            //TODO авторизация прошла успешна запускаем дальше приложение
+                            USER_TOKEN = viewModel.token
+                            USER_ID = response.body()!!
+                            startActivity(Intent(this@LoginActivity, UserProfileActivity::class.java))
                         } else {
                             throw RuntimeException(response.toString())
                         }

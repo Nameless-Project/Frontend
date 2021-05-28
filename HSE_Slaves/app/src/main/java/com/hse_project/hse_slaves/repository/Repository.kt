@@ -25,7 +25,7 @@ class Repository {
         return RetrofitInstance.api.postEvent(HeaderMap, event)
     }
 
-    suspend fun getToken(username : String, password : String): Response<Void> {
+    suspend fun getToken(username : String, password : String): Response<Int> {
         return RetrofitInstance.api.getToken(mapOf("username" to username, "password" to password))
     }
 

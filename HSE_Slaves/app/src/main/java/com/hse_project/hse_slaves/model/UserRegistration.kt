@@ -8,7 +8,6 @@ data class UserRegistration(
     var username: String,
     var password: String,
     var specialization: String,
-    var rating: Int,
     var description: String,
     var images: ArrayList<String>
 )

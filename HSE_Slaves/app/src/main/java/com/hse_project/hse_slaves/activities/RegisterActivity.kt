@@ -198,6 +198,7 @@ class RegisterActivity : AppCompatActivity() {
                         editTextTextPatronymic.text.toString().trim { it <= ' ' }
                     val description: String =
                         editTextTextDescription.text.toString().trim { it <= ' ' }
+                    assert(imagesStringArray.size != 0)
                     viewModel.register(
                         UserRegistration(
                             userRole,
@@ -207,7 +208,6 @@ class RegisterActivity : AppCompatActivity() {
                             userName,
                             password,
                             specialization,
-                            1,
                             description,
                             imagesStringArray,
                         )

@@ -3,6 +3,8 @@ package com.hse_project.hse_slaves
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hse_project.hse_slaves.current.USER_ID
+import com.hse_project.hse_slaves.current.USER_TOKEN
 import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.model.User
@@ -12,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
-    val tokenResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+    val tokenResponse: MutableLiveData<retrofit2.Response<Int>> = MutableLiveData()
     val postEventResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val registerResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val eventResponse: MutableLiveData<retrofit2.Response<Event>> = MutableLiveData()
@@ -20,10 +22,15 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val imageResponse: MutableLiveData<retrofit2.Response<List<String>>> = MutableLiveData()
 
 
-    var token: String = ""
+    var token: String = USER_TOKEN
+    var userId: Int = USER_ID
 
     fun setNewToken(token: String) {
         this.token = token
+    }
+
+    fun setNewUserId(id: Int) {
+        this.userId = id
     }
 
     private fun getHeaderMap(): Map<String, String> {
@@ -36,6 +43,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     fun getUser(id: Int) {
         viewModelScope.launch {
             val response = repository.getUser(getHeaderMap(), id)
+            userResponse.value = response
+        }
+    }
+
+    fun getMyUser() {
+        viewModelScope.launch {
+            val response = repository.getUser(getHeaderMap(), userId)
             userResponse.value = response
         }
     }
