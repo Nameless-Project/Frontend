@@ -15,7 +15,9 @@ import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
+import kotlinx.android.synthetic.main.activity_feed.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
+import kotlinx.android.synthetic.main.activity_user_profile.menu
 
 
 class UserProfileActivity : AppCompatActivity() {
@@ -50,6 +52,8 @@ class UserProfileActivity : AppCompatActivity() {
             false
         }
 
+
+        menu.selectedItemId = R.id.home;
         menu.setOnNavigationItemSelectedListener(listener);
     }
 

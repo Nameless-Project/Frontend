@@ -49,6 +49,7 @@ class FeedActivity : AppCompatActivity() {
             false
         }
 
+        menu.selectedItemId = R.id.feed;
         menu.setOnNavigationItemSelectedListener(listener);
     }
 
