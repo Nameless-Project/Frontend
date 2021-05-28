@@ -79,7 +79,7 @@ class TestApiActivity : AppCompatActivity() {
                 "username$i",
                 "password$i",
                 "ART",
-                i.toDouble() / 10,
+                i,
                 "description$i",
                 ArrayList(),
             )
