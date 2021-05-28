@@ -1,5 +1,6 @@
 package com.hse_project.hse_slaves.activities.pages
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
@@ -16,6 +18,8 @@ import com.hse_project.hse_slaves.posts.EventPostGet
 import com.hse_project.hse_slaves.posts.TopSpacingItemDecoration
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_feed.*
+import kotlinx.android.synthetic.main.activity_feed.menu
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import retrofit2.Response
 import java.io.BufferedReader
 import java.io.IOException
@@ -28,6 +32,25 @@ class FeedActivity : AppCompatActivity() {
     private lateinit var myLayoutManager: LinearLayoutManager
 
     private var isLoading = false
+
+    private fun addMenu() {
+        val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    startActivity(Intent(this@FeedActivity, UserProfileActivity::class.java))
+                }
+                R.id.feed -> {
+                    startActivity(Intent(this@FeedActivity, FeedActivity::class.java))
+                }
+                R.id.chats -> {
+                    //TODO do chats activity
+                }
+            }
+            false
+        }
+
+        menu.setOnNavigationItemSelectedListener(listener);
+    }
 
     fun pushExampleEvent() {
         val repository = Repository()
@@ -58,10 +81,12 @@ class FeedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
 
+        addMenu()
+
         myLayoutManager = LinearLayoutManager(this)
+        initRecyclerView()
 
         pushExampleEvent()
-        initRecyclerView()
 
 
         val repository = Repository()

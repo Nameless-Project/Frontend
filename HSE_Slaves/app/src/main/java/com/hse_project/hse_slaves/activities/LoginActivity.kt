@@ -3,6 +3,7 @@ package com.hse_project.hse_slaves.activities
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -61,6 +62,7 @@ class LoginActivity : AppCompatActivity() {
                     val username: String = editTextTextEmailAddress.text.toString().trim { it <= ' ' }
                     val password: String = editTextTextPassword.text.toString().trim { it <= ' ' }
 
+                    Log.d(username, password)
                     /*
                     Создаем нового юзера
                      */
@@ -68,7 +70,9 @@ class LoginActivity : AppCompatActivity() {
                     viewModel.getToken(username, password)
                     viewModel.tokenResponse.observe(this, { response ->
                         if (response.isSuccessful) {
+
                             viewModel.setNewToken(response.headers()["Authorization"].toString())
+                            //Log.d(viewModel.token, "AAAAAAAAAAAAAAAAaaa")
                             USER_TOKEN = viewModel.token
                             USER_ID = response.body()!!
                             startActivity(Intent(this@LoginActivity, UserProfileActivity::class.java))

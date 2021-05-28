@@ -1,11 +1,14 @@
 package com.hse_project.hse_slaves.activities.pages
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
@@ -14,15 +17,43 @@ import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_user_profile.*
 
+
 class UserProfileActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var data: User
 
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
+
+        addMenu()
+
+        initApi()
+    }
+
+    private fun addMenu() {
+        val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    startActivity(Intent(this@UserProfileActivity, UserProfileActivity::class.java))
+                }
+                R.id.feed -> {
+                    startActivity(Intent(this@UserProfileActivity, FeedActivity::class.java))
+                }
+                R.id.chats -> {
+                    //TODO do chats activity
+                }
+            }
+            false
+        }
+
+        menu.setOnNavigationItemSelectedListener(listener);
+    }
+
+    private fun initApi() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
