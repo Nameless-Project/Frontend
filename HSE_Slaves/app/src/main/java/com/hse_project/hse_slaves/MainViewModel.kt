@@ -22,12 +22,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val imageResponse: MutableLiveData<retrofit2.Response<List<String>>> = MutableLiveData()
 
 
-    var token: String = USER_TOKEN
     var userId: Int = USER_ID
 
-    fun setNewToken(token: String) {
-        this.token = token
-    }
 
     fun setNewUserId(id: Int) {
         this.userId = id
@@ -35,8 +31,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     private fun getHeaderMap(): Map<String, String> {
         val headerMap = mutableMapOf<String, String>()
-        assert(token != "")
-        headerMap["Authorization"] = token;
+        assert(USER_TOKEN != "")
+        headerMap["Authorization"] = USER_TOKEN;
         return headerMap
     }
 

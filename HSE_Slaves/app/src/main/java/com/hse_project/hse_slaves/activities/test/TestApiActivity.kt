@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.current.USER_TOKEN
 import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.model.UserRegistration
@@ -101,8 +102,8 @@ class TestApiActivity : AppCompatActivity() {
         viewModel.getToken("username3", "password3")
         viewModel.tokenResponse.observe(this, { response ->
             if (response.isSuccessful) {
-                viewModel.setNewToken(response.headers()["Authorization"].toString())
-                Log.i("Token: ", viewModel.token)
+                //USER_TOKEN = response.headers()["Authorization"].toString()
+                Log.i("Token: ", USER_TOKEN)
                 run()
             } else {
                 Log.d("Error response", response.toString())

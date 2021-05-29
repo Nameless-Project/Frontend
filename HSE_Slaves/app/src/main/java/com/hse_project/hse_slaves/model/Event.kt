@@ -5,12 +5,13 @@ data class Event (
     val name: String,
     val description: String,
     val images: List<String>,
-    val organizerIDs: List<Int>,
+    val organizerID: Int,
     val participantsIDs: List<Int>,
     val rating: Double,
     val geoData: String,
     val specialization: String,
-    val date: String
+    val date: String,
+    val likes: List<Int>
     ) {
 
 }

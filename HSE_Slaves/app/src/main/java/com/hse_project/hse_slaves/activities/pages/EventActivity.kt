@@ -1,9 +1,6 @@
 package com.hse_project.hse_slaves.activities.pages
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
-import android.util.Base64.DEFAULT
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
@@ -13,8 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.image.getBitmapByString
+import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.model.EventPost
-import com.hse_project.hse_slaves.posts.EventPostGet
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_event.*
 import retrofit2.Response
@@ -26,7 +24,7 @@ import java.io.InputStreamReader
 class EventActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var data: EventPostGet
+    private lateinit var data: Event
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,96 +43,70 @@ class EventActivity : AppCompatActivity() {
         ratio.text = data.rating.toString()
         geo.text = data.geoData
 
-        for (i in data.imageHashes) {
+        for (i in data.images.indices) {
             val view = inflater.inflate(R.layout.item_event_photo, gallery, false)
 
-            val imageView : ImageView = view.findViewById<ImageButton>(R.id.imageView)
+            val imageView: ImageView = view.findViewById<ImageButton>(R.id.imageView)
 
-            val bmp1 = BitmapFactory.decodeByteArray(i, 0, i.size)
 
-            //Log.d("AAAAAAAA", bmp1.toString())
-            imageView.setImageBitmap(bmp1)
-
+            imageView.setImageBitmap(getBitmapByString(data.images[i]))
             gallery.addView(view)
         }
 
     }
+
     fun setData() {
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        pushExampleEvent()
+        //pushExampleEvent()
         viewModel.getEvent(1)
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
-                val resp = response.body()?.images
-                val tmp : ArrayList<ByteArray> = ArrayList()
-                if (resp != null) {
-                    for (i in resp) {
-                        tmp.add(Base64.decode(i, DEFAULT))
-                    }
-                }
-                data = (
-                        EventPostGet(
-                            response.body()?.id,
-                            response.body()?.name.toString(),
-                            response.body()?.description.toString(),
-                            tmp,
-                            response.body()?.organizerIDs,
-                            response.body()?.participantsIDs,
-                            response.body()?.rating,
-                            response.body()?.geoData.toString(),
-                            response.body()?.specialization.toString(),
-                            response.body()?.date.toString()
-                        )
-                        )
-            } else {
-                Log.d("Response", response.errorBody().toString())
-            }
-        }
-        )
-        viewModel.getImage(1, "USER")
-        viewModel.imageResponse.observe(this, { response ->
-            if (response.isSuccessful) {
-                val resp = response.body()
-                val tmp : ArrayList<ByteArray> = ArrayList()
-                if (resp != null) {
-                    for (i in resp) {
-                        tmp.add(Base64.decode(i, DEFAULT))
-                    }
-                }
-                data.imageHashes = tmp
+                data = Event(
+                    response.body()?.id!!,
+                    response.body()?.name.toString(),
+                    response.body()?.description.toString(),
+                    response.body()?.images!!,
+                    response.body()?.organizerID!!,
+                    response.body()?.participantsIDs!!,
+                    response.body()?.rating!!,
+                    response.body()?.geoData.toString(),
+                    response.body()?.specialization.toString(),
+                    response.body()?.date.toString(),
+                    response.body()?.likes!!
+                )
                 update()
             } else {
-                Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaa", response.errorBody().toString())
+                Log.d("BLYAAAAAAAAAAAAAAAAAAAAAAAAA", "EBANAROT")
+                //Log.d("Response", conver(response))
             }
-        }
-        )
-       // application.assets.open("kek.txt").writeBytes(application.assets.open("sample.bmp").readBytes())
+        })
+        // application.assets.open("kek.txt").writeBytes(application.assets.open("sample.bmp").readBytes())
 
     }
 
-
-    fun pushExampleEvent() {
-        val repository = Repository()
-        val viewModelFactory = MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        val tmp = ArrayList<String>();
-        tmp.add(Base64.encodeToString(application.assets.open("sample.bmp").readBytes(), DEFAULT));
-        viewModel.postEvent(
-            EventPost(
-                "Gay Party",
-                "Fisting is 300 bucks",
-                0.228,
-                "Gym",
-                "LITERATURE",
-                "2020-04-04",
-                ArrayList(),
-            ),
-        )
-        Log.d("AAAAAAAAAAAA", "BBBBBBBBBBBbbbBBBb")
-    }
+//
+//    fun pushExampleEvent() {
+//        val repository = Repository()
+//        val viewModelFactory = MainViewModelFactory(repository)
+//        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+//        val tmp = ArrayList<String>();
+//        tmp.add(Base64.encodeToString(application.assets.open("sample.bmp").readBytes(), DEFAULT));
+//        viewModel.postEvent(
+//            EventPost(
+//                "Gay Party",
+//                "Fisting is 300 bucks",
+//                0.228,
+//                "Gym",
+//                "LITERATURE",
+//                "2020-04-04",
+//                ArrayList(),
+//            ),
+//        )
+//        Log.d("AAAAAAAAAAAA", "BBBBBBBBBBBbbbBBBb")
+//    }
 
     private fun conver(response: Response<EventPost>): String {
         var reader: BufferedReader? = null
