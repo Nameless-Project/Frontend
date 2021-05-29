@@ -16,20 +16,22 @@ import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.image.getStringByUri
+import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.model.UserRegistration
 import com.hse_project.hse_slaves.repository.Repository
-import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.gallery
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import retrofit2.Response
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-
-class RegisterActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var data: User
+
 
     private var images: ArrayList<Uri> = ArrayList()
     private var position = 0
@@ -43,12 +45,34 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        setContentView(R.layout.activity_settings)
+
 
         addImages()
         addSpinners()
         initApi()
         run()
+    }
+
+    private fun loadUser() {
+        val inflater = LayoutInflater.from(this)
+        editTextTextEmailAddress.setText(data.username)
+        editTextTextPassword.setText(data.password)
+        editTextTextFirstName.setText(data.firstName)
+        editTextTextLastName.setText(data.lastName)
+        editTextTextPatronymic.setText(data.patronymic)
+        editTextTextDescription.setText(data.description)
+        for (i in 0 until data.images.size) {
+            val view = inflater.inflate(R.layout.item_event_photo, gallery, false)
+
+            val imageView: ImageView = view.findViewById<ImageButton>(R.id.imageView)
+
+            imageView.setImageBitmap(getBitmapByString(data.images[i]))
+
+            gallery.addView(view)
+        }
+        imagesStringArray.addAll(data.images)
+        position = data.images.size
     }
 
     private fun addImages() {
@@ -140,7 +164,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun run() {
         cancel.setOnClickListener {
-            //startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
             onBackPressed()
         }
 
@@ -148,42 +171,42 @@ class RegisterActivity : AppCompatActivity() {
             when {
                 TextUtils.isEmpty(editTextTextEmailAddress.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@RegisterActivity,
+                        this@SettingsActivity,
                         "Please enter email.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextPassword.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@RegisterActivity,
+                        this@SettingsActivity,
                         "Please enter password.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextFirstName.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@RegisterActivity,
+                        this@SettingsActivity,
                         "Please enter first name.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextLastName.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@RegisterActivity,
+                        this@SettingsActivity,
                         "Please enter last name.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextPatronymic.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@RegisterActivity,
+                        this@SettingsActivity,
                         "Please enter patronymic.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextDescription.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@RegisterActivity,
+                        this@SettingsActivity,
                         "Please enter description.",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -214,7 +237,7 @@ class RegisterActivity : AppCompatActivity() {
                     )
                     viewModel.registerResponse.observe(this, { response ->
                         if (response.isSuccessful) {
-                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                            startActivity(Intent(this@SettingsActivity, LoginActivity::class.java))
                         } else {
                             Log.d("AAAAAA", convert(response))
                             throw RuntimeException(response.toString())
@@ -225,6 +248,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun convert(response: Response<Void>): String {
         val reader: BufferedReader?
         val sb = StringBuilder()
@@ -249,5 +273,15 @@ class RegisterActivity : AppCompatActivity() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+
+        viewModel.getMyUser()
+        viewModel.userResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                data = response.body()!!
+                loadUser()
+            } else {
+                throw RuntimeException(response.toString())
+            }
+        })
     }
 }

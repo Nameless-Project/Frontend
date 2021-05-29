@@ -12,15 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HSE_Slaves"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.test.TestApiActivity">
-
-        </activity>
-        <activity android:name=".activities.pages.UserProfileActivity"></activity>
-        <activity android:name=".activities.pages.EventActivity"></activity>
+        <activity android:name=".activities.SettingsActivity"></activity>
+        <activity android:name=".activities.test.TestApiActivity"></activity>
+        <activity android:name=".activities.pages.UserProfileActivity" />
+        <activity android:name=".activities.pages.EventActivity" />
         <activity android:name=".PostsActivity" />
-        <activity android:name=".activities.pages.FeedActivity">
-
-        </activity>
+        <activity android:name=".activities.pages.FeedActivity"></activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity">
             <intent-filter>

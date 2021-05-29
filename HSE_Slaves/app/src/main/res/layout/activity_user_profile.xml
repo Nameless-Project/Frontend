@@ -30,6 +30,17 @@
             android:layout_height="wrap_content">
 
 
+            <ImageButton
+                android:id="@+id/settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="#00000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/outline_settings_black_18" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/profile_photo"
                 android:layout_width="120dp"

@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.SettingsActivity
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
@@ -31,6 +32,9 @@ class UserProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_profile)
 
 
+        settings.setOnClickListener {
+            startActivity(Intent(this@UserProfileActivity, SettingsActivity::class.java))
+        }
         addMenu()
 
         initApi()

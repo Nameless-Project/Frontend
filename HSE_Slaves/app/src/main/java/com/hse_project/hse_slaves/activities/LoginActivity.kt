@@ -29,12 +29,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun run() {
-        register.setOnClickListener {
+        submit.setOnClickListener {
 
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
 
-        login.setOnClickListener {
+        cancel.setOnClickListener {
             when {
                 /*
                 Проверяем что поле с почтой заполнено
