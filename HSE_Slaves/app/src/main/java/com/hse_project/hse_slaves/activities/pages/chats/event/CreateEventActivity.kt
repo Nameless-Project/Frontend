@@ -1,10 +1,11 @@
-package com.hse_project.hse_slaves.activities
+package com.hse_project.hse_slaves.activities.pages.chats.event
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -13,29 +14,25 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.pages.chats.ChatForOrganizerActivity
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.image.getStringByUri
-import com.hse_project.hse_slaves.model.User
+import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.repository.Repository
-import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.activity_register.gallery
-import kotlinx.android.synthetic.main.activity_user_profile.*
+import kotlinx.android.synthetic.main.activity_create_event.*
 import retrofit2.Response
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-class SettingsActivity : AppCompatActivity() {
+class CreateEventActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var data: User
-
 
     private var images: ArrayList<Uri> = ArrayList()
     private var position = 0
     private val PICK_IMAGE = 1
 
-    private var userRole: String = "USER"
     private var specialization: String = "ART"
 
     private val imagesStringArray: ArrayList<String> = ArrayList()
@@ -43,34 +40,12 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-
+        setContentView(R.layout.activity_create_event)
 
         addImages()
         addSpinners()
         initApi()
         run()
-    }
-
-    private fun loadUser() {
-        val inflater = LayoutInflater.from(this)
-        editTextTextEmailAddress.setText(data.username)
-        editTextTextPassword.setText(data.password)
-        editTextTextFirstName.setText(data.firstName)
-        editTextTextGeoData.setText(data.lastName)
-        editTextTextDate.setText(data.patronymic)
-        editTextTextDescription.setText(data.description)
-        for (i in 0 until data.images.size) {
-            val view = inflater.inflate(R.layout.item_event_photo, gallery, false)
-
-            val imageView: ImageView = view.findViewById<ImageButton>(R.id.imageView)
-
-            imageView.setImageBitmap(getBitmapByString(data.images[i]))
-
-            gallery.addView(view)
-        }
-        imagesStringArray.addAll(data.images)
-        position = data.images.size
     }
 
     private fun addImages() {
@@ -141,23 +116,6 @@ class SettingsActivity : AppCompatActivity() {
                 specialization = optionsSpecialization[0]
             }
         }
-
-        val optionsUserRole = arrayOf("USER", "ORGANIZER", "CREATOR")
-        user_role.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, optionsUserRole)
-        user_role.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                userRole = optionsUserRole[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                userRole = optionsUserRole[0]
-            }
-        }
     }
 
     private fun run() {
@@ -167,87 +125,67 @@ class SettingsActivity : AppCompatActivity() {
 
         submit.setOnClickListener {
             when {
-                TextUtils.isEmpty(editTextTextEmailAddress.text.toString().trim { it <= ' ' }) -> {
+                TextUtils.isEmpty(editTextTextName.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@SettingsActivity,
-                        "Please enter email.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                TextUtils.isEmpty(editTextTextPassword.text.toString().trim { it <= ' ' }) -> {
-                    Toast.makeText(
-                        this@SettingsActivity,
-                        "Please enter password.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                TextUtils.isEmpty(editTextTextFirstName.text.toString().trim { it <= ' ' }) -> {
-                    Toast.makeText(
-                        this@SettingsActivity,
-                        "Please enter first name.",
+                        this@CreateEventActivity,
+                        "Please enter Name.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextGeoData.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@SettingsActivity,
-                        "Please enter last name.",
+                        this@CreateEventActivity,
+                        "Please enter geo.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextDate.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@SettingsActivity,
-                        "Please enter patronymic.",
+                        this@CreateEventActivity,
+                        "Please enter date.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 TextUtils.isEmpty(editTextTextDescription.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
-                        this@SettingsActivity,
+                        this@CreateEventActivity,
                         "Please enter description.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 else -> {
-                    val userName: String =
-                        editTextTextEmailAddress.text.toString().trim { it <= ' ' }
-                    val password: String = editTextTextPassword.text.toString().trim { it <= ' ' }
-                    val firstName: String = editTextTextFirstName.text.toString().trim { it <= ' ' }
-                    val lastName: String = editTextTextGeoData.text.toString().trim { it <= ' ' }
-                    val patronymic: String =
+                    val name: String = editTextTextName.text.toString().trim { it <= ' ' }
+                    val geoData: String = editTextTextGeoData.text.toString().trim { it <= ' ' }
+                    val date: String =
                         editTextTextDate.text.toString().trim { it <= ' ' }
                     val description: String =
                         editTextTextDescription.text.toString().trim { it <= ' ' }
                     assert(imagesStringArray.size != 0)
-                    //TODO заменить это на вызов метода, который будет менять пользователя и потом открывать профиль
-//                    viewModel.register(
-//                        UserRegistration(
-//                            userRole,
-//                            firstName,
-//                            lastName,
-//                            patronymic,
-//                            userName,
-//                            password,
-//                            specialization,
-//                            description,
-//                            imagesStringArray,
-//                        )
-//                    )
-//                    viewModel.registerResponse.observe(this, { response ->
-//                        if (response.isSuccessful) {
-//                            startActivity(Intent(this@SettingsActivity, LoginActivity::class.java))
-//                        } else {
-//                            Log.d("AAAAAA", convert(response))
-//                            throw RuntimeException(response.toString())
-//                        }
-//                    })
 
+                    viewModel.postEvent(
+                        EventPost(
+                            name,
+                            description,
+                            1.0,
+                            geoData,
+                            specialization,
+                            date,
+                            imagesStringArray,
+                        )
+                    )
+
+                    viewModel.postEventResponse.observe(this, { response ->
+                        if (response.isSuccessful) {
+                            startActivity(Intent(this@CreateEventActivity, ChatForOrganizerActivity::class.java))
+                        } else {
+                            Log.d("AAAAAA", convert(response))
+                            throw RuntimeException(response.toString())
+                        }
+                    })
                 }
             }
         }
     }
-
     private fun convert(response: Response<Void>): String {
         val reader: BufferedReader?
         val sb = StringBuilder()
@@ -272,15 +210,5 @@ class SettingsActivity : AppCompatActivity() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-
-        viewModel.getMyUser()
-        viewModel.userResponse.observe(this, { response ->
-            if (response.isSuccessful) {
-                data = response.body()!!
-                loadUser()
-            } else {
-                throw RuntimeException(response.toString())
-            }
-        })
     }
 }

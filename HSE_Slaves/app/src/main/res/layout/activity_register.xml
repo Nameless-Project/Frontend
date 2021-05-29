@@ -61,7 +61,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editTextTextLastName"
+                android:id="@+id/editTextTextGeoData"
                 android:layout_width="280dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextFirstName" />
 
             <EditText
-                android:id="@+id/editTextTextPatronymic"
+                android:id="@+id/editTextTextDate"
                 android:layout_width="280dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
@@ -82,7 +82,7 @@
                 android:hint="Patronymic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextLastName" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextTextGeoData" />
 
             <EditText
                 android:id="@+id/editTextTextDescription"
@@ -96,7 +96,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPatronymic" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextTextDate" />
 
             <Spinner
                 android:id="@+id/user_role"

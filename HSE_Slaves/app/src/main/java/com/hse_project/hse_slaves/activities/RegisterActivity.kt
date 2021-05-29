@@ -167,14 +167,14 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                TextUtils.isEmpty(editTextTextLastName.text.toString().trim { it <= ' ' }) -> {
+                TextUtils.isEmpty(editTextTextGeoData.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
                         this@RegisterActivity,
                         "Please enter last name.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                TextUtils.isEmpty(editTextTextPatronymic.text.toString().trim { it <= ' ' }) -> {
+                TextUtils.isEmpty(editTextTextDate.text.toString().trim { it <= ' ' }) -> {
                     Toast.makeText(
                         this@RegisterActivity,
                         "Please enter patronymic.",
@@ -193,9 +193,9 @@ class RegisterActivity : AppCompatActivity() {
                         editTextTextEmailAddress.text.toString().trim { it <= ' ' }
                     val password: String = editTextTextPassword.text.toString().trim { it <= ' ' }
                     val firstName: String = editTextTextFirstName.text.toString().trim { it <= ' ' }
-                    val lastName: String = editTextTextLastName.text.toString().trim { it <= ' ' }
+                    val lastName: String = editTextTextGeoData.text.toString().trim { it <= ' ' }
                     val patronymic: String =
-                        editTextTextPatronymic.text.toString().trim { it <= ' ' }
+                        editTextTextDate.text.toString().trim { it <= ' ' }
                     val description: String =
                         editTextTextDescription.text.toString().trim { it <= ' ' }
                     assert(imagesStringArray.size != 0)

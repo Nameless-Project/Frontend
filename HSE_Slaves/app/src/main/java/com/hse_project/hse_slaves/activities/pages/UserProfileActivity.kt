@@ -13,6 +13,7 @@ import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.SettingsActivity
+import com.hse_project.hse_slaves.activities.pages.chats.ChatForOrganizerActivity
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
@@ -50,7 +51,7 @@ class UserProfileActivity : AppCompatActivity() {
                     startActivity(Intent(this@UserProfileActivity, FeedActivity::class.java))
                 }
                 R.id.chats -> {
-                    //TODO do chats activity
+                    startActivity(Intent(this@UserProfileActivity, ChatForOrganizerActivity::class.java))
                 }
             }
             false

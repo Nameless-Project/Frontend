@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.pages.chats.ChatForOrganizerActivity
 import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
 import com.hse_project.hse_slaves.posts.EventPostGet
@@ -43,7 +44,7 @@ class FeedActivity : AppCompatActivity() {
                     startActivity(Intent(this@FeedActivity, FeedActivity::class.java))
                 }
                 R.id.chats -> {
-                    //TODO do chats activity
+                    startActivity(Intent(this@FeedActivity, ChatForOrganizerActivity::class.java))
                 }
             }
             false
