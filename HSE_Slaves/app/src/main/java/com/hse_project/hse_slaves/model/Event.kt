@@ -5,7 +5,7 @@ data class Event (
     val name: String,
     val description: String,
     val images: List<String>,
-    val organizerID: Int,
+    val organizerId: Int,
     val participantsIDs: List<Int>,
     val rating: Double,
     val geoData: String,

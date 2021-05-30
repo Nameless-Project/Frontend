@@ -127,6 +127,33 @@
                 app:layout_constraintTop_toBottomOf="@id/geo"
                 app:layout_constraintEnd_toStartOf="@id/likes_number"/>
 
+            <TextView
+                android:id="@+id/organizer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/donegal_one"
+                android:textSize="20sp"
+                android:layout_marginStart="8dp"
+                android:textColor="#707070"
+                android:text="Organizer: "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/geo" />
+
+            <TextView
+                android:id="@+id/organizer_nik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/donegal_one"
+                android:textSize="20sp"
+                android:layout_marginStart="8dp"
+                android:textColor="#707070"
+                android:text="Name"
+                app:layout_constraintStart_toEndOf="@+id/organizer"
+                app:layout_constraintTop_toBottomOf="@+id/geo" />
+
+
 
             <TextView
                 android:id="@+id/description"

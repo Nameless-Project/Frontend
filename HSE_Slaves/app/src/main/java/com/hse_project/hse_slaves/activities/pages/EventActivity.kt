@@ -1,5 +1,6 @@
 package com.hse_project.hse_slaves.activities.pages
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.current.IS_TMP_USER
+import com.hse_project.hse_slaves.current.TMP_USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.repository.Repository
@@ -38,6 +41,14 @@ class EventActivity : AppCompatActivity() {
         setContentView(R.layout.activity_event)
 
         initApi()
+        organizer_nik.setOnClickListener {
+            IS_TMP_USER = true
+            startActivity(Intent(this@EventActivity, UserProfileActivity::class.java))
+        }
+        organizer.setOnClickListener {
+            IS_TMP_USER = true
+            startActivity(Intent(this@EventActivity, UserProfileActivity::class.java))
+        }
         setData()
 
         addListenerForLikes()
@@ -131,7 +142,7 @@ class EventActivity : AppCompatActivity() {
                     response.body()?.name.toString(),
                     response.body()?.description.toString(),
                     response.body()?.images!!,
-                    response.body()?.organizerID!!,
+                    response.body()?.organizerId!!,
                     response.body()?.participantsIDs!!,
                     response.body()?.rating!!,
                     response.body()?.geoData.toString(),
@@ -139,6 +150,10 @@ class EventActivity : AppCompatActivity() {
                     response.body()?.date.toString(),
                     response.body()?.likes!!
                 )
+                Log.d("PPPPPPPPPPPP", response.body()?.organizerId.toString())
+                Log.d("PPPPPPPPPPPP", response.body()?.name.toString())
+                Log.d("OOOOOOOOOOOO", data.organizerId.toString())
+                getOrganizer()
                 checkLike()
             } else {
                 Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBB")
@@ -147,6 +162,19 @@ class EventActivity : AppCompatActivity() {
         })
         // application.assets.open("kek.txt").writeBytes(application.assets.open("sample.bmp").readBytes())
 
+    }
+
+    private fun getOrganizer() {
+        Log.d("IIIIIIIIIIIIIIIIIII", data.organizerId.toString())
+        viewModel.getUser(data.organizerId)
+        TMP_USER_ID = data.organizerId
+        viewModel.userResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                organizer_nik.text = response.body()?.username
+            } else {
+                Log.d("AAAAAAA", response.toString())
+            }
+        })
     }
 
     private fun checkLike() {

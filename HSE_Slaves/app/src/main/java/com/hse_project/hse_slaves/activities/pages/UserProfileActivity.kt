@@ -3,6 +3,7 @@ package com.hse_project.hse_slaves.activities.pages
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -14,15 +15,25 @@ import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.SettingsActivity
 import com.hse_project.hse_slaves.activities.pages.chats.ChatForOrganizerActivity
+import com.hse_project.hse_slaves.current.IS_TMP_USER
+import com.hse_project.hse_slaves.current.TMP_USER_ID
+import com.hse_project.hse_slaves.current.USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
+import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.activity_feed.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
+import kotlinx.android.synthetic.main.activity_user_profile.description
+import kotlinx.android.synthetic.main.activity_user_profile.gallery
 import kotlinx.android.synthetic.main.activity_user_profile.menu
+import kotlinx.android.synthetic.main.activity_user_profile.nik_name
+import kotlinx.android.synthetic.main.activity_user_profile.ratio
+import kotlinx.android.synthetic.main.activity_user_profile.specialization
 
 
-class UserProfileActivity : AppCompatActivity() {
+class UserProfileActivity() : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var data: User
 
@@ -32,13 +43,23 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
-
-        settings.setOnClickListener {
-            startActivity(Intent(this@UserProfileActivity, SettingsActivity::class.java))
-        }
-        addMenu()
+        initViewDependsOnUserType()
 
         initApi()
+    }
+
+    private fun initViewDependsOnUserType() {
+        Log.d(IS_TMP_USER.toString(), "SSSSSSSSSSSSSSSSSSSSS")
+        if (!IS_TMP_USER || TMP_USER_ID == USER_ID) {
+            addMenu()
+            settings.setOnClickListener {
+                startActivity(Intent(this@UserProfileActivity, SettingsActivity::class.java))
+            }
+        } else {
+            main_layout.removeView(settings)
+            main_layout.removeView(menu)
+        }
+        IS_TMP_USER = false
     }
 
     private fun addMenu() {
@@ -67,7 +88,11 @@ class UserProfileActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
-        viewModel.getMyUser()
+        if (IS_TMP_USER) {
+            viewModel.getUser(TMP_USER_ID)
+        } else {
+            viewModel.getMyUser()
+        }
         viewModel.userResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data = response.body()!!

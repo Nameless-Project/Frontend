@@ -81,7 +81,7 @@ class FeedActivity : AppCompatActivity() {
                     response.body()?.name.toString(),
                     response.body()?.description.toString(),
                     response.body()?.images!!,
-                    response.body()?.organizerID!!,
+                    response.body()?.organizerId!!,
                     response.body()?.participantsIDs!!,
                     response.body()?.rating!!,
                     response.body()?.geoData.toString(),

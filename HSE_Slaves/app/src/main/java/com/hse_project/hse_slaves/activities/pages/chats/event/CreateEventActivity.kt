@@ -15,6 +15,7 @@ import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.pages.chats.ChatForOrganizerActivity
+import com.hse_project.hse_slaves.current.USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.image.getStringByUri
 import com.hse_project.hse_slaves.model.EventPost
@@ -161,11 +162,12 @@ class CreateEventActivity : AppCompatActivity() {
                     val description: String =
                         editTextTextDescription.text.toString().trim { it <= ' ' }
                     assert(imagesStringArray.size != 0)
-
+                    Log.d(USER_ID.toString(), "RRRRRRRRRRR")
                     viewModel.postEvent(
                         EventPost(
                             name,
                             description,
+                            USER_ID,
                             1.0,
                             geoData,
                             specialization,

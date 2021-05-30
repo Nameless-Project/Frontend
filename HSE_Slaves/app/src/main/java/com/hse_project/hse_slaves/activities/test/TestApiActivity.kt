@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.current.USER_ID
 import com.hse_project.hse_slaves.current.USER_TOKEN
 import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.model.User
@@ -146,6 +147,7 @@ class TestApiActivity : AppCompatActivity() {
             EventPost(
                 "name$i",
                 "description$i",
+                USER_ID,
                 i.toDouble() / 10,
                 "geoData$i",
                 "ART",
