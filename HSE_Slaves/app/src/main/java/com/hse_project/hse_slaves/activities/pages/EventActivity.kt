@@ -78,7 +78,7 @@ class EventActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         nik_name.text = data.name
         description.text = data.description
-        date.text = data.date
+        date.text = data.date.substring(0, 10)
         specialization.text = data.specialization
         ratio.text = data.rating.toString()
         geo.text = data.geoData

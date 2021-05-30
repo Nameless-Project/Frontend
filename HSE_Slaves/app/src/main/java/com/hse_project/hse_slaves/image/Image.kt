@@ -51,5 +51,7 @@ fun getStringByUri(uri: Uri, activity: Activity): String? {
  */
 fun getBitmapByString(str: String): Bitmap {
     val bmp = Base64.decode(str, Base64.DEFAULT)
-    return BitmapFactory.decodeByteArray(bmp, 0, bmp.size)
+    val bmp1 = BitmapFactory.decodeByteArray(bmp, 0, bmp.size)
+    val width: Int = bmp1.width * 512 / bmp1.height
+    return Bitmap.createScaledBitmap(bmp1, width, 512, true)
 }

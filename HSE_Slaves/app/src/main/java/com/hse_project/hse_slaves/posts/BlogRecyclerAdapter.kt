@@ -1,7 +1,6 @@
 package com.hse_project.hse_slaves.posts
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -65,16 +64,13 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(event: Event) {
             nikName.text = event.name
-            date.text = event.date
+            date.text = event.date.substring(0, 10)
             specialization.text = event.specialization
             ratio.text = event.rating.toString()
             geo.text = event.geoData
 
             id = event.id
-            val bmp1 = getBitmapByString(event.images[0])
-            val height: Int = bmp1.height * 512 / bmp1.width
-            val scale = Bitmap.createScaledBitmap(bmp1, 512, height, true)
-            itemView.imageButton.setImageBitmap(scale)
+            itemView.imageButton.setImageBitmap(getBitmapByString(event.images[0]))
         }
 
     }
