@@ -15,13 +15,29 @@ import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.pages.UserProfileActivity
+import com.hse_project.hse_slaves.current.IS_TMP_USER
+import com.hse_project.hse_slaves.current.TMP_USER_ID
+import com.hse_project.hse_slaves.current.USER_ID
+import com.hse_project.hse_slaves.current.USER_TOKEN
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.image.getStringByUri
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.model.UserRegistration
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.activity_register.add_image
+import kotlinx.android.synthetic.main.activity_register.cancel
+import kotlinx.android.synthetic.main.activity_register.editTextTextDate
+import kotlinx.android.synthetic.main.activity_register.editTextTextDescription
+import kotlinx.android.synthetic.main.activity_register.editTextTextEmailAddress
+import kotlinx.android.synthetic.main.activity_register.editTextTextFirstName
+import kotlinx.android.synthetic.main.activity_register.editTextTextGeoData
+import kotlinx.android.synthetic.main.activity_register.editTextTextPassword
 import kotlinx.android.synthetic.main.activity_register.gallery
+import kotlinx.android.synthetic.main.activity_register.specialization_
+import kotlinx.android.synthetic.main.activity_register.submit
+import kotlinx.android.synthetic.main.activity_register.user_role
+import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import retrofit2.Response
 import java.io.BufferedReader
@@ -167,6 +183,14 @@ class SettingsActivity : AppCompatActivity() {
         cancel.setOnClickListener {
             startActivity(Intent(this@SettingsActivity, UserProfileActivity::class.java))
             //onBackPressed()
+        }
+
+        logout.setOnClickListener {
+            USER_TOKEN = ""
+            USER_ID = 0
+            TMP_USER_ID = 0
+            IS_TMP_USER = false
+            startActivity(Intent(this@SettingsActivity, LoginActivity::class.java))
         }
 
         submit.setOnClickListener {

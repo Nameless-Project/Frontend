@@ -2,12 +2,15 @@ package com.hse_project.hse_slaves.activities.pages
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hse_project.hse_slaves.MainViewModel
@@ -56,10 +59,13 @@ class UserProfileActivity() : AppCompatActivity() {
                 startActivity(Intent(this@UserProfileActivity, SettingsActivity::class.java))
             }
         } else {
+            ImageViewCompat.setImageTintList(
+                settings,
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
+            )
             main_layout.removeView(settings)
             main_layout.removeView(menu)
         }
-        IS_TMP_USER = false
     }
 
     private fun addMenu() {
@@ -93,6 +99,9 @@ class UserProfileActivity() : AppCompatActivity() {
         } else {
             viewModel.getMyUser()
         }
+
+        IS_TMP_USER = false
+
         viewModel.userResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data = response.body()!!
