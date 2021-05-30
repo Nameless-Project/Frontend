@@ -21,14 +21,16 @@ import retrofit2.Response
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class EventActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var data: Event
-    private var isLikeSet : Boolean = false
-    private var isCheckingLike : Boolean = false
+    private var isLikeSet: Boolean = false
+    private var isCheckingLike: AtomicBoolean = AtomicBoolean(false)
+    private var likeDelta: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,39 +40,38 @@ class EventActivity : AppCompatActivity() {
         initApi()
         setData()
 
+        addListenerForLikes()
+    }
+
+    private fun addListenerForLikes() {
         likes_icon.setOnClickListener {
-            viewModel.checkLike(data.id)
-            viewModel.checkLikeResponse.observe(this, { response ->
-                if (response.isSuccessful) {
-                    isLikeSet = response.body()!!
-                    if (isLikeSet) {
-                        viewModel.deleteLike(data.id)
-                        viewModel.deleteLikeResponse.observe(this, { response1 ->
-                            if (response1.isSuccessful) {
-                                isLikeSet = !isLikeSet
-                                changeLikeColor()
-                            } else {
-                                Log.d("Delete Like", response1.toString())
-                                Log.d("Delete Like", response1.message())
-                            }
-                        })
-                    } else {
-                        viewModel.postLike(data.id)
-                        viewModel.postLikeResponse.observe(this, { response1 ->
-                            if (response1.isSuccessful) {
-                                isLikeSet = !isLikeSet
-                                changeLikeColor()
-                            } else {
-                                Log.d("Post Like", response1.toString())
-                            }
-                        })
-                    }
+            Log.d("Aaa", "KKKKKKKKKKKKKKKK")
+            if (isCheckingLike.compareAndSet(false, true)) {
+                if (isLikeSet) {
+                    viewModel.deleteLike(data.id)
+                    viewModel.deleteLikeResponse.observe(this, { response1 ->
+                        if (response1.isSuccessful) {
+                            isLikeSet = false
+                            changeLikeColor()
+                        } else {
+                            Log.d("Delete Like", response1.toString())
+                        }
+                        isCheckingLike.set(false)
+                    })
                 } else {
-                    Log.d("AAAAAAAAAAAAAAAAAAAAAAA", conver(response))
+                    viewModel.postLike(data.id)
+                    viewModel.postLikeResponse.observe(this, { response1 ->
+                        if (response1.isSuccessful) {
+                            isLikeSet = true
+                            changeLikeColor()
+                        } else {
+                            Log.d("Post Like", response1.toString())
+                        }
+                        isCheckingLike.set(false)
+                    })
                 }
-            })
+            }
         }
-        //pushExampleEvent()
     }
 
     private fun update() {
@@ -100,17 +101,23 @@ class EventActivity : AppCompatActivity() {
     }
 
     private fun changeLikeColor() {
-        if (isLikeSet) {
+        var likesString = ""
+        likesString = if (isLikeSet) {
             ImageViewCompat.setImageTintList(
                 likes_icon,
                 ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
             )
+            (data.likes.size + likeDelta).toString() + " likes"
         } else {
             ImageViewCompat.setImageTintList(
                 likes_icon,
                 ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
             )
+            (data.likes.size + likeDelta - 1).toString() + " likes"
         }
+
+
+        likes_number.text = likesString
     }
 
     fun setData() {
@@ -147,6 +154,11 @@ class EventActivity : AppCompatActivity() {
         viewModel.checkLikeResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 isLikeSet = response.body()!!
+                if (isLikeSet) {
+                    likeDelta = 0
+                } else {
+                    likeDelta = 1
+                }
                 update()
             } else {
                 Log.d("AAAAAAAAAAAAAAAAAAAAAAA", conver(response))
