@@ -1,18 +1,20 @@
 package com.hse_project.hse_slaves.activities.pages
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_event.*
 import retrofit2.Response
@@ -25,12 +27,49 @@ class EventActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var data: Event
+    private var isLikeSet : Boolean = false
+    private var isCheckingLike : Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
+
+        initApi()
         setData()
+
+        likes_icon.setOnClickListener {
+            viewModel.checkLike(data.id)
+            viewModel.checkLikeResponse.observe(this, { response ->
+                if (response.isSuccessful) {
+                    isLikeSet = response.body()!!
+                    if (isLikeSet) {
+                        viewModel.deleteLike(data.id)
+                        viewModel.deleteLikeResponse.observe(this, { response1 ->
+                            if (response1.isSuccessful) {
+                                isLikeSet = !isLikeSet
+                                changeLikeColor()
+                            } else {
+                                Log.d("Delete Like", response1.toString())
+                                Log.d("Delete Like", response1.message())
+                            }
+                        })
+                    } else {
+                        viewModel.postLike(data.id)
+                        viewModel.postLikeResponse.observe(this, { response1 ->
+                            if (response1.isSuccessful) {
+                                isLikeSet = !isLikeSet
+                                changeLikeColor()
+                            } else {
+                                Log.d("Post Like", response1.toString())
+                            }
+                        })
+                    }
+                } else {
+                    Log.d("AAAAAAAAAAAAAAAAAAAAAAA", conver(response))
+                }
+            })
+        }
         //pushExampleEvent()
     }
 
@@ -42,6 +81,11 @@ class EventActivity : AppCompatActivity() {
         specialization.text = data.specialization
         ratio.text = data.rating.toString()
         geo.text = data.geoData
+
+        changeLikeColor()
+
+        val likesString = data.likes.size.toString() + " likes"
+        likes_number.text = likesString
 
         for (i in data.images.indices) {
             val view = inflater.inflate(R.layout.item_event_photo, gallery, false)
@@ -55,11 +99,22 @@ class EventActivity : AppCompatActivity() {
 
     }
 
+    private fun changeLikeColor() {
+        if (isLikeSet) {
+            ImageViewCompat.setImageTintList(
+                likes_icon,
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+            )
+        } else {
+            ImageViewCompat.setImageTintList(
+                likes_icon,
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.grey))
+            )
+        }
+    }
+
     fun setData() {
 
-        val repository = Repository()
-        val viewModelFactory = MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         //pushExampleEvent()
         viewModel.getEvent(1)
         viewModel.eventResponse.observe(this, { response ->
@@ -77,14 +132,32 @@ class EventActivity : AppCompatActivity() {
                     response.body()?.date.toString(),
                     response.body()?.likes!!
                 )
-                update()
+                checkLike()
             } else {
-                Log.d("BLYAAAAAAAAAAAAAAAAAAAAAAAAA", "EBANAROT")
+                Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBB")
                 //Log.d("Response", conver(response))
             }
         })
         // application.assets.open("kek.txt").writeBytes(application.assets.open("sample.bmp").readBytes())
 
+    }
+
+    private fun checkLike() {
+        viewModel.checkLike(data.id)
+        viewModel.checkLikeResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                isLikeSet = response.body()!!
+                update()
+            } else {
+                Log.d("AAAAAAAAAAAAAAAAAAAAAAA", conver(response))
+            }
+        })
+    }
+
+    private fun initApi() {
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
 //
@@ -108,7 +181,27 @@ class EventActivity : AppCompatActivity() {
 //        Log.d("AAAAAAAAAAAA", "BBBBBBBBBBBbbbBBBb")
 //    }
 
-    private fun conver(response: Response<EventPost>): String {
+    private fun conver(response: Response<Boolean>): String {
+        var reader: BufferedReader? = null
+        val sb = StringBuilder()
+        try {
+            reader = BufferedReader(InputStreamReader(response.errorBody()?.byteStream()))
+            var line: String?
+            try {
+                while (reader.readLine().also { line = it } != null) {
+                    sb.append(line)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return sb.toString()
+    }
+
+    private fun conver1(response: Response<Void>): String {
         var reader: BufferedReader? = null
         val sb = StringBuilder()
         try {

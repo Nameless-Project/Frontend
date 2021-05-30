@@ -51,4 +51,28 @@ interface SimpleApi {
     suspend fun getToken(
         @QueryMap filters: Map<String, String>
     ): Response<Int>
+
+    //Likes
+
+    @POST("/api/users/{userId}/likes/{eventId}")
+    suspend fun postLike(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @Path("eventId") eventId: Int
+    ): Response<Void>
+
+    @DELETE("/api/users/{userId}/likes/{eventId}")
+    suspend fun deleteLike(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @Path("eventId") eventId: Int
+    ): Response<Void>
+
+    @GET("/api/users/{userId}/likes/{eventId}")
+    suspend fun checkLike(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @Path("eventId") eventId: Int
+    ): Response<Boolean>
+
 }

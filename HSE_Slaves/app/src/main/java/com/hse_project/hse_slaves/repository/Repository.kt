@@ -25,11 +25,27 @@ class Repository {
         return RetrofitInstance.api.postEvent(HeaderMap, event)
     }
 
+    //Security
+
     suspend fun getToken(username : String, password : String): Response<Int> {
         return RetrofitInstance.api.getToken(mapOf("username" to username, "password" to password))
     }
 
-    suspend fun register(event: UserRegistration): retrofit2.Response<Void> {
+    suspend fun register(event: UserRegistration): Response<Void> {
         return RetrofitInstance.api.register(event)
+    }
+
+    //Likes
+
+    suspend fun postLike(HeaderMap : Map<String, String>, userId : Int, eventId : Int): Response<Void> {
+        return RetrofitInstance.api.postLike(HeaderMap, userId, eventId)
+    }
+
+    suspend fun deleteLike(HeaderMap : Map<String, String>, userId : Int, eventId : Int): Response<Void> {
+        return RetrofitInstance.api.deleteLike(HeaderMap, userId, eventId)
+    }
+
+    suspend fun checkLike(HeaderMap : Map<String, String>, userId : Int, eventId : Int): Response<Boolean> {
+        return RetrofitInstance.api.checkLike(HeaderMap, userId, eventId)
     }
 }

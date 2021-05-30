@@ -20,6 +20,9 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val eventResponse: MutableLiveData<retrofit2.Response<Event>> = MutableLiveData()
     val userResponse: MutableLiveData<retrofit2.Response<User>> = MutableLiveData()
     val imageResponse: MutableLiveData<retrofit2.Response<List<String>>> = MutableLiveData()
+    val postLikeResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+    val deleteLikeResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+    val checkLikeResponse: MutableLiveData<retrofit2.Response<Boolean>> = MutableLiveData()
 
 
     var userId: Int = USER_ID
@@ -72,6 +75,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    //Security
+
     fun getToken(username: String, password: String) {
         viewModelScope.launch {
             val response = repository.getToken(username, password)
@@ -85,4 +90,29 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             registerResponse.value = response
         }
     }
+
+    //Likes
+
+    fun postLike(eventId : Int) {
+        viewModelScope.launch {
+            val response = repository.postLike(getHeaderMap(), userId, eventId)
+            postLikeResponse.value = response
+        }
+    }
+
+
+    fun deleteLike(eventId : Int) {
+        viewModelScope.launch {
+            val response = repository.deleteLike(getHeaderMap(), userId, eventId)
+            deleteLikeResponse.value = response
+        }
+    }
+
+    fun checkLike(eventId : Int) {
+        viewModelScope.launch {
+            val response = repository.checkLike(getHeaderMap(), userId, eventId)
+            checkLikeResponse.value = response
+        }
+    }
+
 }
