@@ -39,12 +39,26 @@ import kotlinx.android.synthetic.main.activity_user_profile.specialization
 class UserProfileActivity() : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var data: User
+    private var isFollowSet: Boolean = false
 
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
+
+        follow.setOnClickListener {
+            //TODO вызывать методы подписка/отписка
+            if (isFollowSet) {
+                isFollowSet = false
+                follow.text = ("unfollow").toString()
+                follow.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
+            } else {
+                isFollowSet = true
+                follow.text = ("follow").toString()
+                follow.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
+            }
+        }
 
         initViewDependsOnUserType()
 
@@ -59,10 +73,12 @@ class UserProfileActivity() : AppCompatActivity() {
                 startActivity(Intent(this@UserProfileActivity, SettingsActivity::class.java))
             }
         } else {
+
             ImageViewCompat.setImageTintList(
                 settings,
                 ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
             )
+
             main_layout.removeView(settings)
             main_layout.removeView(menu)
         }

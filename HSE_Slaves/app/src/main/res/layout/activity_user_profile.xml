@@ -33,10 +33,11 @@
 
             <ImageButton
                 android:id="@+id/settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:tint="@color/grey"
                 android:background="#00000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -69,11 +70,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/donegal_one"
-                android:textSize="40sp"
                 android:text="Nik"
                 android:textColor="@color/black"
+                android:textSize="40sp"
                 app:layout_constraintStart_toEndOf="@+id/profile_photo"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,27 +82,29 @@
                 android:id="@+id/second_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/donegal_one"
-                android:textSize="15sp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/donegal_one"
 
                 android:text="SecondName"
                 android:textColor="#707070"
+                android:textSize="15sp"
                 app:layout_constraintStart_toEndOf="@+id/profile_photo"
-                app:layout_constraintTop_toBottomOf="@id/nik_name" />
+                app:layout_constraintTop_toBottomOf="@id/follow" />
 
             <TextView
                 android:id="@+id/first_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/donegal_one"
-                android:textSize="15sp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/donegal_one"
 
                 android:text="FirstName"
                 android:textColor="#707070"
+                android:textSize="15sp"
                 app:layout_constraintStart_toEndOf="@+id/second_name"
-                app:layout_constraintTop_toBottomOf="@id/nik_name" />
+                app:layout_constraintTop_toBottomOf="@id/follow" />
 
             <TextView
                 android:id="@+id/third_name"
@@ -190,6 +193,21 @@
                 app:layout_constraintEnd_toEndOf="@+id/type"
                 app:layout_constraintTop_toBottomOf="@+id/type"
                 />
+
+            <Button
+                android:id="@+id/follow"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/purple_500"
+                android:fontFamily="@font/donegal_one"
+                android:text="follow"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/settings"
+                app:layout_constraintStart_toEndOf="@+id/nik_name"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
 
 
