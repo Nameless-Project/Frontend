@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -13,9 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.pages.UserProfileActivity
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.image.getStringByUri
 import com.hse_project.hse_slaves.model.User
+import com.hse_project.hse_slaves.model.UserRegistration
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.gallery
@@ -162,7 +165,8 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun run() {
         cancel.setOnClickListener {
-            onBackPressed()
+            startActivity(Intent(this@SettingsActivity, UserProfileActivity::class.java))
+            //onBackPressed()
         }
 
         submit.setOnClickListener {
@@ -221,28 +225,28 @@ class SettingsActivity : AppCompatActivity() {
                         editTextTextDescription.text.toString().trim { it <= ' ' }
                     assert(imagesStringArray.size != 0)
                     //TODO заменить это на вызов метода, который будет менять пользователя и потом открывать профиль
-//                    viewModel.register(
-//                        UserRegistration(
-//                            userRole,
-//                            firstName,
-//                            lastName,
-//                            patronymic,
-//                            userName,
-//                            password,
-//                            specialization,
-//                            description,
-//                            imagesStringArray,
-//                        )
-//                    )
-//                    viewModel.registerResponse.observe(this, { response ->
-//                        if (response.isSuccessful) {
-//                            startActivity(Intent(this@SettingsActivity, LoginActivity::class.java))
-//                        } else {
-//                            Log.d("AAAAAA", convert(response))
-//                            throw RuntimeException(response.toString())
-//                        }
-//                    })
-
+                    viewModel.changeUser(
+                        UserRegistration(
+                            userRole,
+                            firstName,
+                            lastName,
+                            patronymic,
+                            userName,
+                            password,
+                            specialization,
+                            description,
+                            imagesStringArray,
+                        )
+                    )
+                    viewModel.registerResponse.observe(this, { response ->
+                        if (response.isSuccessful) {
+                            Log.d("AAAAAa", "BBBBBb")
+                        } else {
+                            Log.d("AAAAAA", "convert(response)")
+                            throw RuntimeException(response.toString())
+                        }
+                    })
+                    startActivity(Intent(this@SettingsActivity, UserProfileActivity::class.java))
                 }
             }
         }

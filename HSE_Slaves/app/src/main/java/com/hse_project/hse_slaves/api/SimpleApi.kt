@@ -75,4 +75,10 @@ interface SimpleApi {
         @Path("eventId") eventId: Int
     ): Response<Boolean>
 
+    @PUT("/api/users/{userId}")
+    suspend fun changeUser(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @Body event: UserRegistration
+    ): Response<Void>
 }

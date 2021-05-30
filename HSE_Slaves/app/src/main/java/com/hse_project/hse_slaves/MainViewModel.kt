@@ -17,6 +17,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val tokenResponse: MutableLiveData<retrofit2.Response<Int>> = MutableLiveData()
     val postEventResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val registerResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+    val changeUserResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val eventResponse: MutableLiveData<retrofit2.Response<Event>> = MutableLiveData()
     val userResponse: MutableLiveData<retrofit2.Response<User>> = MutableLiveData()
     val imageResponse: MutableLiveData<retrofit2.Response<List<String>>> = MutableLiveData()
@@ -112,6 +113,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.checkLike(getHeaderMap(), userId, eventId)
             checkLikeResponse.value = response
+        }
+    }
+
+    fun changeUser(user: UserRegistration) {
+        viewModelScope.launch {
+            val response = repository.changeUser(getHeaderMap(), userId, user)
+            changeUserResponse.value = response
         }
     }
 

@@ -48,4 +48,8 @@ class Repository {
     suspend fun checkLike(HeaderMap : Map<String, String>, userId : Int, eventId : Int): Response<Boolean> {
         return RetrofitInstance.api.checkLike(HeaderMap, userId, eventId)
     }
+
+    suspend fun changeUser(HeaderMap: Map<String, String>, userId: Int, user: UserRegistration): Response<Void>? {
+        return RetrofitInstance.api.changeUser(HeaderMap, userId, user)
+    }
 }
