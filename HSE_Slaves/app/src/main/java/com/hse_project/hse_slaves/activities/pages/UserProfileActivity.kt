@@ -56,7 +56,7 @@ class UserProfileActivity() : AppCompatActivity() {
     }
 
     private fun checkSubscription() {
-        if (!IS_TMP_USER || TMP_USER_ID == USER_ID) {
+        if (!IS_TMP_USER || TMP_USER_ID == USER_ID || data.userRole == "USER") {
             IS_TMP_USER = false
             update()
             return
@@ -184,6 +184,9 @@ class UserProfileActivity() : AppCompatActivity() {
         viewModel.userResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data = response.body()!!
+                if (data.userRole == "USER") {
+                    follow.visibility = View.INVISIBLE;
+                }
                 checkSubscription()
             } else {
                 throw RuntimeException(response.toString())
