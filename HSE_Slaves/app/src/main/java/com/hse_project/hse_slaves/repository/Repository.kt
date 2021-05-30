@@ -25,6 +25,10 @@ class Repository {
         return RetrofitInstance.api.postEvent(HeaderMap, event)
     }
 
+    suspend fun changeUser(HeaderMap: Map<String, String>, userId: Int, user: UserRegistration): Response<Void>? {
+        return RetrofitInstance.api.changeUser(HeaderMap, userId, user)
+    }
+
     //Security
 
     suspend fun getToken(username : String, password : String): Response<Int> {
@@ -49,7 +53,18 @@ class Repository {
         return RetrofitInstance.api.checkLike(HeaderMap, userId, eventId)
     }
 
-    suspend fun changeUser(HeaderMap: Map<String, String>, userId: Int, user: UserRegistration): Response<Void>? {
-        return RetrofitInstance.api.changeUser(HeaderMap, userId, user)
+    //Subscriptions
+
+    suspend fun postSubscription(HeaderMap : Map<String, String>, userId : Int, subscriptionId: Int): Response<Void> {
+        return RetrofitInstance.api.postSubscription(HeaderMap, mapOf("userId" to userId, "subscriptionId" to subscriptionId))
     }
+
+    suspend fun deleteSubscription(HeaderMap : Map<String, String>, userId : Int, subscriptionId: Int): Response<Void> {
+        return RetrofitInstance.api.deleteSubscription(HeaderMap, mapOf("userId" to userId, "subscriptionId" to subscriptionId))
+    }
+
+    suspend fun getAllSubscriptions(HeaderMap : Map<String, String>, userId : Int, subscriptionId: Int): Response<List<User>> {
+        return RetrofitInstance.api.getAllSubscriptions(HeaderMap, mapOf("userId" to userId, "subscriptionId" to subscriptionId))
+    }
+
 }

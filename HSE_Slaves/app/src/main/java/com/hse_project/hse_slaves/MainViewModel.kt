@@ -21,9 +21,14 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val eventResponse: MutableLiveData<retrofit2.Response<Event>> = MutableLiveData()
     val userResponse: MutableLiveData<retrofit2.Response<User>> = MutableLiveData()
     val imageResponse: MutableLiveData<retrofit2.Response<List<String>>> = MutableLiveData()
+
     val postLikeResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val deleteLikeResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val checkLikeResponse: MutableLiveData<retrofit2.Response<Boolean>> = MutableLiveData()
+
+    val postSubscriptionResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+    val deleteSubscriptionResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+    val getAllSubscriptionsResponse: MutableLiveData<retrofit2.Response<List<User>>> = MutableLiveData()
 
 
     var userId: Int = USER_ID
@@ -76,6 +81,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    fun changeUser(user: UserRegistration) {
+        viewModelScope.launch {
+            val response = repository.changeUser(getHeaderMap(), userId, user)
+            changeUserResponse.value = response
+        }
+    }
+
     //Security
 
     fun getToken(username: String, password: String) {
@@ -116,11 +128,29 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun changeUser(user: UserRegistration) {
+    //Subscriptions
+
+    fun postSubscription(subscriptionId : Int) {
         viewModelScope.launch {
-            val response = repository.changeUser(getHeaderMap(), userId, user)
-            changeUserResponse.value = response
+            val response = repository.postSubscription(getHeaderMap(), userId, subscriptionId)
+            postSubscriptionResponse.value = response
         }
     }
+
+
+    fun deleteSubscription(subscriptionId : Int) {
+        viewModelScope.launch {
+            val response = repository.deleteSubscription(getHeaderMap(), userId, subscriptionId)
+            deleteSubscriptionResponse.value = response
+        }
+    }
+
+    fun getAllSubscriptions(subscriptionId : Int) {
+        viewModelScope.launch {
+            val response = repository.getAllSubscriptions(getHeaderMap(), userId, subscriptionId)
+            getAllSubscriptionsResponse.value = response
+        }
+    }
+
 
 }

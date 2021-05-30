@@ -40,6 +40,13 @@ interface SimpleApi {
         @Path("id") id: Int
     ): Response<User>
 
+    @PUT("/api/users/{userId}")
+    suspend fun changeUser(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @Body event: UserRegistration
+    ): Response<Void>
+
     //Security
 
     @POST("/api/registration")
@@ -75,10 +82,24 @@ interface SimpleApi {
         @Path("eventId") eventId: Int
     ): Response<Boolean>
 
-    @PUT("/api/users/{userId}")
-    suspend fun changeUser(
+    //Subscriptions
+    @POST("/api/subscriptions")
+    suspend fun postSubscription(
         @HeaderMap headers: Map<String, String>,
-        @Path("userId") userId: Int,
-        @Body event: UserRegistration
+        @QueryMap filters: Map<String, Int>
     ): Response<Void>
+
+    @DELETE("/api/subscriptions")
+    suspend fun deleteSubscription(
+        @HeaderMap headers: Map<String, String>,
+        @QueryMap filters: Map<String, Int>
+    ): Response<Void>
+
+    @GET("/api/subscriptions")
+    suspend fun getAllSubscriptions(
+        @HeaderMap headers: Map<String, String>,
+        @QueryMap filters: Map<String, Int>
+    ): Response<List<User>>
+
+
 }
