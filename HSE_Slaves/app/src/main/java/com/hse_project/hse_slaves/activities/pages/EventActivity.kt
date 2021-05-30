@@ -132,8 +132,6 @@ class EventActivity : AppCompatActivity() {
     }
 
     fun setData() {
-
-        //pushExampleEvent()
         viewModel.getEvent(1)
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
@@ -199,27 +197,6 @@ class EventActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
-
-//
-//    fun pushExampleEvent() {
-//        val repository = Repository()
-//        val viewModelFactory = MainViewModelFactory(repository)
-//        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-//        val tmp = ArrayList<String>();
-//        tmp.add(Base64.encodeToString(application.assets.open("sample.bmp").readBytes(), DEFAULT));
-//        viewModel.postEvent(
-//            EventPost(
-//                "Gay Party",
-//                "Fisting is 300 bucks",
-//                0.228,
-//                "Gym",
-//                "LITERATURE",
-//                "2020-04-04",
-//                ArrayList(),
-//            ),
-//        )
-//        Log.d("AAAAAAAAAAAA", "BBBBBBBBBBBbbbBBBb")
-//    }
 
     private fun conver(response: Response<Boolean>): String {
         var reader: BufferedReader? = null

@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -34,12 +35,14 @@ import kotlinx.android.synthetic.main.activity_user_profile.menu
 import kotlinx.android.synthetic.main.activity_user_profile.nik_name
 import kotlinx.android.synthetic.main.activity_user_profile.ratio
 import kotlinx.android.synthetic.main.activity_user_profile.specialization
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class UserProfileActivity() : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var data: User
     private var isFollowSet: Boolean = false
+    private var isCheckingSubscription: AtomicBoolean = AtomicBoolean(false)
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -47,28 +50,85 @@ class UserProfileActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
-        follow.setOnClickListener {
-            //TODO вызывать методы подписка/отписка
-            if (isFollowSet) {
-                isFollowSet = false
-                follow.text = ("unfollow").toString()
-                follow.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
-            } else {
-                isFollowSet = true
-                follow.text = ("follow").toString()
-                follow.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
-            }
-        }
-
         initViewDependsOnUserType()
 
         initApi()
+    }
+
+    private fun checkSubscription() {
+        if (!IS_TMP_USER || TMP_USER_ID == USER_ID) {
+            IS_TMP_USER = false
+            update()
+            return
+        }
+        IS_TMP_USER = false
+        //TODO когда появится метод который возвращает bool поменять на него
+        viewModel.getAllSubscriptions(TMP_USER_ID)
+        viewModel.getAllSubscriptionsResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                isFollowSet = response.body()?.contains(data)!!
+                Log.d("QQQQQQQQQQQQQQQ", isFollowSet.toString())
+                addFollowListener()
+                update()
+            } else {
+                Log.d("AAAAAAAAAAAAAAAAAAAAAAA", response.toString())
+            }
+        })
+    }
+
+    private fun addFollowListener() {
+        follow.setOnClickListener {
+            if (isCheckingSubscription.compareAndSet(false, true)) {
+                Log.d("AAAA", isFollowSet.toString())
+                if (isFollowSet) {
+                    viewModel.deleteSubscription(data.id)
+                    viewModel.deleteSubscriptionResponse.observe(this, { response1 ->
+                        if (response1.isSuccessful) {
+                            isFollowSet = false
+                            follow.text = ("follow").toString()
+                            follow.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.purple_500
+                                )
+                            )
+                        } else {
+                            Log.d("Delete subscription", response1.toString())
+                        }
+                        isCheckingSubscription.set(false)
+                    })
+                } else {
+                    viewModel.postSubscription(data.id)
+                    viewModel.postSubscriptionResponse.observe(this, { response1 ->
+                        if (response1.isSuccessful) {
+                            isFollowSet = true
+                            follow.text = ("unfollow").toString()
+                            follow.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.grey
+                                )
+                            )
+
+                        } else {
+                            Log.d("Post subscription", response1.toString())
+                        }
+                        isCheckingSubscription.set(false)
+                    })
+                }
+            }
+        }
     }
 
     private fun initViewDependsOnUserType() {
         Log.d(IS_TMP_USER.toString(), "SSSSSSSSSSSSSSSSSSSSS")
         if (!IS_TMP_USER || TMP_USER_ID == USER_ID) {
             addMenu()
+//            follow.text = ("").toString()
+//            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+//            main_layout.removeView(follow)
+            follow.visibility = View.INVISIBLE;
+
             settings.setOnClickListener {
                 startActivity(Intent(this@UserProfileActivity, SettingsActivity::class.java))
             }
@@ -78,7 +138,6 @@ class UserProfileActivity() : AppCompatActivity() {
                 settings,
                 ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
             )
-
             main_layout.removeView(settings)
             main_layout.removeView(menu)
         }
@@ -94,7 +153,12 @@ class UserProfileActivity() : AppCompatActivity() {
                     startActivity(Intent(this@UserProfileActivity, FeedActivity::class.java))
                 }
                 R.id.chats -> {
-                    startActivity(Intent(this@UserProfileActivity, ChatForOrganizerActivity::class.java))
+                    startActivity(
+                        Intent(
+                            this@UserProfileActivity,
+                            ChatForOrganizerActivity::class.java
+                        )
+                    )
                 }
             }
             false
@@ -116,19 +180,18 @@ class UserProfileActivity() : AppCompatActivity() {
             viewModel.getMyUser()
         }
 
-        IS_TMP_USER = false
 
         viewModel.userResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data = response.body()!!
-                run()
+                checkSubscription()
             } else {
                 throw RuntimeException(response.toString())
             }
         })
     }
 
-    private fun run() {
+    private fun update() {
         val inflater = LayoutInflater.from(this)
 
         nik_name.text = data.username
@@ -139,6 +202,14 @@ class UserProfileActivity() : AppCompatActivity() {
         type.text = data.userRole
         specialization.text = data.specialization
         ratio.text = data.rating.toString()
+
+        if (isFollowSet) {
+            follow.text = ("unfollow").toString()
+            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
+        } else {
+            follow.text = ("follow").toString()
+            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
+        }
 
         for (i in 0 until data.images.size) {
             val view = inflater.inflate(R.layout.item_event_photo, gallery, false)
