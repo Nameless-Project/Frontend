@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
-import com.hse_project.hse_slaves.activities.pages.chats.ChatForOrganizerActivity
+import com.hse_project.hse_slaves.activities.MainActivity
 import com.hse_project.hse_slaves.current.USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.image.getStringByUri
@@ -178,7 +178,7 @@ class CreateEventActivity : AppCompatActivity() {
 
                     viewModel.postEventResponse.observe(this, { response ->
                         if (response.isSuccessful) {
-                            startActivity(Intent(this@CreateEventActivity, ChatForOrganizerActivity::class.java))
+                            startActivity(Intent(this@CreateEventActivity, MainActivity::class.java))
                         } else {
                             Log.d("AAAAAA", convert(response))
                             throw RuntimeException(response.toString())

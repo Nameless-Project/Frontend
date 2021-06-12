@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.MainActivity
 import com.hse_project.hse_slaves.current.IS_TMP_USER
 import com.hse_project.hse_slaves.current.TMP_USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
@@ -43,11 +44,11 @@ class EventActivity : AppCompatActivity() {
         initApi()
         organizer_nik.setOnClickListener {
             IS_TMP_USER = true
-            startActivity(Intent(this@EventActivity, UserProfileActivity::class.java))
+            startActivity(Intent(this@EventActivity, MainActivity::class.java))
         }
         organizer.setOnClickListener {
             IS_TMP_USER = true
-            startActivity(Intent(this@EventActivity, UserProfileActivity::class.java))
+            startActivity(Intent(this@EventActivity, MainActivity::class.java))
         }
         setData()
 

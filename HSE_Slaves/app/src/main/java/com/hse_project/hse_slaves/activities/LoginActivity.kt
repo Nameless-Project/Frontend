@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
-import com.hse_project.hse_slaves.activities.pages.UserProfileActivity
 import com.hse_project.hse_slaves.current.USER_ID
 import com.hse_project.hse_slaves.current.USER_TOKEN
 import com.hse_project.hse_slaves.repository.Repository
@@ -74,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                             USER_TOKEN = response.headers()["Authorization"].toString()
                             //Log.d(viewModel.token, "AAAAAAAAAAAAAAAAaaa")
                             USER_ID = response.body()!!
-                            startActivity(Intent(this@LoginActivity, UserProfileActivity::class.java))
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         } else {
                             throw RuntimeException(response.toString())
                         }

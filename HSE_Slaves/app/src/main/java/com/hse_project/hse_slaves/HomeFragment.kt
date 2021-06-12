@@ -1,55 +1,36 @@
-package com.hse_project.hse_slaves.activities.pages
+package com.hse_project.hse_slaves
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.hse_project.hse_slaves.MainViewModel
-import com.hse_project.hse_slaves.MainViewModelFactory
-import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.SettingsActivity
-import com.hse_project.hse_slaves.activities.pages.chats.ChatForOrganizerActivity
 import com.hse_project.hse_slaves.current.IS_TMP_USER
 import com.hse_project.hse_slaves.current.TMP_USER_ID
 import com.hse_project.hse_slaves.current.USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
-import kotlinx.android.synthetic.main.activity_event.*
-import kotlinx.android.synthetic.main.activity_feed.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_user_profile.*
-import kotlinx.android.synthetic.main.activity_user_profile.description
-import kotlinx.android.synthetic.main.activity_user_profile.gallery
-import kotlinx.android.synthetic.main.activity_user_profile.menu
-import kotlinx.android.synthetic.main.activity_user_profile.nik_name
-import kotlinx.android.synthetic.main.activity_user_profile.ratio
-import kotlinx.android.synthetic.main.activity_user_profile.specialization
+import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-
-class UserProfileActivity() : AppCompatActivity() {
+class HomeFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var data: User
     private var isFollowSet: Boolean = false
     private var isCheckingSubscription: AtomicBoolean = AtomicBoolean(false)
 
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_profile)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViewDependsOnUserType()
 
         initApi()
@@ -88,7 +69,7 @@ class UserProfileActivity() : AppCompatActivity() {
                             follow.text = ("follow").toString()
                             follow.setBackgroundColor(
                                 ContextCompat.getColor(
-                                    this,
+                                    requireContext(),
                                     R.color.purple_500
                                 )
                             )
@@ -105,7 +86,7 @@ class UserProfileActivity() : AppCompatActivity() {
                             follow.text = ("unfollow").toString()
                             follow.setBackgroundColor(
                                 ContextCompat.getColor(
-                                    this,
+                                    requireContext(),
                                     R.color.grey
                                 )
                             )
@@ -123,50 +104,22 @@ class UserProfileActivity() : AppCompatActivity() {
     private fun initViewDependsOnUserType() {
         Log.d(IS_TMP_USER.toString(), "SSSSSSSSSSSSSSSSSSSSS")
         if (!IS_TMP_USER || TMP_USER_ID == USER_ID) {
-            addMenu()
 //            follow.text = ("").toString()
 //            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 //            main_layout.removeView(follow)
             follow.visibility = View.INVISIBLE;
 
             settings.setOnClickListener {
-                startActivity(Intent(this@UserProfileActivity, SettingsActivity::class.java))
+                startActivity(Intent(context, SettingsActivity::class.java))
             }
         } else {
 
             ImageViewCompat.setImageTintList(
                 settings,
-                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
+                ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
             )
             main_layout.removeView(settings)
-            main_layout.removeView(menu)
         }
-    }
-
-    private fun addMenu() {
-        val listener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.home -> {
-                    startActivity(Intent(this@UserProfileActivity, UserProfileActivity::class.java))
-                }
-                R.id.feed -> {
-                    startActivity(Intent(this@UserProfileActivity, FeedActivity::class.java))
-                }
-                R.id.chats -> {
-                    startActivity(
-                        Intent(
-                            this@UserProfileActivity,
-                            ChatForOrganizerActivity::class.java
-                        )
-                    )
-                }
-            }
-            false
-        }
-
-
-        menu.selectedItemId = R.id.home;
-        menu.setOnNavigationItemSelectedListener(listener);
     }
 
     private fun initApi() {
@@ -195,7 +148,7 @@ class UserProfileActivity() : AppCompatActivity() {
     }
 
     private fun update() {
-        val inflater = LayoutInflater.from(this)
+        val inflater = LayoutInflater.from(context)
 
         nik_name.text = data.username
         first_name.text = data.firstName
@@ -208,10 +161,10 @@ class UserProfileActivity() : AppCompatActivity() {
 
         if (isFollowSet) {
             follow.text = ("unfollow").toString()
-            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
+            follow.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey))
         } else {
             follow.text = ("follow").toString()
-            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
+            follow.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
         }
 
         for (i in 0 until data.images.size) {
@@ -226,5 +179,12 @@ class UserProfileActivity() : AppCompatActivity() {
                 gallery.addView(view)
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 }

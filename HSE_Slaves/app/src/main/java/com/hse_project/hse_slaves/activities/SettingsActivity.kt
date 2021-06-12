@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
-import com.hse_project.hse_slaves.activities.pages.UserProfileActivity
 import com.hse_project.hse_slaves.current.IS_TMP_USER
 import com.hse_project.hse_slaves.current.TMP_USER_ID
 import com.hse_project.hse_slaves.current.USER_ID
@@ -38,14 +37,9 @@ import kotlinx.android.synthetic.main.activity_register.specialization_
 import kotlinx.android.synthetic.main.activity_register.submit
 import kotlinx.android.synthetic.main.activity_register.user_role
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.activity_user_profile.*
-import retrofit2.Response
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 
 class SettingsActivity : AppCompatActivity() {
-
+    //TODO для спинеров правильно выставлять начальное значение
     private lateinit var viewModel: MainViewModel
     private lateinit var data: User
 
@@ -181,8 +175,8 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun run() {
         cancel.setOnClickListener {
-            startActivity(Intent(this@SettingsActivity, UserProfileActivity::class.java))
-            //onBackPressed()
+            //startActivity(Intent(this@SettingsActivity, UserProfileActivity::class.java))
+            onBackPressed()
         }
 
         logout.setOnClickListener {
@@ -270,30 +264,10 @@ class SettingsActivity : AppCompatActivity() {
                             throw RuntimeException(response.toString())
                         }
                     })
-                    startActivity(Intent(this@SettingsActivity, UserProfileActivity::class.java))
+                    startActivity(Intent(this@SettingsActivity, MainActivity::class.java))
                 }
             }
         }
-    }
-
-    private fun convert(response: Response<Void>): String {
-        val reader: BufferedReader?
-        val sb = StringBuilder()
-        try {
-            reader = BufferedReader(InputStreamReader(response.errorBody()?.byteStream()))
-            var line: String?
-            try {
-                while (reader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return sb.toString()
     }
 
     fun initApi() {
