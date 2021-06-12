@@ -30,6 +30,10 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val deleteSubscriptionResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val getAllSubscriptionsResponse: MutableLiveData<retrofit2.Response<List<User>>> = MutableLiveData()
 
+    val getEventsResponse: MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+    val getEventsRecommendationResponse: MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+    val getCreatorsResponse: MutableLiveData<retrofit2.Response<List<User>>> = MutableLiveData()
+
 
     var userId: Int = USER_ID
 
@@ -149,6 +153,29 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.getAllSubscriptions(getHeaderMap(), userId, subscriptionId)
             getAllSubscriptionsResponse.value = response
+        }
+    }
+
+    //Feed
+
+    fun getEvents(offset : Int, size : Int, specializations : Set<String>) {
+        viewModelScope.launch {
+            val response = repository.getEvents(getHeaderMap(), offset, size, specializations)
+            getEventsResponse.value = response
+        }
+    }
+
+    fun getEventsRecommendation(offset : Int, size : Int, specializations : Set<String>) {
+        viewModelScope.launch {
+            val response = repository.getEventsRecommendation(getHeaderMap(), userId, offset, size, specializations)
+            getEventsRecommendationResponse.value = response
+        }
+    }
+
+    fun getCreators(offset : Int, size : Int, specializations : Set<String>) {
+        viewModelScope.launch {
+            val response = repository.getCreators(getHeaderMap(), offset, size, specializations)
+            getCreatorsResponse.value = response
         }
     }
 

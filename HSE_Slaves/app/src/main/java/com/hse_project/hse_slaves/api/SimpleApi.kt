@@ -101,5 +101,27 @@ interface SimpleApi {
         @QueryMap filters: Map<String, Int>
     ): Response<List<User>>
 
+    //Feed
+    @GET("/api/feed/events")
+    suspend fun getEvents(
+        @HeaderMap headers: Map<String, String>,
+        @QueryMap filters: Map<String, Int>,
+        @Query("specializations") specializations : Set<String>
+    ): Response<List<Event>>
+
+    @GET("/api/feed/{userId}/events/recommendations")
+    suspend fun getEventsRecommendation(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @QueryMap filters: Map<String, Int>,
+        @Query("specializations") specializations : Set<String>
+    ): Response<List<Event>>
+
+    @GET("/api/feed/creators")
+    suspend fun getCreators(
+        @HeaderMap headers: Map<String, String>,
+        @QueryMap filters: Map<String, Int>,
+        @Query("specializations") specializations : Set<String>
+    ): Response<List<User>>
 
 }

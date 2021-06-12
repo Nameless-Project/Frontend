@@ -67,4 +67,18 @@ class Repository {
         return RetrofitInstance.api.getAllSubscriptions(HeaderMap, mapOf("userId" to userId, "subscriptionId" to subscriptionId))
     }
 
+    //Feed
+
+    suspend fun getEvents(HeaderMap : Map<String, String>, offset : Int, size :Int, specializations : Set<String>): Response<List<Event>> {
+        return RetrofitInstance.api.getEvents(HeaderMap, mapOf("offset" to offset, "size" to size), specializations)
+    }
+
+    suspend fun getEventsRecommendation(HeaderMap : Map<String, String>, userId : Int, offset : Int, size :Int, specializations : Set<String>): Response<List<Event>> {
+        return RetrofitInstance.api.getEventsRecommendation(HeaderMap, userId, mapOf("offset" to offset, "size" to size), specializations)
+    }
+
+    suspend fun getCreators(HeaderMap : Map<String, String>, offset : Int, size :Int, specializations : Set<String>): Response<List<User>> {
+        return RetrofitInstance.api.getCreators(HeaderMap, mapOf("offset" to offset, "size" to size), specializations)
+    }
+
 }

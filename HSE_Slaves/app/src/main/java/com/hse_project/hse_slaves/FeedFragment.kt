@@ -14,6 +14,7 @@ import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
 import com.hse_project.hse_slaves.posts.TopSpacingItemDecoration
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.fragment_feed.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 class FeedFragment : Fragment() {
 
@@ -22,7 +23,8 @@ class FeedFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var myLayoutManager: LinearLayoutManager
 
-    private var isLoading = false
+    private var offset: Int = 0
+    private var isLoading : AtomicBoolean = AtomicBoolean(false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,7 +42,7 @@ class FeedFragment : Fragment() {
                 val visibleItemCount = myLayoutManager.childCount
                 val pastVisibleItem = myLayoutManager.findFirstVisibleItemPosition()
                 val total = blogAdapter.itemCount
-                if (!isLoading) {
+                if (!isLoading.get() && pastVisibleItem > 8) {
                     if (visibleItemCount + pastVisibleItem >= total) {
                         addDataSet()
                     }
@@ -58,34 +60,30 @@ class FeedFragment : Fragment() {
     }
 
     fun addDataSet() {
-        isLoading = true
+        if (!isLoading.compareAndSet(false, true)) {
+            return
+        }
         //progressBar.visibil
-
-
-        var event: Event
-        viewModel.getEvent(1)
-        viewModel.eventResponse.observe(viewLifecycleOwner, { response ->
+        Log.d("QQQQQQQQQQQQ", offset.toString())
+        var event: List<Event>
+        viewModel.getEvents(offset, 10, setOf("ART", "LITERATURE", "MUSIC", "PHOTOGRAPHY"))
+        viewModel.getEventsResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
-                event = Event(
-                    response.body()?.id!!,
-                    response.body()?.name.toString(),
-                    response.body()?.description.toString(),
-                    response.body()?.images!!,
-                    response.body()?.organizerId!!,
-                    response.body()?.participantsIDs!!,
-                    response.body()?.rating!!,
-                    response.body()?.geoData.toString(),
-                    response.body()?.specialization.toString(),
-                    response.body()?.date.toString(),
-                    response.body()?.likes!!
-                )
-                blogAdapter.submitList(event)
+
+                offset += 10
+                event = response.body()!!
+                recycler_view.post {
+                    blogAdapter.submitList(event)
+                }
+
+                //blogAdapter.submitList(event)
             } else {
+                Log.d("QQQQQQQQQQQQQ", response.toString())
                 Log.d("BLYAAAAAAAAAAAAAAAAAAAAAAAAA", "EBANAROT")
                 //Log.d("Response", conver(response))
             }
+            isLoading.set(false)
         })
-        isLoading = false
     }
 
     private fun initRecyclerView() {

@@ -41,8 +41,8 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items.size
     }
 
-    fun submitList(event: Event) {
-        items.add(event)
+    fun submitList(event: List<Event>) {
+        items.addAll(event)
         notifyDataSetChanged()
     }
 
