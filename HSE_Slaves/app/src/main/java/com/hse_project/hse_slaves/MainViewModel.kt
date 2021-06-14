@@ -40,6 +40,10 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     val inviteCreatorToEventResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
 
+    val checkIfCreatorHasInvitationToEventResponse : MutableLiveData<retrofit2.Response<Boolean>> = MutableLiveData()
+
+    val checkIfCreatorHasApplicationFromEventResponse : MutableLiveData<retrofit2.Response<Boolean>> = MutableLiveData()
+
     var userId: Int = USER_ID
 
 
@@ -206,6 +210,20 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.inviteCreatorToEvent(getHeaderMap(), userId, creatorId, eventId, message)
             inviteCreatorToEventResponse.value = response
+        }
+    }
+
+    fun checkIfCreatorHasInvitationToEvent(eventId: Int) {
+        viewModelScope.launch {
+            val response = repository.checkIfCreatorHasInvitationToEvent(getHeaderMap(), userId, eventId)
+            checkIfCreatorHasInvitationToEventResponse.value = response
+        }
+    }
+
+    fun checkIfCreatorHasApplicationFromEvent(eventId: Int) {
+        viewModelScope.launch {
+            val response = repository.checkIfCreatorHasApplicationFromEvent(getHeaderMap(), userId, eventId)
+            checkIfCreatorHasApplicationFromEventResponse.value = response
         }
     }
 

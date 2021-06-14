@@ -107,7 +107,7 @@ interface SimpleApi {
     suspend fun getEvents(
         @HeaderMap headers: Map<String, String>,
         @QueryMap filters: Map<String, Int>,
-        @Query("specializations") specializations : Set<String>
+        @Query("specializations") specializations: Set<String>
     ): Response<List<Event>>
 
     @GET("/api/feed/{userId}/events/recommendations")
@@ -115,14 +115,14 @@ interface SimpleApi {
         @HeaderMap headers: Map<String, String>,
         @Path("userId") userId: Int,
         @QueryMap filters: Map<String, Int>,
-        @Query("specializations") specializations : Set<String>
+        @Query("specializations") specializations: Set<String>
     ): Response<List<Event>>
 
     @GET("/api/feed/creators")
     suspend fun getCreators(
         @HeaderMap headers: Map<String, String>,
         @QueryMap filters: Map<String, Int>,
-        @Query("specializations") specializations : Set<String>
+        @Query("specializations") specializations: Set<String>
     ): Response<List<User>>
 
     //Application
@@ -133,7 +133,7 @@ interface SimpleApi {
         @Path("creatorId") userId: Int,
         @Path("eventId") eventId: Int,
         @Body message: String
-    ) : Response<Void>
+    ): Response<Void>
 
     //Organizers
 
@@ -142,7 +142,7 @@ interface SimpleApi {
         @HeaderMap headers: Map<String, String>,
         @Path("organizerId") userId: Int,
         @Path("time") time: Timestamp
-    ) : Response<List<Event>>
+    ): Response<List<Event>>
 
     @POST("/api/organizers/{organizerId}/invites/{creatorId}")
     suspend fun inviteCreatorToEvent(
@@ -151,5 +151,19 @@ interface SimpleApi {
         @Path("creatorId") creatorId: Int,
         @Query("eventId") eventId: Int,
         @Body message: String
-    ) : Response<Void>
+    ): Response<Void>
+
+    @GET("/api/creators/{creatorId}/invitations/{eventId}")
+    suspend fun checkIfCreatorHasInvitationToEvent(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") creatorId: Int,
+        @Path("eventId") eventId: Int
+    ): Response<Boolean>
+
+    @GET("/api/creators/{creatorId}/applications/{eventId}")
+    suspend fun checkIfCreatorHasApplicationFromEvent(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") creatorId: Int,
+        @Path("eventId") eventId: Int
+    ): Response<Boolean>
 }

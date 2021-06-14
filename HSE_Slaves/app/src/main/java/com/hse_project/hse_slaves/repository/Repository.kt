@@ -97,4 +97,12 @@ class Repository {
     suspend fun inviteCreatorToEvent(HeaderMap: Map<String, String>, organizerId: Int, creatorId: Int, eventId: Int, message: String) : Response<Void> {
         return RetrofitInstance.api.inviteCreatorToEvent(HeaderMap, organizerId, creatorId, eventId, message)
     }
+
+    suspend fun checkIfCreatorHasInvitationToEvent(HeaderMap: Map<String, String>, creatorId: Int, eventId: Int) : Response<Boolean> {
+        return RetrofitInstance.api.checkIfCreatorHasInvitationToEvent(HeaderMap, creatorId, eventId)
+    }
+
+    suspend fun checkIfCreatorHasApplicationFromEvent(HeaderMap: Map<String, String>, creatorId: Int, eventId: Int) : Response<Boolean> {
+        return RetrofitInstance.api.checkIfCreatorHasApplicationFromEvent(HeaderMap, creatorId, eventId)
+    }
 }

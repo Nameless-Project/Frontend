@@ -5,6 +5,8 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
@@ -58,22 +60,43 @@ class EventActivity : AppCompatActivity() {
     }
 
     private fun checkApply() {
-        //TODO удалить edit text и apply если уже подана заявка и добавить галочку с подпись типа ура вы уже сюда подались
+        //TODO этот метод точно делает то что надо ??????
+        viewModel.checkIfCreatorHasApplicationFromEvent(EVENT_ID)
+        viewModel.checkIfCreatorHasApplicationFromEventResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                if (response.body() == true) {
+                    Log.d("EEEEEEEEEEEEEEEe", "BOOOOOOOYYYYYYYYYYYYYY")
+                    //TODO когда появится метод проверить прииняли ли на мероприятие и если да то поменять текст и картинку
+                    deleteIfApplied()
+                } else {
+                    status_image.visibility = GONE
+                    status_text.visibility = GONE
+                }
+            } else {
+                Log.d("AAAAAAAAAAAa", "OCHEN' JAL'")
+            }
+        })
     }
 
     private fun addApplyOnClickListener() {
         send_application.setOnClickListener {
+            Log.d("QQQQQQQQQQ", "1QQQQQQQQQQQQQqq")
             if (isCheckingApply.compareAndSet(false, true)) {
+                Log.d("QQQQQQQQQQ", "2QQQQQQQQQQQQQqq")
                 if (!isApplied) {
+                    Log.d("QQQQQQQQQQ", "3QQQQQQQQQQQQQqq")
                     val message: String =
                         edit_text_message.text.toString().trim { it <= ' ' }
                     viewModel.sendApplicationToEvent(data.id, message)
                     viewModel.sendApplicationToEventResponse.observe(this, { response ->
+                        Log.d("QQQQQQQQQQ", "4QQQQQQQQQQQQQqq")
                         if (response.isSuccessful) {
+                            Log.d("QQQQQQQQQQ", "5QQQQQQQQQQQQQqq")
                             isApplied = true
                             deleteIfApplied()
-                            onBackPressed()
+                            //onBackPressed()
                         } else {
+                            Log.d("AAAAAAAAAA", "OOOOOOOOOOOOOO")
                             Toast.makeText(
                                 this@EventActivity,
                                 "Something went wrong, try again later",
@@ -88,7 +111,11 @@ class EventActivity : AppCompatActivity() {
     }
 
     private fun deleteIfApplied() {
-        //TODO удаляет поле с заявкой и кнопку и заменяет их на то что надо
+        edit_text_message.visibility = GONE
+        send_application.visibility = GONE
+
+        status_image.visibility = VISIBLE
+        status_text.visibility = VISIBLE
     }
 
     private fun addUserOnClickListeners() {
