@@ -16,6 +16,7 @@ import com.hse_project.hse_slaves.activities.SettingsActivity
 import com.hse_project.hse_slaves.current.IS_TMP_USER
 import com.hse_project.hse_slaves.current.TMP_USER_ID
 import com.hse_project.hse_slaves.current.USER_ID
+import com.hse_project.hse_slaves.current.USER_ROLE
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
@@ -202,6 +203,9 @@ class HomeFragment : Fragment() {
         viewModel.userResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
                 data = response.body()!!
+                if (USER_ROLE == "") {
+                    USER_ROLE = data.userRole
+                }
                 if (data.userRole == "USER") {
                     follow.visibility = View.INVISIBLE
                 }

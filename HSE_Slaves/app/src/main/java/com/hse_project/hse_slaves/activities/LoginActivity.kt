@@ -73,6 +73,7 @@ class LoginActivity : AppCompatActivity() {
                             USER_TOKEN = response.headers()["Authorization"].toString()
                             //Log.d(viewModel.token, "AAAAAAAAAAAAAAAAaaa")
                             USER_ID = response.body()!!
+
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         } else {
                             throw RuntimeException(response.toString())

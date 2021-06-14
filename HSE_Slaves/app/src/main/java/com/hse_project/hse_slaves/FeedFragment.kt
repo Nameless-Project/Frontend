@@ -11,8 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hse_project.hse_slaves.current.FILTER_SET
+import com.hse_project.hse_slaves.current.USER_ROLE
 import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
+import com.hse_project.hse_slaves.model.User
+import com.hse_project.hse_slaves.posts.CreatorRecyclerAdapter
+import com.hse_project.hse_slaves.posts.EventRecyclerAdapter
 import com.hse_project.hse_slaves.posts.TopSpacingItemDecoration
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.fragment_feed.*
@@ -21,12 +24,13 @@ import java.util.concurrent.atomic.AtomicBoolean
 class FeedFragment : Fragment() {
 
 
-    private lateinit var blogAdapter: BlogRecyclerAdapter
+    private lateinit var eventAdapter: EventRecyclerAdapter
+    private lateinit var userAdapter: CreatorRecyclerAdapter
     private lateinit var viewModel: MainViewModel
     private lateinit var myLayoutManager: LinearLayoutManager
 
     private var offset: Int = 0
-    private var isLoading : AtomicBoolean = AtomicBoolean(false)
+    private var isLoading: AtomicBoolean = AtomicBoolean(false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,7 +86,13 @@ class FeedFragment : Fragment() {
     }
 
     private fun refresh() {
-        blogAdapter.clear()
+        if (USER_ROLE == "ORGANIZER") {
+            userAdapter.clear()
+        } else {
+            eventAdapter.clear()
+
+        }
+
         offset = 0
         addDataSet()
     }
@@ -94,7 +104,11 @@ class FeedFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val visibleItemCount = myLayoutManager.childCount
                 val pastVisibleItem = myLayoutManager.findFirstVisibleItemPosition()
-                val total = blogAdapter.itemCount
+                val total = if (USER_ROLE == "ORGANIZER") {
+                    userAdapter.itemCount
+                } else {
+                    eventAdapter.itemCount
+                }
                 if (!isLoading.get()) {
                     if (visibleItemCount + pastVisibleItem >= total) {
                         addDataSet()
@@ -116,32 +130,48 @@ class FeedFragment : Fragment() {
         if (!isLoading.compareAndSet(false, true)) {
             return
         }
-        //progressBar.visibil
-        Log.d("QQQQQQQQQQQQ", offset.toString())
+
         var curFilterSet = FILTER_SET
         if (curFilterSet.size == 0) {
             curFilterSet = setOf("ART", "MUSIC", "LITERATURE", "PHOTOGRAPHY") as MutableSet<String>
         }
-        var event: List<Event>
-        viewModel.getEventsResponse = MutableLiveData()
-        viewModel.getEvents(offset, 10, curFilterSet)
-        viewModel.getEventsResponse.observe(viewLifecycleOwner, { response ->
-            if (response.isSuccessful) {
+        if (USER_ROLE == "ORGANIZER") {
+            var user: List<User>
 
-                offset += response.body()!!.size
-                event = response.body()!!
-                Log.d("WWWWWWWWWWWWWWWWW", event.size.toString())
-                recycler_view.post {
-                    blogAdapter.submitList(event)
+            viewModel.getCreatorsResponse = MutableLiveData()
+            viewModel.getCreators(offset, 10, curFilterSet)
+            viewModel.getCreatorsResponse.observe(viewLifecycleOwner, { response ->
+                if (response.isSuccessful) {
+
+                    offset += response.body()!!.size
+                    user = response.body()!!
+                    recycler_view.post {
+                        userAdapter.submitList(user)
+                    }
+                } else {
+                    Log.d("QQQQQQQQQQQQQ", response.toString())
                 }
+                isLoading.set(false)
+            })
+        } else {
+            var event: List<Event>
 
-                //blogAdapter.submitList(event)
-            } else {
-                Log.d("QQQQQQQQQQQQQ", response.toString())
-                //Log.d("Response", conver(response))
-            }
-            isLoading.set(false)
-        })
+            viewModel.getEventsResponse = MutableLiveData()
+            viewModel.getEvents(offset, 10, curFilterSet)
+            viewModel.getEventsResponse.observe(viewLifecycleOwner, { response ->
+                if (response.isSuccessful) {
+
+                    offset += response.body()!!.size
+                    event = response.body()!!
+                    recycler_view.post {
+                        eventAdapter.submitList(event)
+                    }
+                } else {
+                    Log.d("QQQQQQQQQQQQQ", response.toString())
+                }
+                isLoading.set(false)
+            })
+        }
     }
 
     private fun initRecyclerView() {
@@ -149,8 +179,13 @@ class FeedFragment : Fragment() {
             recycler_view.layoutManager = myLayoutManager
             val topSpacingDecoration = TopSpacingItemDecoration(30)
             addItemDecoration(topSpacingDecoration)
-            blogAdapter = BlogRecyclerAdapter()
-            recycler_view.adapter = blogAdapter
+            if (USER_ROLE == "ORGANIZER") {
+                userAdapter = CreatorRecyclerAdapter()
+                recycler_view.adapter = userAdapter
+            } else {
+                eventAdapter = EventRecyclerAdapter()
+                recycler_view.adapter = eventAdapter
+            }
         }
     }
 

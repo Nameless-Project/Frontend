@@ -15,21 +15,19 @@ import com.hse_project.hse_slaves.model.Event
 import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
 
 
-class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class EventRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items = ArrayList<Event>()
-
-    var isLoading = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_blog_list_item, parent, false)
 
-        return BlogViewHolder(view)
+        return EventViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is BlogViewHolder -> {
+            is EventViewHolder -> {
                 holder.bind(items[position])
             }
         }
@@ -49,11 +47,11 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class BlogViewHolder constructor(
+    class EventViewHolder constructor(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView){
 
-        var id = 0;
+        var id = 0
         private val nikName: TextView = itemView.nik_name
         private val date: TextView = itemView.date
         private val specialization: TextView = itemView.specialization

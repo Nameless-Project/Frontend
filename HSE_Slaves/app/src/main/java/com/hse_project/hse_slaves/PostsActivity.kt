@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.posts.BlogPost
-import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
+import com.hse_project.hse_slaves.posts.EventRecyclerAdapter
 import com.hse_project.hse_slaves.repository.Repository
 
 class PostsActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class PostsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_posts)
     }
 
-    fun getNewData(blogAdapter: BlogRecyclerAdapter) {
+    fun getNewData(eventAdapter: EventRecyclerAdapter) {
         val data = ArrayList<BlogPost>()
 
         val repository = Repository()
@@ -35,7 +35,7 @@ class PostsActivity : AppCompatActivity() {
                     )
                 )
                 //blogAdapter.submitList(data)
-                blogAdapter.notifyDataSetChanged()
+                eventAdapter.notifyDataSetChanged()
             } else {
                 Log.d("Response", "")
             }
