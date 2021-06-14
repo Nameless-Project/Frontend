@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         IS_TMP_USER = false
         //TODO когда появится метод который возвращает bool поменять на него
         viewModel.getAllSubscriptions(TMP_USER_ID)
-        viewModel.getAllSubscriptionsResponse.observe(this, { response ->
+        viewModel.getAllSubscriptionsResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
                 isFollowSet = response.body()?.contains(data)!!
                 Log.d("QQQQQQQQQQQQQQQ", isFollowSet.toString())
@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
                 Log.d("AAAA", isFollowSet.toString())
                 if (isFollowSet) {
                     viewModel.deleteSubscription(data.id)
-                    viewModel.deleteSubscriptionResponse.observe(this, { response1 ->
+                    viewModel.deleteSubscriptionResponse.observe(viewLifecycleOwner, { response1 ->
                         if (response1.isSuccessful) {
                             isFollowSet = false
                             follow.text = ("follow").toString()
@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
                     })
                 } else {
                     viewModel.postSubscription(data.id)
-                    viewModel.postSubscriptionResponse.observe(this, { response1 ->
+                    viewModel.postSubscriptionResponse.observe(viewLifecycleOwner, { response1 ->
                         if (response1.isSuccessful) {
                             isFollowSet = true
                             follow.text = ("unfollow").toString()
@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
 //            follow.text = ("").toString()
 //            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 //            main_layout.removeView(follow)
-            follow.visibility = View.INVISIBLE;
+            follow.visibility = View.INVISIBLE
 
             settings.setOnClickListener {
                 startActivity(Intent(context, SettingsActivity::class.java))
@@ -134,11 +134,11 @@ class HomeFragment : Fragment() {
         }
 
 
-        viewModel.userResponse.observe(this, { response ->
+        viewModel.userResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
                 data = response.body()!!
                 if (data.userRole == "USER") {
-                    follow.visibility = View.INVISIBLE;
+                    follow.visibility = View.INVISIBLE
                 }
                 checkSubscription()
             } else {

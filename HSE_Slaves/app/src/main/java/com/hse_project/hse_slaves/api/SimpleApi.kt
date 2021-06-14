@@ -124,4 +124,14 @@ interface SimpleApi {
         @Query("specializations") specializations : Set<String>
     ): Response<List<User>>
 
+    //Application
+
+    @POST("/api/creators/{creatorId}/applications/{eventId}")
+    suspend fun sendApplicationToEvent(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") userId: Int,
+        @Path("eventId") eventId: Int,
+        @Body message: String
+    ) : Response<Void>
+
 }

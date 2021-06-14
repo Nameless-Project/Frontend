@@ -81,4 +81,9 @@ class Repository {
         return RetrofitInstance.api.getCreators(HeaderMap, mapOf("offset" to offset, "size" to size), specializations)
     }
 
+    //Application
+
+    suspend fun sendApplicationToEvent(HeaderMap: Map<String, String>, userId: Int, eventId: Int, message : String) : Response<Void> {
+        return RetrofitInstance.api.sendApplicationToEvent(HeaderMap, userId, eventId, message)
+    }
 }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
@@ -22,6 +23,8 @@ import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_event.*
+import kotlinx.android.synthetic.main.activity_event.gallery
+import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Response
 import java.io.BufferedReader
 import java.io.IOException
@@ -37,12 +40,58 @@ class EventActivity : AppCompatActivity() {
     private var isCheckingLike: AtomicBoolean = AtomicBoolean(false)
     private var likeDelta: Int = 0
 
+    private var isApplied: Boolean = false
+
+    private var isCheckingApply: AtomicBoolean = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
 
         initApi()
+        checkApply()
+        addApplyOnClickListener()
+        addUserOnClickListeners()
+        setData()
+
+        addListenerForLikes()
+    }
+
+    private fun checkApply() {
+        //TODO удалить edit text и apply если уже подана заявка и добавить галочку с подпись типа ура вы уже сюда подались
+    }
+
+    private fun addApplyOnClickListener() {
+        send_application.setOnClickListener {
+            if (isCheckingApply.compareAndSet(false, true)) {
+                if (!isApplied) {
+                    val message: String =
+                        edit_text_message.text.toString().trim { it <= ' ' }
+                    viewModel.sendApplicationToEvent(data.id, message)
+                    viewModel.sendApplicationToEventResponse.observe(this, { response ->
+                        if (response.isSuccessful) {
+                            isApplied = true
+                            deleteIfApplied()
+                            onBackPressed()
+                        } else {
+                            Toast.makeText(
+                                this@EventActivity,
+                                "Something went wrong, try again later",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        isCheckingLike.set(false)
+                    })
+                }
+            }
+        }
+    }
+
+    private fun deleteIfApplied() {
+        //TODO удаляет поле с заявкой и кнопку и заменяет их на то что надо
+    }
+
+    private fun addUserOnClickListeners() {
         organizer_nik.setOnClickListener {
             IS_TMP_USER = true
             startActivity(Intent(this@EventActivity, MainActivity::class.java))
@@ -51,9 +100,6 @@ class EventActivity : AppCompatActivity() {
             IS_TMP_USER = true
             startActivity(Intent(this@EventActivity, MainActivity::class.java))
         }
-        setData()
-
-        addListenerForLikes()
     }
 
     private fun addListenerForLikes() {
@@ -137,19 +183,7 @@ class EventActivity : AppCompatActivity() {
         viewModel.getEvent(EVENT_ID)
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
-                data = Event(
-                    response.body()?.id!!,
-                    response.body()?.name.toString(),
-                    response.body()?.description.toString(),
-                    response.body()?.images!!,
-                    response.body()?.organizerId!!,
-                    response.body()?.participantsIDs!!,
-                    response.body()?.rating!!,
-                    response.body()?.geoData.toString(),
-                    response.body()?.specialization.toString(),
-                    response.body()?.date.toString(),
-                    response.body()?.likes!!
-                )
+                data = response.body()!!
                 Log.d("PPPPPPPPPPPP", response.body()?.organizerId.toString())
                 Log.d("PPPPPPPPPPPP", response.body()?.name.toString())
                 Log.d("OOOOOOOOOOOO", data.organizerId.toString())
@@ -157,10 +191,8 @@ class EventActivity : AppCompatActivity() {
                 checkLike()
             } else {
                 Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBB")
-                //Log.d("Response", conver(response))
             }
         })
-        // application.assets.open("kek.txt").writeBytes(application.assets.open("sample.bmp").readBytes())
 
     }
 
@@ -201,26 +233,6 @@ class EventActivity : AppCompatActivity() {
     }
 
     private fun conver(response: Response<Boolean>): String {
-        var reader: BufferedReader? = null
-        val sb = StringBuilder()
-        try {
-            reader = BufferedReader(InputStreamReader(response.errorBody()?.byteStream()))
-            var line: String?
-            try {
-                while (reader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return sb.toString()
-    }
-
-    private fun conver1(response: Response<Void>): String {
         var reader: BufferedReader? = null
         val sb = StringBuilder()
         try {

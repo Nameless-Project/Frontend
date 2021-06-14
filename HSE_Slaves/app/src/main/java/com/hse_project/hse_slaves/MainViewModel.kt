@@ -34,6 +34,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val getEventsRecommendationResponse: MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
     val getCreatorsResponse: MutableLiveData<retrofit2.Response<List<User>>> = MutableLiveData()
 
+    val sendApplicationToEventResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+
 
     var userId: Int = USER_ID
 
@@ -179,5 +181,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    //Application
+
+    fun sendApplicationToEvent(eventId: Int, message: String) {
+        viewModelScope.launch {
+            val response = repository.sendApplicationToEvent(getHeaderMap(), userId, eventId, message)
+            sendApplicationToEventResponse.value = response
+        }
+    }
 
 }
