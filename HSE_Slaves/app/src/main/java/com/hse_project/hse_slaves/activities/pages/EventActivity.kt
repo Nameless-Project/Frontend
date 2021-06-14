@@ -15,6 +15,7 @@ import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.MainActivity
+import com.hse_project.hse_slaves.current.EVENT_ID
 import com.hse_project.hse_slaves.current.IS_TMP_USER
 import com.hse_project.hse_slaves.current.TMP_USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
@@ -133,7 +134,7 @@ class EventActivity : AppCompatActivity() {
     }
 
     fun setData() {
-        viewModel.getEvent(1)
+        viewModel.getEvent(EVENT_ID)
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data = Event(

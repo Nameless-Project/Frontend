@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hse_project.hse_slaves.current.FILTER_SET
 import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.posts.BlogRecyclerAdapter
 import com.hse_project.hse_slaves.posts.TopSpacingItemDecoration
@@ -27,7 +28,6 @@ class FeedFragment : Fragment() {
     private var offset: Int = 0
     private var isLoading : AtomicBoolean = AtomicBoolean(false)
 
-    private val filterSet : MutableSet<String> = HashSet()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,43 +39,43 @@ class FeedFragment : Fragment() {
     }
 
     private fun addFilterListener() {
-        art_chip.isChecked = filterSet.contains("ART")
-        music_chip.isChecked = filterSet.contains("MUSIC")
-        literature_chip.isChecked = filterSet.contains("LITERATURE")
-        photography_chip.isChecked = filterSet.contains("PHOTOGRAPHY")
+        art_chip.isChecked = FILTER_SET.contains("ART")
+        music_chip.isChecked = FILTER_SET.contains("MUSIC")
+        literature_chip.isChecked = FILTER_SET.contains("LITERATURE")
+        photography_chip.isChecked = FILTER_SET.contains("PHOTOGRAPHY")
 
         art_chip.setOnClickListener {
             if (art_chip.isChecked) {
-                filterSet.add("ART")
+                FILTER_SET.add("ART")
             } else {
-                filterSet.remove("ART")
+                FILTER_SET.remove("ART")
             }
             refresh()
         }
 
         music_chip.setOnClickListener {
             if (music_chip.isChecked) {
-                filterSet.add("MUSIC")
+                FILTER_SET.add("MUSIC")
             } else {
-                filterSet.remove("MUSIC")
+                FILTER_SET.remove("MUSIC")
             }
             refresh()
         }
 
         literature_chip.setOnClickListener {
             if (literature_chip.isChecked) {
-                filterSet.add("LITERATURE")
+                FILTER_SET.add("LITERATURE")
             } else {
-                filterSet.remove("LITERATURE")
+                FILTER_SET.remove("LITERATURE")
             }
             refresh()
         }
 
         photography_chip.setOnClickListener {
             if (photography_chip.isChecked) {
-                filterSet.add("PHOTOGRAPHY")
+                FILTER_SET.add("PHOTOGRAPHY")
             } else {
-                filterSet.remove("PHOTOGRAPHY")
+                FILTER_SET.remove("PHOTOGRAPHY")
             }
             refresh()
         }
@@ -118,9 +118,13 @@ class FeedFragment : Fragment() {
         }
         //progressBar.visibil
         Log.d("QQQQQQQQQQQQ", offset.toString())
+        var curFilterSet = FILTER_SET
+        if (curFilterSet.size == 0) {
+            curFilterSet = setOf("ART", "MUSIC", "LITERATURE", "PHOTOGRAPHY") as MutableSet<String>
+        }
         var event: List<Event>
         viewModel.getEventsResponse = MutableLiveData()
-        viewModel.getEvents(offset, 10, filterSet)
+        viewModel.getEvents(offset, 10, curFilterSet)
         viewModel.getEventsResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
 

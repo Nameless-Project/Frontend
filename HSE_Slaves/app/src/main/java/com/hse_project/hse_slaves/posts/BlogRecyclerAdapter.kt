@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.pages.EventActivity
+import com.hse_project.hse_slaves.current.EVENT_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.Event
 import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
@@ -22,10 +23,7 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_blog_list_item, parent, false)
-        view.setOnClickListener {
-            Log.d("PPPPPPPPPPPPPPPPPPP", "AAAAAAAAAAAAAAAAA")
-            view.context.startActivity(Intent(view.context, EventActivity::class.java))
-        }
+
         return BlogViewHolder(view)
     }
 
@@ -62,6 +60,8 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val ratio: TextView = itemView.ratio
         private val geo: TextView = itemView.geo
 
+
+
         fun bind(event: Event) {
             nikName.text = event.name
             date.text = event.date.substring(0, 10)
@@ -71,6 +71,12 @@ class BlogRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             id = event.id
             itemView.imageButton.setImageBitmap(getBitmapByString(event.images[0]))
+
+            itemView.setOnClickListener {
+                Log.d("PPPPPPPPPPPPPPPPPPP", "AAAAAAAAAAAAAAAAA")
+                EVENT_ID = id
+                itemView.context.startActivity(Intent(itemView.context, EventActivity::class.java))
+            }
         }
 
     }
