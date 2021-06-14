@@ -86,4 +86,14 @@ class Repository {
     suspend fun sendApplicationToEvent(HeaderMap: Map<String, String>, userId: Int, eventId: Int, message : String) : Response<Void> {
         return RetrofitInstance.api.sendApplicationToEvent(HeaderMap, userId, eventId, message)
     }
+
+    //Organizers
+
+    suspend fun getFutureEventsOfOrganizer(HeaderMap: Map<String, String>, userId: Int) :Response<List<Event>> {
+        return RetrofitInstance.api.getFutureEventsOfOrganizer(HeaderMap, userId)
+    }
+
+    suspend fun inviteCreatorToEvent(HeaderMap: Map<String, String>, organizerId: Int, creatorId: Int, eventId: Int, message: String) : Response<Void> {
+        return RetrofitInstance.api.inviteCreatorToEvent(HeaderMap, organizerId, creatorId, eventId, message)
+    }
 }

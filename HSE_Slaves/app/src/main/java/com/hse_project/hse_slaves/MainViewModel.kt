@@ -36,6 +36,9 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     val sendApplicationToEventResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
 
+    val getFutureEventsOfOrganizerResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+
+    val inviteCreatorToEventResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
 
     var userId: Int = USER_ID
 
@@ -187,6 +190,22 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.sendApplicationToEvent(getHeaderMap(), userId, eventId, message)
             sendApplicationToEventResponse.value = response
+        }
+    }
+
+    //Organizers
+
+    fun getFutureEventsOfOrganizer() {
+        viewModelScope.launch {
+            val response = repository.getFutureEventsOfOrganizer(getHeaderMap(), userId)
+            getFutureEventsOfOrganizerResponse.value  = response
+        }
+    }
+
+    fun inviteCreatorToEvent(creatorId : Int, eventId: Int, message: String) {
+        viewModelScope.launch {
+            val response = repository.inviteCreatorToEvent(getHeaderMap(), userId, creatorId, eventId, message)
+            inviteCreatorToEventResponse.value = response
         }
     }
 

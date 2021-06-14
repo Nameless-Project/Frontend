@@ -7,8 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
@@ -29,11 +28,77 @@ class HomeFragment : Fragment() {
     private var isFollowSet: Boolean = false
     private var isCheckingSubscription: AtomicBoolean = AtomicBoolean(false)
 
+    private var eventId: Int = 0
+
+    private var isInvited: Boolean = false
+
+    private val nameToEventId: MutableMap<String, Int> = HashMap()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewDependsOnUserType()
 
         initApi()
+        addSpinner()
+        addInvite()
+    }
+
+    private fun addInvite() {
+        //TODO удалить лишнее и в начале еще проверять отправлялось ли приглошение и тоже удалять
+        invite_button.setOnClickListener {
+            if (!isInvited) {
+                isInvited = true
+                val message: String =
+                    edit_text_message.text.toString().trim { it <= ' ' }
+                viewModel.inviteCreatorToEvent(TMP_USER_ID, eventId, message)
+                viewModel.inviteCreatorToEventResponse.observe(viewLifecycleOwner, { response ->
+                    if (response.isSuccessful) {
+                        //TODO удалить и добавить галочку и надпись что все ок
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Something went wrong, try again later.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
+        }
+    }
+
+    private fun addSpinner() {
+        viewModel.getFutureEventsOfOrganizer()
+        viewModel.getFutureEventsOfOrganizerResponse.observe(viewLifecycleOwner, { response ->
+            if (response.isSuccessful) {
+                val tmpList = response.body()!!
+                val optionsEvents = ArrayList<String>()
+
+                for (event in tmpList) {
+                    optionsEvents.add(event.name)
+                    nameToEventId[event.name] = event.id
+                }
+
+
+                events_spinner.adapter =
+                    ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, optionsEvents)
+                events_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                         eventId = nameToEventId[optionsEvents[position]]!!
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                         eventId = nameToEventId[optionsEvents[0]]!!
+                    }
+                }
+            } else {
+                Log.d("QQQQQQQQQQQQQQQQQq", "TTTTTTTTTTTTTTTTTTTT")
+            }
+        })
     }
 
     private fun checkSubscription() {

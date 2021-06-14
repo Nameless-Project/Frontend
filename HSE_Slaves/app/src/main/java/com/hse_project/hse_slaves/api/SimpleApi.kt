@@ -134,4 +134,20 @@ interface SimpleApi {
         @Body message: String
     ) : Response<Void>
 
+    //Organizers
+
+    @GET("/api/organizers/{organizerId}/futureEvents")
+    suspend fun getFutureEventsOfOrganizer(
+        @HeaderMap headers: Map<String, String>,
+        @Path("organizerId") userId: Int
+    ) : Response<List<Event>>
+
+    @POST("/api/organizers/{organizerId}/invites/{creatorId}")
+    suspend fun inviteCreatorToEvent(
+        @HeaderMap headers: Map<String, String>,
+        @Path("organizerId") organizerId: Int,
+        @Path("creatorId") creatorId: Int,
+        @Query("eventId") eventId: Int,
+        @Body message: String
+    ) : Response<Void>
 }

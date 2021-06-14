@@ -198,6 +198,37 @@
                 app:layout_constraintStart_toEndOf="@+id/nik_name"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <EditText
+                android:id="@+id/edit_text_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/type"
+                app:layout_constraintStart_toStartOf="@+id/specialization"
+                app:layout_constraintTop_toBottomOf="@+id/description" />
+
+            <Spinner
+                android:id="@+id/events_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_message"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_message" />
+
+            <Button
+                android:id="@+id/invite_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/purple_500"
+                android:fontFamily="@font/donegal_one"
+                android:text="INVITE"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@+id/type"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_message" />
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
