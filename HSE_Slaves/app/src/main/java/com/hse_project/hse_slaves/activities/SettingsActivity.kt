@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -30,9 +29,7 @@ import kotlinx.android.synthetic.main.activity_register.editTextTextFirstName
 import kotlinx.android.synthetic.main.activity_register.editTextTextGeoData
 import kotlinx.android.synthetic.main.activity_register.editTextTextPassword
 import kotlinx.android.synthetic.main.activity_register.gallery
-import kotlinx.android.synthetic.main.activity_register.specialization_
 import kotlinx.android.synthetic.main.activity_register.submit
-import kotlinx.android.synthetic.main.activity_register.user_role
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
@@ -45,7 +42,6 @@ class SettingsActivity : AppCompatActivity() {
     private var position = 0
     private val PICK_IMAGE = 1
 
-    private var userRole: String = "USER"
     private var specialization: String = "ART"
 
     private val imagesStringArray: ArrayList<String> = ArrayList()
@@ -57,13 +53,13 @@ class SettingsActivity : AppCompatActivity() {
 
 
         addImages()
-        addSpinners()
         initApi()
         run()
     }
 
     private fun loadUser() {
         val inflater = LayoutInflater.from(this)
+        specialization = data.specialization
         editTextTextEmailAddress.setText(data.username)
         editTextTextPassword.setText(data.password)
         editTextTextFirstName.setText(data.firstName)
@@ -131,43 +127,6 @@ class SettingsActivity : AppCompatActivity() {
         intent.action = Intent.ACTION_GET_CONTENT
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
-    }
-
-    private fun addSpinners() {
-        val optionsSpecialization = arrayOf("ART", "LITERATURE", "MUSIC", "PHOTOGRAPHY")
-        specialization_.adapter =
-            ArrayAdapter(this, android.R.layout.simple_list_item_1, optionsSpecialization)
-        specialization_.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                specialization = optionsSpecialization[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                specialization = optionsSpecialization[0]
-            }
-        }
-
-        val optionsUserRole = arrayOf("USER", "ORGANIZER", "CREATOR")
-        user_role.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, optionsUserRole)
-        user_role.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                userRole = optionsUserRole[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                userRole = optionsUserRole[0]
-            }
-        }
     }
 
     private fun run() {
@@ -246,7 +205,7 @@ class SettingsActivity : AppCompatActivity() {
                     //TODO заменить это на вызов метода, который будет менять пользователя и потом открывать профиль
                     viewModel.changeUser(
                         UserRegistration(
-                            userRole,
+                            USER_ROLE,
                             firstName,
                             lastName,
                             patronymic,

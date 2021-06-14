@@ -45,7 +45,7 @@
                 android:inputType="textEmailAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/specialization_" />
+                app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
             <EditText
                 android:id="@+id/editTextTextFirstName"
@@ -96,24 +96,6 @@
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextDate" />
-
-            <Spinner
-                android:id="@+id/user_role"
-                android:layout_width="280dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_image" />
-
-            <Spinner
-                android:id="@+id/specialization_"
-                android:layout_width="280dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/user_role" />
 
             <Button
                 android:id="@+id/cancel"
