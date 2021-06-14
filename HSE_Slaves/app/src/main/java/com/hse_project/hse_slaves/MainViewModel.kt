@@ -30,7 +30,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val deleteSubscriptionResponse: MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
     val getAllSubscriptionsResponse: MutableLiveData<retrofit2.Response<List<User>>> = MutableLiveData()
 
-    val getEventsResponse: MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+    var getEventsResponse: MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
     val getEventsRecommendationResponse: MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
     val getCreatorsResponse: MutableLiveData<retrofit2.Response<List<User>>> = MutableLiveData()
 

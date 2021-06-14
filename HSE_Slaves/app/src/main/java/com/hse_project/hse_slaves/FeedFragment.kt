@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,11 +27,63 @@ class FeedFragment : Fragment() {
     private var offset: Int = 0
     private var isLoading : AtomicBoolean = AtomicBoolean(false)
 
+    private val filterSet : MutableSet<String> = HashSet()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addFilterListener()
         addScrollListener()
         initRecyclerView()
         initApi()
+        addDataSet()
+    }
+
+    private fun addFilterListener() {
+        art_chip.isChecked = filterSet.contains("ART")
+        music_chip.isChecked = filterSet.contains("MUSIC")
+        literature_chip.isChecked = filterSet.contains("LITERATURE")
+        photography_chip.isChecked = filterSet.contains("PHOTOGRAPHY")
+
+        art_chip.setOnClickListener {
+            if (art_chip.isChecked) {
+                filterSet.add("ART")
+            } else {
+                filterSet.remove("ART")
+            }
+            refresh()
+        }
+
+        music_chip.setOnClickListener {
+            if (music_chip.isChecked) {
+                filterSet.add("MUSIC")
+            } else {
+                filterSet.remove("MUSIC")
+            }
+            refresh()
+        }
+
+        literature_chip.setOnClickListener {
+            if (literature_chip.isChecked) {
+                filterSet.add("LITERATURE")
+            } else {
+                filterSet.remove("LITERATURE")
+            }
+            refresh()
+        }
+
+        photography_chip.setOnClickListener {
+            if (photography_chip.isChecked) {
+                filterSet.add("PHOTOGRAPHY")
+            } else {
+                filterSet.remove("PHOTOGRAPHY")
+            }
+            refresh()
+        }
+    }
+
+    private fun refresh() {
+        blogAdapter.clear()
+        offset = 0
         addDataSet()
     }
 
@@ -42,7 +95,7 @@ class FeedFragment : Fragment() {
                 val visibleItemCount = myLayoutManager.childCount
                 val pastVisibleItem = myLayoutManager.findFirstVisibleItemPosition()
                 val total = blogAdapter.itemCount
-                if (!isLoading.get() && pastVisibleItem > 8) {
+                if (!isLoading.get()) {
                     if (visibleItemCount + pastVisibleItem >= total) {
                         addDataSet()
                     }
@@ -66,12 +119,14 @@ class FeedFragment : Fragment() {
         //progressBar.visibil
         Log.d("QQQQQQQQQQQQ", offset.toString())
         var event: List<Event>
-        viewModel.getEvents(offset, 10, setOf("ART", "LITERATURE", "MUSIC", "PHOTOGRAPHY"))
+        viewModel.getEventsResponse = MutableLiveData()
+        viewModel.getEvents(offset, 10, filterSet)
         viewModel.getEventsResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
 
-                offset += 10
+                offset += response.body()!!.size
                 event = response.body()!!
+                Log.d("WWWWWWWWWWWWWWWWW", event.size.toString())
                 recycler_view.post {
                     blogAdapter.submitList(event)
                 }
@@ -79,7 +134,6 @@ class FeedFragment : Fragment() {
                 //blogAdapter.submitList(event)
             } else {
                 Log.d("QQQQQQQQQQQQQ", response.toString())
-                Log.d("BLYAAAAAAAAAAAAAAAAAAAAAAAAA", "EBANAROT")
                 //Log.d("Response", conver(response))
             }
             isLoading.set(false)
