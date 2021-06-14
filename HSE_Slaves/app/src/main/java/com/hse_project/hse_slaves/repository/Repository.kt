@@ -6,6 +6,7 @@ import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.model.UserRegistration
 import retrofit2.Response
+import java.sql.Timestamp
 
 class Repository {
 
@@ -90,7 +91,7 @@ class Repository {
     //Organizers
 
     suspend fun getFutureEventsOfOrganizer(HeaderMap: Map<String, String>, userId: Int) :Response<List<Event>> {
-        return RetrofitInstance.api.getFutureEventsOfOrganizer(HeaderMap, userId)
+        return RetrofitInstance.api.getFutureEventsOfOrganizer(HeaderMap, userId,  Timestamp(System.currentTimeMillis()))
     }
 
     suspend fun inviteCreatorToEvent(HeaderMap: Map<String, String>, organizerId: Int, creatorId: Int, eventId: Int, message: String) : Response<Void> {

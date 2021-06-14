@@ -14,10 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
-import com.hse_project.hse_slaves.current.IS_TMP_USER
-import com.hse_project.hse_slaves.current.TMP_USER_ID
-import com.hse_project.hse_slaves.current.USER_ID
-import com.hse_project.hse_slaves.current.USER_TOKEN
+import com.hse_project.hse_slaves.current.*
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.image.getStringByUri
 import com.hse_project.hse_slaves.model.User
@@ -184,6 +181,10 @@ class SettingsActivity : AppCompatActivity() {
             USER_ID = 0
             TMP_USER_ID = 0
             IS_TMP_USER = false
+            EVENT_ID = 1
+            USER_ROLE = ""
+            FILTER_SET = HashSet()
+
             startActivity(Intent(this@SettingsActivity, LoginActivity::class.java))
         }
 

@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hse_project.hse_slaves.R
 import com.hse_project.hse_slaves.activities.MainActivity
+import com.hse_project.hse_slaves.current.IS_TMP_USER
+import com.hse_project.hse_slaves.current.TMP_USER_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.User
 import kotlinx.android.synthetic.main.layout_blog_list_item.view.*
@@ -72,7 +74,8 @@ class CreatorRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             itemView.setOnClickListener {
                 Log.d("PPPPPPPPPPPPPPPPPPP", "AAAAAAAAAAAAAAAAA")
-                //TODO правильно открывать текущего юзера
+                TMP_USER_ID = id
+                IS_TMP_USER = true
                 itemView.context.startActivity(Intent(itemView.context, MainActivity::class.java))
             }
         }

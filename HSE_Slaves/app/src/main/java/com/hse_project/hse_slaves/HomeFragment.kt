@@ -35,34 +35,40 @@ class HomeFragment : Fragment() {
 
     private val nameToEventId: MutableMap<String, Int> = HashMap()
 
+    private var tmpUserRole: String = ""
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewDependsOnUserType()
 
         initApi()
-        addSpinner()
-        addInvite()
     }
 
     private fun addInvite() {
-        //TODO удалить лишнее и в начале еще проверять отправлялось ли приглошение и тоже удалять
-        invite_button.setOnClickListener {
-            if (!isInvited) {
-                isInvited = true
-                val message: String =
-                    edit_text_message.text.toString().trim { it <= ' ' }
-                viewModel.inviteCreatorToEvent(TMP_USER_ID, eventId, message)
-                viewModel.inviteCreatorToEventResponse.observe(viewLifecycleOwner, { response ->
-                    if (response.isSuccessful) {
-                        //TODO удалить и добавить галочку и надпись что все ок
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Something went wrong, try again later.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                })
+        if (!IS_TMP_USER || !(tmpUserRole == "CREATOR" && USER_ROLE == "ORGANIZER")) {
+            sub_main_layout.removeView(edit_text_message)
+            sub_main_layout.removeView(invite_button)
+            sub_main_layout.removeView(events_spinner)
+        } else {
+            addSpinner()
+            invite_button.setOnClickListener {
+                if (!isInvited) {
+                    isInvited = true
+                    val message: String =
+                        edit_text_message.text.toString().trim { it <= ' ' }
+                    viewModel.inviteCreatorToEvent(TMP_USER_ID, eventId, message)
+                    viewModel.inviteCreatorToEventResponse.observe(viewLifecycleOwner, { response ->
+                        if (response.isSuccessful) {
+                            //TODO удалить из спинера
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Something went wrong, try again later.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+                }
             }
         }
     }
@@ -81,21 +87,26 @@ class HomeFragment : Fragment() {
 
 
                 events_spinner.adapter =
-                    ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, optionsEvents)
-                events_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                         eventId = nameToEventId[optionsEvents[position]]!!
-                    }
+                    ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_list_item_1,
+                        optionsEvents
+                    )
+                events_spinner.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            eventId = nameToEventId[optionsEvents[position]]!!
+                        }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                         eventId = nameToEventId[optionsEvents[0]]!!
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            eventId = nameToEventId[optionsEvents[0]]!!
+                        }
                     }
-                }
             } else {
                 Log.d("QQQQQQQQQQQQQQQQQq", "TTTTTTTTTTTTTTTTTTTT")
             }
@@ -206,6 +217,8 @@ class HomeFragment : Fragment() {
                 if (USER_ROLE == "") {
                     USER_ROLE = data.userRole
                 }
+                tmpUserRole = data.userRole
+                addInvite()
                 if (data.userRole == "USER") {
                     follow.visibility = View.INVISIBLE
                 }

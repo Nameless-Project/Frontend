@@ -90,7 +90,6 @@ class FeedFragment : Fragment() {
             userAdapter.clear()
         } else {
             eventAdapter.clear()
-
         }
 
         offset = 0

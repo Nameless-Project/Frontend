@@ -6,6 +6,7 @@ import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.model.UserRegistration
 import retrofit2.Response
 import retrofit2.http.*
+import java.sql.Timestamp
 
 interface SimpleApi {
 
@@ -136,10 +137,11 @@ interface SimpleApi {
 
     //Organizers
 
-    @GET("/api/organizers/{organizerId}/futureEvents")
+    @GET("/api/organizers/{organizerId}/futureEvents/{time}")
     suspend fun getFutureEventsOfOrganizer(
         @HeaderMap headers: Map<String, String>,
-        @Path("organizerId") userId: Int
+        @Path("organizerId") userId: Int,
+        @Path("time") time: Timestamp
     ) : Response<List<Event>>
 
     @POST("/api/organizers/{organizerId}/invites/{creatorId}")
