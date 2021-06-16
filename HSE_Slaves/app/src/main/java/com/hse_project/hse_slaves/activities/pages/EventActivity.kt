@@ -47,6 +47,8 @@ class EventActivity : AppCompatActivity() {
 
     private var isCheckingApply: AtomicBoolean = AtomicBoolean(false)
 
+    private var isAnswering: AtomicBoolean = AtomicBoolean(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
@@ -55,7 +57,31 @@ class EventActivity : AppCompatActivity() {
         if (USER_ROLE == "CREATOR") {
             checkApply()
             addApplyOnClickListener()
+            open_list_of_creators.visibility = GONE
+
+            //TODO проверить что заявка есть и не рассмотрена
+            viewModel.checkIfCreatorHasInvitationToEvent(EVENT_ID)
+            viewModel.checkIfCreatorHasInvitationToEventResponse.observe(this, {response ->
+                if (response.isSuccessful) {
+                    viewModel.getInvitation(EVENT_ID)
+                    viewModel.getInvitationResponse.observe(this, {response2->
+                        if (response2.isSuccessful) {
+                            if (!response2.body()!!.accepted){
+                                addAcceptDeclineListener()
+                            }
+                        }
+                    })
+                }
+            })
+
         } else {
+            if (USER_ROLE == "USER") {
+                open_list_of_creators.visibility = GONE
+            } else {
+                addListOfCreatorsListener()
+            }
+            accept.visibility = GONE
+            decline.visibility = GONE
             edit_text_message.visibility = GONE
             send_application.visibility = GONE
 
@@ -66,6 +92,44 @@ class EventActivity : AppCompatActivity() {
         setData()
 
         addListenerForLikes()
+    }
+
+    private fun addListOfCreatorsListener() {
+        open_list_of_creators.setOnClickListener {
+            //TODO получить список криэйтеров которые подали заявки,стартовать новое активити его надо еще  сделать
+            //TODO в активити просто спсисок из названий и аватарок и кнопки принять отклонить
+        }
+    }
+
+    private fun addAcceptDeclineListener() {
+        accept.setOnClickListener {
+            if (isAnswering.compareAndSet(false, true)) {
+                viewModel.answerInvitationToEvent(EVENT_ID, true)
+                viewModel.answerInvitationToEventResponse.observe(this, { response ->
+                    if (response.isSuccessful) {
+                        accept.visibility = GONE
+                        decline.visibility = GONE
+                    } else {
+                        Log.d("AAA", "BBB")
+                        isAnswering.set(false)
+                    }
+                })
+            }
+        }
+        decline.setOnClickListener {
+            if (isAnswering.compareAndSet(false, true)) {
+                viewModel.answerInvitationToEvent(EVENT_ID, false)
+                viewModel.answerInvitationToEventResponse.observe(this, { response ->
+                    if (response.isSuccessful) {
+                        accept.visibility = GONE
+                        decline.visibility = GONE
+                    } else {
+                        Log.d("AAA", "BBB")
+                        isAnswering.set(false)
+                    }
+                })
+            }
+        }
     }
 
     private fun checkApply() {

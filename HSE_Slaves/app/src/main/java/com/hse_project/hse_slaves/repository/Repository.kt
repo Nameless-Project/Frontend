@@ -1,10 +1,7 @@
 package com.hse_project.hse_slaves.repository
 
 import com.hse_project.hse_slaves.api.RetrofitInstance
-import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.model.EventPost
-import com.hse_project.hse_slaves.model.User
-import com.hse_project.hse_slaves.model.UserRegistration
+import com.hse_project.hse_slaves.model.*
 import retrofit2.Response
 import java.sql.Timestamp
 
@@ -132,5 +129,25 @@ class Repository {
 
     suspend fun getInviteEventsOfCreator(HeaderMap: Map<String, String>, userId: Int) : Response<List<Event>> {
         return RetrofitInstance.api.getInviteEventsOfCreator(HeaderMap, userId,Timestamp(System.currentTimeMillis()))
+    }
+
+    //Reply applications
+
+    suspend fun answerInvitationToEvent(HeaderMap: Map<String, String>, userId: Int, eventId: Int, acceptance : Boolean) : Response<Void> {
+        return RetrofitInstance.api.answerInvitationToEvent(HeaderMap, userId, eventId, acceptance)
+    }
+
+    suspend fun answerApplicationFromCreator(HeaderMap: Map<String, String>, userId: Int, eventId: Int, creatorId: Int, acceptance : Boolean) : Response<Void> {
+        return RetrofitInstance.api.answerApplicationFromCreator(HeaderMap, userId, eventId, creatorId, acceptance)
+    }
+
+    //Status of application/invitation
+
+    suspend fun getApplication(HeaderMap: Map<String, String>, userId: Int, eventId: Int) : Response<Application> {
+        return RetrofitInstance.api.getApplication(HeaderMap, userId, eventId)
+    }
+
+    suspend fun getInvitation(HeaderMap: Map<String, String>, userId: Int, eventId: Int) : Response<Invitation> {
+        return RetrofitInstance.api.getInvitation(HeaderMap, userId, eventId)
     }
 }

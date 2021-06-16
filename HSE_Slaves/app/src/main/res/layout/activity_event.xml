@@ -71,9 +71,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/donegal_one"
-                android:textSize="50sp"
                 android:text="Name"
                 android:textColor="@color/black"
+                android:textSize="50sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
@@ -216,8 +216,35 @@
                 app:layout_constraintStart_toEndOf="@+id/status_image"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
 
+            <Button
+                android:id="@+id/open_list_of_creators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="APPLICATIONS"
+                app:layout_constraintBottom_toBottomOf="@+id/nik_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/nik_name"
+                app:layout_constraintTop_toTopOf="@+id/nik_name" />
 
+            <Button
+                android:id="@+id/accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACCEPT"
+                app:layout_constraintBottom_toBottomOf="@+id/nik_name"
+                app:layout_constraintEnd_toStartOf="@+id/decline"
+                app:layout_constraintStart_toEndOf="@+id/nik_name"
+                app:layout_constraintTop_toTopOf="@+id/nik_name" />
 
+            <Button
+                android:id="@+id/decline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="DECLINE"
+                app:layout_constraintBottom_toBottomOf="@+id/nik_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/nik_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

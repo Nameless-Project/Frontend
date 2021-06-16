@@ -5,10 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hse_project.hse_slaves.current.USER_ID
 import com.hse_project.hse_slaves.current.USER_TOKEN
-import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.model.EventPost
-import com.hse_project.hse_slaves.model.User
-import com.hse_project.hse_slaves.model.UserRegistration
+import com.hse_project.hse_slaves.model.*
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.coroutines.launch
 
@@ -51,6 +48,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val checkIfCreatorHasInvitationToEventResponse : MutableLiveData<retrofit2.Response<Boolean>> = MutableLiveData()
 
     val checkIfCreatorHasApplicationFromEventResponse : MutableLiveData<retrofit2.Response<Boolean>> = MutableLiveData()
+
+    val answerApplicationFromCreatorResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+    val answerInvitationToEventResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
+
+    val getApplicationResponse : MutableLiveData<retrofit2.Response<Application>> = MutableLiveData()
+    val getInvitationResponse : MutableLiveData<retrofit2.Response<Invitation>> = MutableLiveData()
+
 
     var userId: Int = USER_ID
 
@@ -278,6 +282,38 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.getInviteEventsOfCreator(getHeaderMap(), userId)
             getInviteEventsOfCreatorResponse.value = response
+        }
+    }
+
+    //Answers to applications
+
+    fun answerInvitationToEvent(eventId: Int, acceptance : Boolean) {
+        viewModelScope.launch {
+            val response = repository.answerInvitationToEvent(getHeaderMap(), userId, eventId, acceptance)
+            answerInvitationToEventResponse.value = response
+        }
+    }
+
+    fun answerApplicationFromCreator(eventId: Int, creatorId: Int, acceptance: Boolean) {
+        viewModelScope.launch {
+            val response = repository.answerApplicationFromCreator(getHeaderMap(), userId, eventId, creatorId, acceptance)
+            answerApplicationFromCreatorResponse.value = response
+        }
+    }
+
+    //Status of application/invitation
+
+    fun getApplication(eventId: Int) {
+        viewModelScope.launch {
+            val response = repository.getApplication(getHeaderMap(), userId, eventId)
+            getApplicationResponse.value = response
+        }
+    }
+
+    fun getInvitation(eventId: Int) {
+        viewModelScope.launch {
+            val response = repository.getInvitation(getHeaderMap(), userId, eventId)
+            getInvitationResponse.value = response
         }
     }
 }

@@ -1,9 +1,6 @@
 package com.hse_project.hse_slaves.api
 
-import com.hse_project.hse_slaves.model.Event
-import com.hse_project.hse_slaves.model.EventPost
-import com.hse_project.hse_slaves.model.User
-import com.hse_project.hse_slaves.model.UserRegistration
+import com.hse_project.hse_slaves.model.*
 import retrofit2.Response
 import retrofit2.http.*
 import java.sql.Timestamp
@@ -160,14 +157,14 @@ interface SimpleApi {
         @Body message: String
     ): Response<Void>
 
-    @GET("/api/creators/{creatorId}/invitations/{eventId}")
+    @GET("/api/creators/{creatorId}/invitations/{eventId}/check")
     suspend fun checkIfCreatorHasInvitationToEvent(
         @HeaderMap headers: Map<String, String>,
         @Path("creatorId") creatorId: Int,
         @Path("eventId") eventId: Int
     ): Response<Boolean>
 
-    @GET("/api/creators/{creatorId}/applications/{eventId}")
+    @GET("/api/creators/{creatorId}/applications/{eventId}/check")
     suspend fun checkIfCreatorHasApplicationFromEvent(
         @HeaderMap headers: Map<String, String>,
         @Path("creatorId") creatorId: Int,
@@ -213,4 +210,41 @@ interface SimpleApi {
         @Path("creatorId") userId: Int,
         @Path("time") time: Timestamp
     ): Response<List<Event>>
+
+    //Reply application
+    @POST("api/creators/{creatorId}/invites/{eventId}")
+    suspend fun answerInvitationToEvent(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") creatorId: Int,
+        @Path("eventId") eventId: Int,
+        @Query("acceptance") acceptance: Boolean
+    ): Response<Void>
+
+    @POST("api/organizers/{organizerId}/events/{eventId}/applications/{creatorId}")
+    suspend fun answerApplicationFromCreator(
+        @HeaderMap headers: Map<String, String>,
+        @Path("organizerId") organizerId: Int,
+        @Path("eventId") eventId: Int,
+        @Path("creatorId") creatorId: Int,
+        @Query("acceptance") acceptance: Boolean
+    ): Response<Void>
+
+    //Status of application/invitation
+
+    @GET("api/creators/{creatorId}/applications/{eventId}")
+    suspend fun getApplication(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") creatorId: Int,
+        @Path("eventId") eventId: Int
+    ): Response<Application>
+
+
+    @GET("api/creators/{creatorId}/invitations/{eventId}")
+    suspend fun getInvitation(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") creatorId: Int,
+        @Path("eventId") eventId: Int
+    ): Response<Invitation>
+
+
 }

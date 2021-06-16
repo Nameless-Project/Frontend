@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HSE_Slaves"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.pages.chats.event.CreateEventActivity"></activity>
+        <activity android:name=".activities.SearchActivity"></activity>
+        <activity android:name=".activities.ApplicationsToEventActivity" />
+        <activity android:name=".activities.pages.chats.event.CreateEventActivity" />
         <activity android:name=".activities.pages.chats.ChatForOrganizerActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.test.TestApiActivity" />
