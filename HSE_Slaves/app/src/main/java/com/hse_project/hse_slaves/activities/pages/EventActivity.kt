@@ -21,6 +21,7 @@ import com.hse_project.hse_slaves.activities.MainActivity
 import com.hse_project.hse_slaves.current.EVENT_ID
 import com.hse_project.hse_slaves.current.IS_TMP_USER
 import com.hse_project.hse_slaves.current.TMP_USER_ID
+import com.hse_project.hse_slaves.current.USER_ROLE
 import com.hse_project.hse_slaves.image.getBitmapByString
 import com.hse_project.hse_slaves.model.Event
 import com.hse_project.hse_slaves.repository.Repository
@@ -51,8 +52,16 @@ class EventActivity : AppCompatActivity() {
         setContentView(R.layout.activity_event)
 
         initApi()
-        checkApply()
-        addApplyOnClickListener()
+        if (USER_ROLE == "CREATOR") {
+            checkApply()
+            addApplyOnClickListener()
+        } else {
+            edit_text_message.visibility = GONE
+            send_application.visibility = GONE
+
+            status_image.visibility = GONE
+            status_text.visibility = GONE
+        }
         addUserOnClickListeners()
         setData()
 
@@ -164,7 +173,7 @@ class EventActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         nik_name.text = data.name
         description.text = data.description
-        date.text = data.date.substring(0, 10)
+        date.text = data.date.toString().substring(0, 10)
         specialization.text = data.specialization
         ratio.text = data.rating.toString()
         geo.text = data.geoData

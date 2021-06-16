@@ -1,5 +1,6 @@
 package com.hse_project.hse_slaves.activities.pages.chats.event
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -25,6 +26,8 @@ import retrofit2.Response
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CreateEventActivity : AppCompatActivity() {
 
@@ -119,6 +122,7 @@ class CreateEventActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun run() {
         cancel.setOnClickListener {
             onBackPressed()
@@ -159,6 +163,7 @@ class CreateEventActivity : AppCompatActivity() {
                     val geoData: String = editTextTextGeoData.text.toString().trim { it <= ' ' }
                     val date: String =
                         editTextTextDate.text.toString().trim { it <= ' ' }
+                    Log.d("WWSWSWSWSWSWS", date.toString())
                     val description: String =
                         editTextTextDescription.text.toString().trim { it <= ' ' }
                     assert(imagesStringArray.size != 0)
@@ -168,7 +173,6 @@ class CreateEventActivity : AppCompatActivity() {
                             name,
                             description,
                             USER_ID,
-                            1.0,
                             geoData,
                             specialization,
                             date,

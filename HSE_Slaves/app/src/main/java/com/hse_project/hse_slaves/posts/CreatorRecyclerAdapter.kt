@@ -70,8 +70,10 @@ class CreatorRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             geo.text = ""
 
             id = user.id
-            itemView.imageButton.setImageBitmap(getBitmapByString(user.images[0]))
-
+            if (user.images.size != 0) {
+                Log.d(user.images.size.toString(), user.images[0])
+                itemView.imageButton.setImageBitmap(getBitmapByString(user.images[0]))
+            }
             itemView.setOnClickListener {
                 Log.d("PPPPPPPPPPPPPPPPPPP", "AAAAAAAAAAAAAAAAA")
                 TMP_USER_ID = id

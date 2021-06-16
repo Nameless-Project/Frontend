@@ -62,7 +62,7 @@ class EventRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(event: Event) {
             nikName.text = event.name
-            date.text = event.date.substring(0, 10)
+            date.text = event.date.toString().substring(0, 10)
             specialization.text = event.specialization
             ratio.text = event.rating.toString()
             geo.text = event.geoData

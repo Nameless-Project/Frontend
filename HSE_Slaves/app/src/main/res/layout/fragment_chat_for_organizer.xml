@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,6 +15,77 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/outline_control_point_black_24" />
+        app:srcCompat="@drawable/outline_control_point_black_24"
+        android:contentDescription="TODO" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_below="@+id/addEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/name_of_future_events"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+
+                android:layout_height="wrap_content"
+                android:text="Future events"
+                android:textSize="30sp" />
+
+            <GridView
+                android:id="@+id/grid_view_past_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_of_past_events"
+                android:numColumns="3"
+                tools:ignore="NestedScrolling" />
+
+            <TextView
+                android:id="@+id/name_of_past_events"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/grid_view_future_events"
+                android:text="Past events"
+                android:textSize="30sp" />
+
+            <GridView
+                android:id="@+id/grid_view_future_events"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_of_future_events"
+                android:numColumns="3"
+                tools:ignore="NestedScrolling" />
+
+            <TextView
+                android:id="@+id/name_of_invite_events"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/grid_view_past_events"
+                android:text="Invitations"
+                android:textSize="30sp" />
+
+            <GridView
+                android:id="@+id/grid_view_invite_events"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_of_invite_events"
+                android:numColumns="3"
+                tools:ignore="NestedScrolling" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

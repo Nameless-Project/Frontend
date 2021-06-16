@@ -144,6 +144,13 @@ interface SimpleApi {
         @Path("time") time: Timestamp
     ): Response<List<Event>>
 
+    @GET("/api/organizers/{organizerId}/passedEvents/{time}")
+    suspend fun getPassedEventsOfOrganizer(
+        @HeaderMap headers: Map<String, String>,
+        @Path("organizerId") userId: Int,
+        @Path("time") time: Timestamp
+    ): Response<List<Event>>
+
     @POST("/api/organizers/{organizerId}/invites/{creatorId}")
     suspend fun inviteCreatorToEvent(
         @HeaderMap headers: Map<String, String>,
@@ -166,4 +173,44 @@ interface SimpleApi {
         @Path("creatorId") creatorId: Int,
         @Path("eventId") eventId: Int
     ): Response<Boolean>
+
+    //Users
+
+    @GET("/api/users/{userId}/participations/future/{time}")
+    suspend fun getFutureEventsOfUser(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @Path("time") time: Timestamp
+    ): Response<List<Event>>
+
+    @GET("/api/users/{userId}/participations/passed/{time}")
+    suspend fun getPassedEventsOfUser(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") userId: Int,
+        @Path("time") time: Timestamp
+    ): Response<List<Event>>
+
+
+    //Creators
+
+    @GET("/api/creators/{creatorId}/applications/futureEvents/{time}")
+    suspend fun getFutureEventsOfCreator(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") userId: Int,
+        @Path("time") time: Timestamp
+    ): Response<List<Event>>
+
+    @GET("/api/creators/{creatorId}/applications/passedEvents/{time}")
+    suspend fun getPassedEventsOfCreator(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") userId: Int,
+        @Path("time") time: Timestamp
+    ): Response<List<Event>>
+
+    @GET("api/creators/{creatorId}/invitations/futureEvents/{time}")
+    suspend fun getInviteEventsOfCreator(
+        @HeaderMap headers: Map<String, String>,
+        @Path("creatorId") userId: Int,
+        @Path("time") time: Timestamp
+    ): Response<List<Event>>
 }

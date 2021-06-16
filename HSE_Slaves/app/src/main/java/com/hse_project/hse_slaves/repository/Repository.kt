@@ -94,6 +94,10 @@ class Repository {
         return RetrofitInstance.api.getFutureEventsOfOrganizer(HeaderMap, userId,  Timestamp(System.currentTimeMillis()))
     }
 
+    suspend fun getPassedEventsOfOrganizer(HeaderMap: Map<String, String>, userId: Int) :Response<List<Event>> {
+        return RetrofitInstance.api.getPassedEventsOfOrganizer(HeaderMap, userId, Timestamp(System.currentTimeMillis()))
+    }
+
     suspend fun inviteCreatorToEvent(HeaderMap: Map<String, String>, organizerId: Int, creatorId: Int, eventId: Int, message: String) : Response<Void> {
         return RetrofitInstance.api.inviteCreatorToEvent(HeaderMap, organizerId, creatorId, eventId, message)
     }
@@ -104,5 +108,29 @@ class Repository {
 
     suspend fun checkIfCreatorHasApplicationFromEvent(HeaderMap: Map<String, String>, creatorId: Int, eventId: Int) : Response<Boolean> {
         return RetrofitInstance.api.checkIfCreatorHasApplicationFromEvent(HeaderMap, creatorId, eventId)
+    }
+
+    //Users
+
+    suspend fun getFutureEventsOfUser(HeaderMap: Map<String, String>, userId: Int) :Response<List<Event>> {
+        return RetrofitInstance.api.getFutureEventsOfUser(HeaderMap, userId,  Timestamp(System.currentTimeMillis()))
+    }
+
+    suspend fun getPassedEventsOfUser(HeaderMap: Map<String, String>, userId: Int) :Response<List<Event>> {
+        return RetrofitInstance.api.getPassedEventsOfUser(HeaderMap, userId, Timestamp(System.currentTimeMillis()))
+    }
+
+    //Creators
+
+    suspend fun getFutureEventsOfCreator(HeaderMap: Map<String, String>, userId: Int) :Response<List<Event>> {
+        return RetrofitInstance.api.getFutureEventsOfCreator(HeaderMap, userId,  Timestamp(System.currentTimeMillis()))
+    }
+
+    suspend fun getPassedEventsOfCreator(HeaderMap: Map<String, String>, userId: Int) :Response<List<Event>> {
+        return RetrofitInstance.api.getPassedEventsOfCreator(HeaderMap, userId, Timestamp(System.currentTimeMillis()))
+    }
+
+    suspend fun getInviteEventsOfCreator(HeaderMap: Map<String, String>, userId: Int) : Response<List<Event>> {
+        return RetrofitInstance.api.getInviteEventsOfCreator(HeaderMap, userId,Timestamp(System.currentTimeMillis()))
     }
 }

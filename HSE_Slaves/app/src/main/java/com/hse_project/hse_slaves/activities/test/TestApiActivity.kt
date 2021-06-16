@@ -148,10 +148,9 @@ class TestApiActivity : AppCompatActivity() {
                 "name$i",
                 "description$i",
                 USER_ID,
-                i.toDouble() / 10,
                 "geoData$i",
                 "ART",
-                "2020-04-04",
+                "202-04-04",
                 ArrayList()
             )
         )

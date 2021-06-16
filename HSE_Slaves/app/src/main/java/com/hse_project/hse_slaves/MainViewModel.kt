@@ -37,6 +37,14 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val sendApplicationToEventResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
 
     val getFutureEventsOfOrganizerResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+    val getPassedEventsOfOrganizerResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+
+    val getFutureEventsOfUserResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+    val getPassedEventsOfUserResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+
+    val getFutureEventsOfCreatorResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+    val getPassedEventsOfCreatorResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+    val getInviteEventsOfCreatorResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
 
     val inviteCreatorToEventResponse : MutableLiveData<retrofit2.Response<Void>> = MutableLiveData()
 
@@ -206,6 +214,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    fun getPassedEventsOfOrganizer() {
+        viewModelScope.launch {
+            val response = repository.getPassedEventsOfOrganizer(getHeaderMap(), userId)
+            getPassedEventsOfOrganizerResponse.value  = response
+        }
+    }
+
     fun inviteCreatorToEvent(creatorId : Int, eventId: Int, message: String) {
         viewModelScope.launch {
             val response = repository.inviteCreatorToEvent(getHeaderMap(), userId, creatorId, eventId, message)
@@ -227,4 +242,42 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    //Users
+
+    fun getFutureEventsOfUser() {
+        viewModelScope.launch {
+            val response = repository.getFutureEventsOfOrganizer(getHeaderMap(), userId)
+            getFutureEventsOfUserResponse.value  = response
+        }
+    }
+
+    fun getPassedEventsOfUser() {
+        viewModelScope.launch {
+            val response = repository.getPassedEventsOfOrganizer(getHeaderMap(), userId)
+            getPassedEventsOfUserResponse.value  = response
+        }
+    }
+
+    //Creators
+
+    fun getFutureEventsOfCreator() {
+        viewModelScope.launch {
+            val response = repository.getFutureEventsOfOrganizer(getHeaderMap(), userId)
+            getFutureEventsOfCreatorResponse.value  = response
+        }
+    }
+
+    fun getPassedEventsOfCreator() {
+        viewModelScope.launch {
+            val response = repository.getPassedEventsOfOrganizer(getHeaderMap(), userId)
+            getPassedEventsOfCreatorResponse.value  = response
+        }
+    }
+
+    fun getInviteEventsOfCreator() {
+        viewModelScope.launch {
+            val response = repository.getInviteEventsOfCreator(getHeaderMap(), userId)
+            getInviteEventsOfCreatorResponse.value = response
+        }
+    }
 }
