@@ -8,6 +8,8 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+
     }
 
     //TODO сделать editext кнопку и ресайклер вью, сделать интерфейс объект который имплементят пользователь и эвент чтобы сделать один ресайклервью
