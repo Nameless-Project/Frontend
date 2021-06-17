@@ -246,5 +246,25 @@ interface SimpleApi {
         @Path("eventId") eventId: Int
     ): Response<Invitation>
 
+    @GET("api/events/{eventId}/applications")
+    suspend fun getAllCreatorsApplications(
+        @HeaderMap headers: Map<String, String>,
+        @Path("eventId") eventId: Int
+    ): Response<List<Application>>
 
+    //Search
+
+    @GET("api/users/search")
+    suspend fun searchUsers(
+        @HeaderMap headers: Map<String, String>,
+        @Query("username") name: String,
+        @QueryMap filters: Map<String, Int>
+    ): Response<List<User>>
+
+    @GET("api/events/search")
+    suspend fun searchEvents(
+        @HeaderMap headers: Map<String, String>,
+        @Query("eventName") name: String,
+        @QueryMap filters: Map<String, Int>
+    ): Response<List<Event>>
 }

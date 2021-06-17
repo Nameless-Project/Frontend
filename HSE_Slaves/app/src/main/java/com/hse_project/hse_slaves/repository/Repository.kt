@@ -150,4 +150,18 @@ class Repository {
     suspend fun getInvitation(HeaderMap: Map<String, String>, userId: Int, eventId: Int) : Response<Invitation> {
         return RetrofitInstance.api.getInvitation(HeaderMap, userId, eventId)
     }
+
+    suspend fun getAllCreatorsApplications(HeaderMap: Map<String, String>, eventId: Int) : Response<List<Application>> {
+        return RetrofitInstance.api.getAllCreatorsApplications(HeaderMap, eventId)
+    }
+
+    //Search
+
+    suspend fun searchUsers(HeaderMap: Map<String, String>, name: String, offset: Int, size: Int) :Response<List<User>> {
+        return RetrofitInstance.api.searchUsers(HeaderMap, name, mapOf("offset" to offset, "size" to size))
+    }
+
+    suspend fun searchEvents(HeaderMap: Map<String, String>, name: String, offset: Int, size: Int) :Response<List<Event>> {
+        return RetrofitInstance.api.searchEvents(HeaderMap, name, mapOf("offset" to offset, "size" to size))
+    }
 }

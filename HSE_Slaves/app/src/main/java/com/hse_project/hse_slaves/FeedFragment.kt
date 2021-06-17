@@ -1,5 +1,6 @@
 package com.hse_project.hse_slaves
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hse_project.hse_slaves.activities.SearchActivity
 import com.hse_project.hse_slaves.current.FILTER_SET
 import com.hse_project.hse_slaves.current.USER_ROLE
 import com.hse_project.hse_slaves.model.Event
@@ -35,6 +37,9 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        search.setOnClickListener {
+            startActivity(Intent(context, SearchActivity::class.java))
+        }
         addFilterListener()
         addScrollListener()
         initRecyclerView()

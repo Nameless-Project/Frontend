@@ -1,6 +1,7 @@
 package com.hse_project.hse_slaves.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -9,9 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.current.EVENT_ID
 import com.hse_project.hse_slaves.image.getBitmapByString
+import com.hse_project.hse_slaves.model.Application
 import com.hse_project.hse_slaves.model.User
 import com.hse_project.hse_slaves.repository.Repository
+import kotlinx.android.synthetic.main.activity_applications_to_event.*
 import kotlinx.android.synthetic.main.item_creators.view.*
 
 class ApplicationsToEventActivity : AppCompatActivity() {
@@ -19,6 +23,7 @@ class ApplicationsToEventActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private val creators = ArrayList<User>()
+    private var applications = ArrayList<Application>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +36,31 @@ class ApplicationsToEventActivity : AppCompatActivity() {
     }
 
     private fun addListView() {
-        //TODO получаем список криэйтеров подавших заявку
+        viewModel.getAllCreatorsApplications(EVENT_ID)
+        viewModel.getAllCreatorsApplicationsResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                applications.addAll(response.body()!!)
+                makeCreators(0)
+            } else {
+                Log.d("PPPPPPPPPPP", "TTTTTTTTTT")
+            }
+        })
+    }
+
+    private fun makeCreators(position : Int) {
+        if (position >= applications.size) {
+            list_view_creators.adapter = CreatorAdapter()
+            return
+        }
+        viewModel.getUser(applications[position].creatorId.toInt())
+        viewModel.userResponse.observe(this, {response ->
+            if (response.isSuccessful) {
+                creators.add(response.body()!!)
+                makeCreators(position + 1)
+            } else {
+                Log.d("FFFFFFFFFFFF", "FFFFFFFFFFFFFF")
+            }
+        })
     }
 
     private inner class CreatorAdapter : BaseAdapter() {
@@ -60,11 +89,25 @@ class ApplicationsToEventActivity : AppCompatActivity() {
             }
 
             view.accept.setOnClickListener {
-                //TODO обрабатываем нажатие
+                viewModel.answerApplicationFromCreator(EVENT_ID, creators[position].id, true)
+                viewModel.answerApplicationFromCreatorResponse.observe(this@ApplicationsToEventActivity, { response ->
+                    if (response.isSuccessful) {
+                        creators.remove(creators[position])
+                    } else {
+                        Log.d("AAA", "BBB")
+                    }
+                })
             }
 
             view.decline.setOnClickListener {
-
+                viewModel.answerApplicationFromCreator(EVENT_ID, creators[position].id, false)
+                viewModel.answerApplicationFromCreatorResponse.observe(this@ApplicationsToEventActivity, { response ->
+                    if (response.isSuccessful) {
+                        creators.remove(creators[position])
+                    } else {
+                        Log.d("AAA", "BBB")
+                    }
+                })
             }
 
             return view

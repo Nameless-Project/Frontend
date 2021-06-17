@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hse_project.hse_slaves.MainViewModel
 import com.hse_project.hse_slaves.MainViewModelFactory
 import com.hse_project.hse_slaves.R
+import com.hse_project.hse_slaves.activities.ApplicationsToEventActivity
 import com.hse_project.hse_slaves.activities.MainActivity
 import com.hse_project.hse_slaves.current.EVENT_ID
 import com.hse_project.hse_slaves.current.IS_TMP_USER
@@ -59,7 +60,6 @@ class EventActivity : AppCompatActivity() {
             addApplyOnClickListener()
             open_list_of_creators.visibility = GONE
 
-            //TODO проверить что заявка есть и не рассмотрена
             viewModel.checkIfCreatorHasInvitationToEvent(EVENT_ID)
             viewModel.checkIfCreatorHasInvitationToEventResponse.observe(this, {response ->
                 if (response.isSuccessful) {
@@ -96,8 +96,7 @@ class EventActivity : AppCompatActivity() {
 
     private fun addListOfCreatorsListener() {
         open_list_of_creators.setOnClickListener {
-            //TODO получить список криэйтеров которые подали заявки,стартовать новое активити его надо еще  сделать
-            //TODO в активити просто спсисок из названий и аватарок и кнопки принять отклонить
+            startActivity(Intent(this@EventActivity, ApplicationsToEventActivity::class.java))
         }
     }
 

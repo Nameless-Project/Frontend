@@ -55,6 +55,11 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val getApplicationResponse : MutableLiveData<retrofit2.Response<Application>> = MutableLiveData()
     val getInvitationResponse : MutableLiveData<retrofit2.Response<Invitation>> = MutableLiveData()
 
+    val getAllCreatorsApplicationsResponse : MutableLiveData<retrofit2.Response<List<Application>>> = MutableLiveData()
+
+    var searchUsersResponse : MutableLiveData<retrofit2.Response<List<User>>> = MutableLiveData()
+    var searchEventsResponse : MutableLiveData<retrofit2.Response<List<Event>>> = MutableLiveData()
+
 
     var userId: Int = USER_ID
 
@@ -314,6 +319,28 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val response = repository.getInvitation(getHeaderMap(), userId, eventId)
             getInvitationResponse.value = response
+        }
+    }
+
+    fun getAllCreatorsApplications(eventId: Int) {
+        viewModelScope.launch {
+            val response = repository.getAllCreatorsApplications(getHeaderMap(), eventId)
+            getAllCreatorsApplicationsResponse.value = response
+        }
+    }
+
+    //Search
+    fun searchUsers(name : String, offset: Int, size: Int) {
+        viewModelScope.launch {
+            val response = repository.searchUsers(getHeaderMap(), name, offset, size)
+            searchUsersResponse.value = response
+        }
+    }
+
+    fun searchEvents(name: String, offset: Int, size: Int) {
+        viewModelScope.launch {
+            val response = repository.searchEvents(getHeaderMap(), name, offset, size)
+            searchEventsResponse.value = response
         }
     }
 }

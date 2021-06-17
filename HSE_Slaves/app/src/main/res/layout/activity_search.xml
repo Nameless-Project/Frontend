@@ -7,28 +7,40 @@
     tools:context=".activities.SearchActivity">
 
     <EditText
+        android:id="@+id/edit_text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/search_users"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/search_events"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:text="search"
+        android:text="search events"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/search_users"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="search users"
+        app:layout_constraintEnd_toEndOf="@+id/search_events"
+        app:layout_constraintStart_toStartOf="@+id/search_events"
+        app:layout_constraintTop_toBottomOf="@+id/search_events" />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/search_users" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
