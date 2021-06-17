@@ -1,7 +1,6 @@
 package com.hse_project.hse_slaves.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -26,21 +25,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var userAdapter: CreatorRecyclerAdapter
     private lateinit var viewModel: MainViewModel
     private lateinit var myLayoutManager: LinearLayoutManager
-
-    private var name : String = ""
-
-    private var type :Boolean = false
+    private var name: String = ""
+    private var type: Boolean = false
     private var offset: Int = 0
     private var isLoading: AtomicBoolean = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
         addScrollListener()
         initApi()
         addListeners()
-
     }
 
     private fun addListeners() {
@@ -74,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
         addDataSet(type)
     }
 
-    private fun initRecyclerView(type : Boolean) {
+    private fun initRecyclerView(type: Boolean) {
         recyclerView.apply {
             recyclerView.layoutManager = myLayoutManager
             val topSpacingDecoration = TopSpacingItemDecoration(30)
@@ -107,8 +102,6 @@ class SearchActivity : AppCompatActivity() {
                     recyclerView.post {
                         userAdapter.submitList(user)
                     }
-                } else {
-                    Log.d("QQQQQQQQQQQQQ", response.toString())
                 }
                 isLoading.set(false)
             })
@@ -125,8 +118,6 @@ class SearchActivity : AppCompatActivity() {
                     recyclerView.post {
                         eventAdapter.submitList(event)
                     }
-                } else {
-                    Log.d("QQQQQQQQQQQQQ", response.toString())
                 }
                 isLoading.set(false)
             })

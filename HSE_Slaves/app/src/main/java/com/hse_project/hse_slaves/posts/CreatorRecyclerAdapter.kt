@@ -1,7 +1,6 @@
 package com.hse_project.hse_slaves.posts
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,17 +18,16 @@ class CreatorRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items = ArrayList<User>()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_blog_list_item, parent, false)
 
-        return CreatorRecyclerAdapter.CreatorViewHolder(view)
+        return CreatorViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is CreatorRecyclerAdapter.CreatorViewHolder -> {
+            is CreatorViewHolder -> {
                 holder.bind(items[position])
             }
         }
@@ -51,7 +49,7 @@ class CreatorRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class CreatorViewHolder constructor(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView){
+    ) : RecyclerView.ViewHolder(itemView) {
 
         var id = 0
         private val nikName: TextView = itemView.nik_name
@@ -59,7 +57,6 @@ class CreatorRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val specialization: TextView = itemView.specialization
         private val ratio: TextView = itemView.ratio
         private val geo: TextView = itemView.geo
-
 
 
         fun bind(user: User) {
@@ -71,11 +68,9 @@ class CreatorRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             id = user.id
             if (user.images.size != 0) {
-                Log.d(user.images.size.toString(), user.images[0])
                 itemView.imageButton.setImageBitmap(getBitmapByString(user.images[0]))
             }
             itemView.setOnClickListener {
-                Log.d("PPPPPPPPPPPPPPPPPPP", "AAAAAAAAAAAAAAAAA")
                 TMP_USER_ID = id
                 IS_TMP_USER = true
                 itemView.context.startActivity(Intent(itemView.context, MainActivity::class.java))

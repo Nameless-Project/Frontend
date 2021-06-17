@@ -8,6 +8,4 @@ data class EventPost(
     val specialization: String,
     val date: String,
     val images: List<String>,
-) {
-
-}
+)

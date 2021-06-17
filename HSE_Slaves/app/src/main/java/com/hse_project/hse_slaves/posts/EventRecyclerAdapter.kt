@@ -1,7 +1,6 @@
 package com.hse_project.hse_slaves.posts
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +48,7 @@ class EventRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class EventViewHolder constructor(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView){
+    ) : RecyclerView.ViewHolder(itemView) {
 
         var id = 0
         private val nikName: TextView = itemView.nik_name
@@ -59,10 +58,9 @@ class EventRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val geo: TextView = itemView.geo
 
 
-
         fun bind(event: Event) {
             nikName.text = event.name
-            date.text = event.date.toString().substring(0, 10)
+            date.text = event.date.substring(0, 10)
             specialization.text = event.specialization
             ratio.text = event.rating.toString()
             geo.text = event.geoData
@@ -71,7 +69,6 @@ class EventRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             itemView.imageButton.setImageBitmap(getBitmapByString(event.images[0]))
 
             itemView.setOnClickListener {
-                Log.d("PPPPPPPPPPPPPPPPPPP", "AAAAAAAAAAAAAAAAA")
                 EVENT_ID = id
                 itemView.context.startActivity(Intent(itemView.context, EventActivity::class.java))
             }

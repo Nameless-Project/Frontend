@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -21,23 +20,15 @@ import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.gallery
-import retrofit2.Response
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 
 
 class RegisterActivity : AppCompatActivity() {
-
     private lateinit var viewModel: MainViewModel
-
     private var images: ArrayList<Uri> = ArrayList()
     private var position = 0
-    private val PICK_IMAGE = 1
-
     private var userRole: String = "USER"
     private var specialization: String = "ART"
-
+    private val PICK_IMAGE = 1
     private val imagesStringArray: ArrayList<String> = ArrayList()
 
 
@@ -140,7 +131,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun run() {
         cancel.setOnClickListener {
-            //startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
             onBackPressed()
         }
 
@@ -216,33 +206,17 @@ class RegisterActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                         } else {
-                            Log.d("AAAAAA", convert(response))
-                            throw RuntimeException(response.toString())
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "User with such username is already exist.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     })
 
                 }
             }
         }
-    }
-    private fun convert(response: Response<Void>): String {
-        val reader: BufferedReader?
-        val sb = StringBuilder()
-        try {
-            reader = BufferedReader(InputStreamReader(response.errorBody()?.byteStream()))
-            var line: String?
-            try {
-                while (reader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return sb.toString()
     }
 
     fun initApi() {

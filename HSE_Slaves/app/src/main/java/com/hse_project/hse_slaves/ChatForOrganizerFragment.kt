@@ -1,9 +1,9 @@
 package com.hse_project.hse_slaves
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -24,12 +24,10 @@ import kotlinx.android.synthetic.main.item_chats.view.*
 
 
 class ChatForOrganizerFragment : Fragment() {
-
     private lateinit var viewModel: MainViewModel
-
-    private var eventsFuture : ArrayList<Event> = ArrayList()
-    private var eventsPast : ArrayList<Event> = ArrayList()
-    private var eventsInvite : ArrayList<Event> = ArrayList()
+    private var eventsFuture: ArrayList<Event> = ArrayList()
+    private var eventsPast: ArrayList<Event> = ArrayList()
+    private var eventsInvite: ArrayList<Event> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,68 +56,67 @@ class ChatForOrganizerFragment : Fragment() {
     }
 
     private fun addGridFuture() {
-        if (USER_ROLE == "ORGANIZER") {
-            viewModel.getFutureEventsOfOrganizer()
-            viewModel.getFutureEventsOfOrganizerResponse.observe(viewLifecycleOwner, { response ->
-                if (response.isSuccessful) {
-                    eventsFuture.clear()
-                    eventsFuture.addAll(response.body()!!)
+        when {
+            (USER_ROLE == "ORGANIZER") -> {
+                viewModel.getFutureEventsOfOrganizer()
+                viewModel.getFutureEventsOfOrganizerResponse.observe(
+                    viewLifecycleOwner,
+                    { response ->
+                        if (response.isSuccessful) {
+                            eventsFuture.clear()
+                            eventsFuture.addAll(response.body()!!)
 
-                    grid_view_future_events.adapter = FutureAdapter()
+                            grid_view_future_events.adapter = FutureAdapter()
 
-                    grid_view_future_events.onItemClickListener =
-                        AdapterView.OnItemClickListener { _, _, position, _ ->
-                            Log.d("AAAAAAAAAAA", "FFFFFFFFFF")
-                            EVENT_ID = eventsFuture[position].id
-                            startActivity(Intent(context, EventActivity::class.java))
+                            grid_view_future_events.onItemClickListener =
+                                AdapterView.OnItemClickListener { _, _, position, _ ->
+                                    EVENT_ID = eventsFuture[position].id
+                                    startActivity(Intent(context, EventActivity::class.java))
+                                }
                         }
-                } else {
-                    Log.d("QQQQq", "TTTTTTTTTTTTTTTTTTTt")
-                }
-            })
-        } else if (USER_ROLE == "CREATOR") {
-            viewModel.getFutureEventsOfCreator()
-            viewModel.getFutureEventsOfCreatorResponse.observe(viewLifecycleOwner, { response ->
-                if (response.isSuccessful) {
-                    eventsFuture.clear()
-                    eventsFuture.addAll(response.body()!!)
+                    })
+                return
+            }
+            (USER_ROLE == "CREATOR") -> {
+                viewModel.getFutureEventsOfCreator()
+                viewModel.getFutureEventsOfCreatorResponse.observe(viewLifecycleOwner, { response ->
+                    if (response.isSuccessful) {
+                        eventsFuture.clear()
+                        eventsFuture.addAll(response.body()!!)
 
-                    grid_view_future_events.adapter = FutureAdapter()
+                        grid_view_future_events.adapter = FutureAdapter()
 
-                    grid_view_future_events.onItemClickListener =
-                        AdapterView.OnItemClickListener { _, _, position, _ ->
-                            Log.d("AAAAAAAAAAA", "FFFFFFFFFF")
-                            EVENT_ID = eventsFuture[position].id
-                            startActivity(Intent(context, EventActivity::class.java))
-                        }
-                } else {
-                    Log.d("QQQQq", "TTTTTTTTTTTTTTTTTTTt")
-                }
-            })
-        } else {
-            viewModel.getFutureEventsOfUser()
-            viewModel.getFutureEventsOfUserResponse.observe(viewLifecycleOwner, { response ->
-                if (response.isSuccessful) {
-                    eventsFuture.clear()
-                    eventsFuture.addAll(response.body()!!)
+                        grid_view_future_events.onItemClickListener =
+                            AdapterView.OnItemClickListener { _, _, position, _ ->
+                                EVENT_ID = eventsFuture[position].id
+                                startActivity(Intent(context, EventActivity::class.java))
+                            }
+                    }
+                })
+                return
+            }
+            else -> {
+                viewModel.getFutureEventsOfUser()
+                viewModel.getFutureEventsOfUserResponse.observe(viewLifecycleOwner, { response ->
+                    if (response.isSuccessful) {
+                        eventsFuture.clear()
+                        eventsFuture.addAll(response.body()!!)
 
-                    grid_view_future_events.adapter = FutureAdapter()
+                        grid_view_future_events.adapter = FutureAdapter()
 
-                    grid_view_future_events.onItemClickListener =
-                        AdapterView.OnItemClickListener { _, _, position, _ ->
-                            Log.d("AAAAAAAAAAA", "FFFFFFFFFF")
-                            EVENT_ID = eventsFuture[position].id
-                            startActivity(Intent(context, EventActivity::class.java))
-                        }
-                } else {
-                    Log.d("QQQQq", "TTTTTTTTTTTTTTTTTTTt")
-                }
-            })
+                        grid_view_future_events.onItemClickListener =
+                            AdapterView.OnItemClickListener { _, _, position, _ ->
+                                EVENT_ID = eventsFuture[position].id
+                                startActivity(Intent(context, EventActivity::class.java))
+                            }
+                    }
+                })
+            }
         }
     }
 
     private fun addGridInvite() {
-       if (USER_ROLE == "CREATOR") {
+        if (USER_ROLE == "CREATOR") {
             viewModel.getInviteEventsOfCreator()
             viewModel.getInviteEventsOfCreatorResponse.observe(viewLifecycleOwner, { response ->
                 if (response.isSuccessful) {
@@ -130,75 +127,71 @@ class ChatForOrganizerFragment : Fragment() {
 
                     grid_view_invite_events.onItemClickListener =
                         AdapterView.OnItemClickListener { _, _, position, _ ->
-                            Log.d("AAAAAAAAAAA", "FFFFFFFFFF")
                             EVENT_ID = eventsInvite[position].id
                             startActivity(Intent(context, EventActivity::class.java))
                         }
-                } else {
-                    Log.d("QQQQq", "TTTTTTTTTTTTTTTTTTTt")
                 }
             })
         }
     }
 
     private fun addGridPast() {
-        if (USER_ROLE == "ORGANIZER") {
-            viewModel.getPassedEventsOfOrganizer()
-            viewModel.getPassedEventsOfOrganizerResponse.observe(viewLifecycleOwner, { response ->
-                if (response.isSuccessful) {
-                    eventsPast.clear()
-                    eventsPast.addAll(response.body()!!)
+        when {
+            (USER_ROLE == "ORGANIZER") -> {
+                viewModel.getPassedEventsOfOrganizer()
+                viewModel.getPassedEventsOfOrganizerResponse.observe(
+                    viewLifecycleOwner,
+                    { response ->
+                        if (response.isSuccessful) {
+                            eventsPast.clear()
+                            eventsPast.addAll(response.body()!!)
 
-                    grid_view_past_events.adapter = PastAdapter()
+                            grid_view_past_events.adapter = PastAdapter()
 
-                    grid_view_past_events.onItemClickListener =
-                        AdapterView.OnItemClickListener { _, _, position, _ ->
-                            Log.d("AAAAAAAAAAA", "FFFFFFFFFF")
-                            EVENT_ID = eventsPast[position].id
-                            startActivity(Intent(context, EventActivity::class.java))
+                            grid_view_past_events.onItemClickListener =
+                                AdapterView.OnItemClickListener { _, _, position, _ ->
+                                    EVENT_ID = eventsPast[position].id
+                                    startActivity(Intent(context, EventActivity::class.java))
+                                }
                         }
-                } else {
-                    Log.d("QQQQq", "TTTTTTTTTTTTTTTTTTTt")
-                }
-            })
-        } else if (USER_ROLE == "CREATOR") {
-            viewModel.getPassedEventsOfCreator()
-            viewModel.getPassedEventsOfCreatorResponse.observe(viewLifecycleOwner, { response ->
-                if (response.isSuccessful) {
-                    eventsPast.clear()
-                    eventsPast.addAll(response.body()!!)
+                    })
+                return
+            }
+            (USER_ROLE == "CREATOR") -> {
+                viewModel.getPassedEventsOfCreator()
+                viewModel.getPassedEventsOfCreatorResponse.observe(viewLifecycleOwner, { response ->
+                    if (response.isSuccessful) {
+                        eventsPast.clear()
+                        eventsPast.addAll(response.body()!!)
 
-                    grid_view_past_events.adapter = PastAdapter()
+                        grid_view_past_events.adapter = PastAdapter()
 
-                    grid_view_past_events.onItemClickListener =
-                        AdapterView.OnItemClickListener { _, _, position, _ ->
-                            Log.d("AAAAAAAAAAA", "FFFFFFFFFF")
-                            EVENT_ID = eventsPast[position].id
-                            startActivity(Intent(context, EventActivity::class.java))
-                        }
-                } else {
-                    Log.d("QQQQq", "TTTTTTTTTTTTTTTTTTTt")
-                }
-            })
-        } else {
-            viewModel.getPassedEventsOfUser()
-            viewModel.getPassedEventsOfUserResponse.observe(viewLifecycleOwner, { response ->
-                if (response.isSuccessful) {
-                    eventsPast.clear()
-                    eventsPast.addAll(response.body()!!)
+                        grid_view_past_events.onItemClickListener =
+                            AdapterView.OnItemClickListener { _, _, position, _ ->
+                                EVENT_ID = eventsPast[position].id
+                                startActivity(Intent(context, EventActivity::class.java))
+                            }
+                    }
+                })
+                return
+            }
+            else -> {
+                viewModel.getPassedEventsOfUser()
+                viewModel.getPassedEventsOfUserResponse.observe(viewLifecycleOwner, { response ->
+                    if (response.isSuccessful) {
+                        eventsPast.clear()
+                        eventsPast.addAll(response.body()!!)
 
-                    grid_view_past_events.adapter = PastAdapter()
+                        grid_view_past_events.adapter = PastAdapter()
 
-                    grid_view_past_events.onItemClickListener =
-                        AdapterView.OnItemClickListener { _, _, position, _ ->
-                            Log.d("AAAAAAAAAAA", "FFFFFFFFFF")
-                            EVENT_ID = eventsPast[position].id
-                            startActivity(Intent(context, EventActivity::class.java))
-                        }
-                } else {
-                    Log.d("QQQQq", "TTTTTTTTTTTTTTTTTTTt")
-                }
-            })
+                        grid_view_past_events.onItemClickListener =
+                            AdapterView.OnItemClickListener { _, _, position, _ ->
+                                EVENT_ID = eventsPast[position].id
+                                startActivity(Intent(context, EventActivity::class.java))
+                            }
+                    }
+                })
+            }
         }
     }
 
@@ -226,9 +219,10 @@ class ChatForOrganizerFragment : Fragment() {
         }
 
         override fun getItemId(position: Int): Long {
-           return 0
+            return 0
         }
 
+        @SuppressLint("ViewHolder", "InflateParams")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val view = layoutInflater.inflate(R.layout.item_chats, null)
             view.item_chat_text.text = eventsFuture[position].name
@@ -259,6 +253,7 @@ class ChatForOrganizerFragment : Fragment() {
             return 0
         }
 
+        @SuppressLint("ViewHolder", "InflateParams")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val view = layoutInflater.inflate(R.layout.item_chats, null)
             view.item_chat_text.text = eventsPast[position].name
@@ -289,6 +284,7 @@ class ChatForOrganizerFragment : Fragment() {
             return 0
         }
 
+        @SuppressLint("ViewHolder", "InflateParams")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val view = layoutInflater.inflate(R.layout.item_chats, null)
             view.item_chat_text.text = eventsInvite[position].name

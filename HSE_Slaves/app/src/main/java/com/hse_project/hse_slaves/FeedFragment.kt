@@ -2,7 +2,6 @@ package com.hse_project.hse_slaves
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ class FeedFragment : Fragment() {
     private lateinit var userAdapter: CreatorRecyclerAdapter
     private lateinit var viewModel: MainViewModel
     private lateinit var myLayoutManager: LinearLayoutManager
-
     private var offset: Int = 0
     private var isLoading: AtomicBoolean = AtomicBoolean(false)
 
@@ -152,8 +150,6 @@ class FeedFragment : Fragment() {
                     recycler_view.post {
                         userAdapter.submitList(user)
                     }
-                } else {
-                    Log.d("QQQQQQQQQQQQQ", response.toString())
                 }
                 isLoading.set(false)
             })
@@ -170,8 +166,6 @@ class FeedFragment : Fragment() {
                     recycler_view.post {
                         eventAdapter.submitList(event)
                     }
-                } else {
-                    Log.d("QQQQQQQQQQQQQ", response.toString())
                 }
                 isLoading.set(false)
             })

@@ -5,23 +5,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HSE_Slaves"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.SearchActivity"></activity>
+        <activity android:name=".activities.SearchActivity" />
         <activity android:name=".activities.ApplicationsToEventActivity" />
         <activity android:name=".activities.pages.chats.event.CreateEventActivity" />
-        <activity android:name=".activities.pages.chats.ChatForOrganizerActivity" />
         <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.test.TestApiActivity" />
-        <activity android:name=".activities.pages.UserProfileActivity" />
         <activity android:name=".activities.pages.EventActivity" />
-        <activity android:name=".PostsActivity" />
-        <activity android:name=".activities.pages.FeedActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity">
             <intent-filter>

@@ -3,7 +3,6 @@ package com.hse_project.hse_slaves
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,14 +27,13 @@ class HomeFragment : Fragment() {
     private lateinit var data: User
     private var isFollowSet: Boolean = false
     private var isCheckingSubscription: AtomicBoolean = AtomicBoolean(false)
-
     private var eventId: Int = 0
-
     private var isInvited: Boolean = false
-
-    private val nameToEventId: MutableMap<String, Int> = HashMap()
-
     private var tmpUserRole: String = ""
+    private var spinnerPosition: Int = 0
+    private val nameToEventId: MutableMap<String, Int> = HashMap()
+    private val optionsEvents = ArrayList<String>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,7 +57,7 @@ class HomeFragment : Fragment() {
                     viewModel.inviteCreatorToEvent(TMP_USER_ID, eventId, message)
                     viewModel.inviteCreatorToEventResponse.observe(viewLifecycleOwner, { response ->
                         if (response.isSuccessful) {
-                            //TODO удалить из спинера
+                            optionsEvents.remove(optionsEvents[spinnerPosition])
                         } else {
                             Toast.makeText(
                                 context,
@@ -78,7 +76,6 @@ class HomeFragment : Fragment() {
         viewModel.getFutureEventsOfOrganizerResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
                 val tmpList = response.body()!!
-                val optionsEvents = ArrayList<String>()
 
                 for (event in tmpList) {
                     optionsEvents.add(event.name)
@@ -101,14 +98,14 @@ class HomeFragment : Fragment() {
                             id: Long
                         ) {
                             eventId = nameToEventId[optionsEvents[position]]!!
+                            spinnerPosition = position
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                             eventId = nameToEventId[optionsEvents[0]]!!
+                            spinnerPosition = 0
                         }
                     }
-            } else {
-                Log.d("QQQQQQQQQQQQQQQQQq", "TTTTTTTTTTTTTTTTTTTT")
             }
         })
     }
@@ -120,16 +117,12 @@ class HomeFragment : Fragment() {
             return
         }
         IS_TMP_USER = false
-        //TODO когда появится метод который возвращает bool поменять на него
         viewModel.getAllSubscriptions(TMP_USER_ID)
         viewModel.getAllSubscriptionsResponse.observe(viewLifecycleOwner, { response ->
             if (response.isSuccessful) {
                 isFollowSet = response.body()?.contains(data)!!
-                Log.d("QQQQQQQQQQQQQQQ", isFollowSet.toString())
                 addFollowListener()
                 update()
-            } else {
-                Log.d("AAAAAAAAAAAAAAAAAAAAAAA", response.toString())
             }
         })
     }
@@ -137,7 +130,6 @@ class HomeFragment : Fragment() {
     private fun addFollowListener() {
         follow.setOnClickListener {
             if (isCheckingSubscription.compareAndSet(false, true)) {
-                Log.d("AAAA", isFollowSet.toString())
                 if (isFollowSet) {
                     viewModel.deleteSubscription(data.id)
                     viewModel.deleteSubscriptionResponse.observe(viewLifecycleOwner, { response1 ->
@@ -150,8 +142,6 @@ class HomeFragment : Fragment() {
                                     R.color.purple_500
                                 )
                             )
-                        } else {
-                            Log.d("Delete subscription", response1.toString())
                         }
                         isCheckingSubscription.set(false)
                     })
@@ -168,8 +158,6 @@ class HomeFragment : Fragment() {
                                 )
                             )
 
-                        } else {
-                            Log.d("Post subscription", response1.toString())
                         }
                         isCheckingSubscription.set(false)
                     })
@@ -179,11 +167,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViewDependsOnUserType() {
-        Log.d(IS_TMP_USER.toString(), "SSSSSSSSSSSSSSSSSSSSS")
         if (!IS_TMP_USER || TMP_USER_ID == USER_ID) {
-//            follow.text = ("").toString()
-//            follow.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-//            main_layout.removeView(follow)
             follow.visibility = View.INVISIBLE
 
             settings.setOnClickListener {

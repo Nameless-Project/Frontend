@@ -1,7 +1,7 @@
 package com.hse_project.hse_slaves.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -19,20 +19,16 @@ import kotlinx.android.synthetic.main.activity_applications_to_event.*
 import kotlinx.android.synthetic.main.item_creators.view.*
 
 class ApplicationsToEventActivity : AppCompatActivity() {
-
-
     private lateinit var viewModel: MainViewModel
-    private val creators = ArrayList<User>()
     private var applications = ArrayList<Application>()
+    private val creators = ArrayList<User>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_applications_to_event)
         initApi()
-
         addListView()
-
     }
 
     private fun addListView() {
@@ -41,24 +37,20 @@ class ApplicationsToEventActivity : AppCompatActivity() {
             if (response.isSuccessful) {
                 applications.addAll(response.body()!!)
                 makeCreators(0)
-            } else {
-                Log.d("PPPPPPPPPPP", "TTTTTTTTTT")
             }
         })
     }
 
-    private fun makeCreators(position : Int) {
+    private fun makeCreators(position: Int) {
         if (position >= applications.size) {
             list_view_creators.adapter = CreatorAdapter()
             return
         }
         viewModel.getUser(applications[position].creatorId.toInt())
-        viewModel.userResponse.observe(this, {response ->
+        viewModel.userResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 creators.add(response.body()!!)
                 makeCreators(position + 1)
-            } else {
-                Log.d("FFFFFFFFFFFF", "FFFFFFFFFFFFFF")
             }
         })
     }
@@ -76,6 +68,7 @@ class ApplicationsToEventActivity : AppCompatActivity() {
             return 0
         }
 
+        @SuppressLint("ViewHolder", "InflateParams")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val view = layoutInflater.inflate(R.layout.item_creators, null)
             view.item_creators_text.text = creators[position].username
@@ -90,29 +83,27 @@ class ApplicationsToEventActivity : AppCompatActivity() {
 
             view.accept.setOnClickListener {
                 viewModel.answerApplicationFromCreator(EVENT_ID, creators[position].id, true)
-                viewModel.answerApplicationFromCreatorResponse.observe(this@ApplicationsToEventActivity, { response ->
-                    if (response.isSuccessful) {
-                        creators.remove(creators[position])
-                    } else {
-                        Log.d("AAA", "BBB")
-                    }
-                })
+                viewModel.answerApplicationFromCreatorResponse.observe(
+                    this@ApplicationsToEventActivity,
+                    { response ->
+                        if (response.isSuccessful) {
+                            creators.remove(creators[position])
+                        }
+                    })
             }
 
             view.decline.setOnClickListener {
                 viewModel.answerApplicationFromCreator(EVENT_ID, creators[position].id, false)
-                viewModel.answerApplicationFromCreatorResponse.observe(this@ApplicationsToEventActivity, { response ->
-                    if (response.isSuccessful) {
-                        creators.remove(creators[position])
-                    } else {
-                        Log.d("AAA", "BBB")
-                    }
-                })
+                viewModel.answerApplicationFromCreatorResponse.observe(
+                    this@ApplicationsToEventActivity,
+                    { response ->
+                        if (response.isSuccessful) {
+                            creators.remove(creators[position])
+                        }
+                    })
             }
-
             return view
         }
-
     }
 
     private fun initApi() {
@@ -120,6 +111,4 @@ class ApplicationsToEventActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
-
-
 }

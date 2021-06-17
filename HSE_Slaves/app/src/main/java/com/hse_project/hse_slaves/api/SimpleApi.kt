@@ -267,4 +267,19 @@ interface SimpleApi {
         @Query("eventName") name: String,
         @QueryMap filters: Map<String, Int>
     ): Response<List<Event>>
+
+    //Notifications
+
+    @GET("api/users/{userId}/notifications")
+    suspend fun getNotifications(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") eventId: Int
+    ) :Response<List<Notification>>
+
+    @DELETE("api/users/{userId}/notifications")
+    suspend fun deleteNotifications(
+        @HeaderMap headers: Map<String, String>,
+        @Path("userId") eventId: Int,
+        @Body ids : List<Long>
+    ) : Response<Void>
 }

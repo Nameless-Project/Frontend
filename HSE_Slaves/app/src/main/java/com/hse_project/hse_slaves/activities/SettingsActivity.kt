@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -33,25 +32,18 @@ import kotlinx.android.synthetic.main.activity_register.submit
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
-    //TODO для спинеров правильно выставлять начальное значение
     private lateinit var viewModel: MainViewModel
     private lateinit var data: User
-
-
     private var images: ArrayList<Uri> = ArrayList()
     private var position = 0
-    private val PICK_IMAGE = 1
-
     private var specialization: String = "ART"
-
+    private val PICK_IMAGE = 1
     private val imagesStringArray: ArrayList<String> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-
         addImages()
         initApi()
         run()
@@ -131,7 +123,6 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun run() {
         cancel.setOnClickListener {
-            //startActivity(Intent(this@SettingsActivity, UserProfileActivity::class.java))
             onBackPressed()
         }
 
@@ -202,7 +193,6 @@ class SettingsActivity : AppCompatActivity() {
                     val description: String =
                         editTextTextDescription.text.toString().trim { it <= ' ' }
                     assert(imagesStringArray.size != 0)
-                    //TODO заменить это на вызов метода, который будет менять пользователя и потом открывать профиль
                     viewModel.changeUser(
                         UserRegistration(
                             USER_ROLE,
@@ -218,13 +208,15 @@ class SettingsActivity : AppCompatActivity() {
                     )
                     viewModel.registerResponse.observe(this, { response ->
                         if (response.isSuccessful) {
-                            Log.d("AAAAAa", "BBBBBb")
+                            startActivity(Intent(this@SettingsActivity, MainActivity::class.java))
                         } else {
-                            Log.d("AAAAAA", "convert(response)")
-                            throw RuntimeException(response.toString())
+                            Toast.makeText(
+                                this@SettingsActivity,
+                                "Smth went wrong, try again later.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     })
-                    startActivity(Intent(this@SettingsActivity, MainActivity::class.java))
                 }
             }
         }
@@ -240,8 +232,6 @@ class SettingsActivity : AppCompatActivity() {
             if (response.isSuccessful) {
                 data = response.body()!!
                 loadUser()
-            } else {
-                throw RuntimeException(response.toString())
             }
         })
     }

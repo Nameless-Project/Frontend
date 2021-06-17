@@ -3,7 +3,6 @@ package com.hse_project.hse_slaves.activities
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -29,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun run() {
         submit.setOnClickListener {
-
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
 
@@ -60,23 +58,20 @@ class LoginActivity : AppCompatActivity() {
 
                     val username: String = editTextTextEmailAddress.text.toString().trim { it <= ' ' }
                     val password: String = editTextTextPassword.text.toString().trim { it <= ' ' }
-
-                    Log.d(username, password)
-                    /*
-                    Создаем нового юзера
-                     */
-
                     viewModel.getToken(username, password)
                     viewModel.tokenResponse.observe(this, { response ->
                         if (response.isSuccessful) {
 
                             USER_TOKEN = response.headers()["Authorization"].toString()
-                            Log.d( "AAAAAAAAAAAAAAAAaaa", USER_TOKEN)
                             USER_ID = response.body()!!
 
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         } else {
-                            throw RuntimeException(response.toString())
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Wrong password or username.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                     )

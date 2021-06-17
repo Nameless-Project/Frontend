@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -22,23 +21,16 @@ import com.hse_project.hse_slaves.image.getStringByUri
 import com.hse_project.hse_slaves.model.EventPost
 import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_create_event.*
-import retrofit2.Response
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CreateEventActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-
     private var images: ArrayList<Uri> = ArrayList()
     private var position = 0
-    private val PICK_IMAGE = 1
-
     private var specialization: String = "ART"
-
+    private val PICK_IMAGE = 1
     private val imagesStringArray: ArrayList<String> = ArrayList()
 
 
@@ -163,11 +155,9 @@ class CreateEventActivity : AppCompatActivity() {
                     val geoData: String = editTextTextGeoData.text.toString().trim { it <= ' ' }
                     val date: String =
                         editTextTextDate.text.toString().trim { it <= ' ' }
-                    Log.d("WWSWSWSWSWSWS", date.toString())
                     val description: String =
                         editTextTextDescription.text.toString().trim { it <= ' ' }
                     assert(imagesStringArray.size != 0)
-                    Log.d(USER_ID.toString(), "RRRRRRRRRRR")
                     viewModel.postEvent(
                         EventPost(
                             name,
@@ -182,34 +172,23 @@ class CreateEventActivity : AppCompatActivity() {
 
                     viewModel.postEventResponse.observe(this, { response ->
                         if (response.isSuccessful) {
-                            startActivity(Intent(this@CreateEventActivity, MainActivity::class.java))
+                            startActivity(
+                                Intent(
+                                    this@CreateEventActivity,
+                                    MainActivity::class.java
+                                )
+                            )
                         } else {
-                            Log.d("AAAAAA", convert(response))
-                            throw RuntimeException(response.toString())
+                            Toast.makeText(
+                                this@CreateEventActivity,
+                                "Smth went wrong, try again later.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     })
                 }
             }
         }
-    }
-    private fun convert(response: Response<Void>): String {
-        val reader: BufferedReader?
-        val sb = StringBuilder()
-        try {
-            reader = BufferedReader(InputStreamReader(response.errorBody()?.byteStream()))
-            var line: String?
-            try {
-                while (reader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return sb.toString()
     }
 
     fun initApi() {

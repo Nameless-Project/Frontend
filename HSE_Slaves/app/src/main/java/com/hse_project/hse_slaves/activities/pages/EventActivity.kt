@@ -3,7 +3,6 @@ package com.hse_project.hse_slaves.activities.pages
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -29,10 +28,6 @@ import com.hse_project.hse_slaves.repository.Repository
 import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.activity_event.gallery
 import kotlinx.android.synthetic.main.activity_register.*
-import retrofit2.Response
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -43,11 +38,8 @@ class EventActivity : AppCompatActivity() {
     private var isLikeSet: Boolean = false
     private var isCheckingLike: AtomicBoolean = AtomicBoolean(false)
     private var likeDelta: Int = 0
-
     private var isApplied: Boolean = false
-
     private var isCheckingApply: AtomicBoolean = AtomicBoolean(false)
-
     private var isAnswering: AtomicBoolean = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +53,12 @@ class EventActivity : AppCompatActivity() {
             open_list_of_creators.visibility = GONE
 
             viewModel.checkIfCreatorHasInvitationToEvent(EVENT_ID)
-            viewModel.checkIfCreatorHasInvitationToEventResponse.observe(this, {response ->
+            viewModel.checkIfCreatorHasInvitationToEventResponse.observe(this, { response ->
                 if (response.isSuccessful) {
                     viewModel.getInvitation(EVENT_ID)
-                    viewModel.getInvitationResponse.observe(this, {response2->
+                    viewModel.getInvitationResponse.observe(this, { response2 ->
                         if (response2.isSuccessful) {
-                            if (!response2.body()!!.accepted){
+                            if (!response2.body()!!.accepted) {
                                 addAcceptDeclineListener()
                             }
                         }
@@ -109,7 +101,6 @@ class EventActivity : AppCompatActivity() {
                         accept.visibility = GONE
                         decline.visibility = GONE
                     } else {
-                        Log.d("AAA", "BBB")
                         isAnswering.set(false)
                     }
                 })
@@ -123,7 +114,6 @@ class EventActivity : AppCompatActivity() {
                         accept.visibility = GONE
                         decline.visibility = GONE
                     } else {
-                        Log.d("AAA", "BBB")
                         isAnswering.set(false)
                     }
                 })
@@ -137,38 +127,29 @@ class EventActivity : AppCompatActivity() {
         viewModel.checkIfCreatorHasApplicationFromEventResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 if (response.body() == true) {
-                    Log.d("EEEEEEEEEEEEEEEe", "BOOOOOOOYYYYYYYYYYYYYY")
                     //TODO когда появится метод проверить прииняли ли на мероприятие и если да то поменять текст и картинку
                     deleteIfApplied()
                 } else {
                     status_image.visibility = GONE
                     status_text.visibility = GONE
                 }
-            } else {
-                Log.d("AAAAAAAAAAAa", "OCHEN' JAL'")
             }
         })
     }
 
     private fun addApplyOnClickListener() {
         send_application.setOnClickListener {
-            Log.d("QQQQQQQQQQ", "1QQQQQQQQQQQQQqq")
             if (isCheckingApply.compareAndSet(false, true)) {
-                Log.d("QQQQQQQQQQ", "2QQQQQQQQQQQQQqq")
                 if (!isApplied) {
-                    Log.d("QQQQQQQQQQ", "3QQQQQQQQQQQQQqq")
                     val message: String =
                         edit_text_message.text.toString().trim { it <= ' ' }
                     viewModel.sendApplicationToEvent(data.id, message)
                     viewModel.sendApplicationToEventResponse.observe(this, { response ->
-                        Log.d("QQQQQQQQQQ", "4QQQQQQQQQQQQQqq")
                         if (response.isSuccessful) {
-                            Log.d("QQQQQQQQQQ", "5QQQQQQQQQQQQQqq")
                             isApplied = true
                             deleteIfApplied()
                             //onBackPressed()
                         } else {
-                            Log.d("AAAAAAAAAA", "OOOOOOOOOOOOOO")
                             Toast.makeText(
                                 this@EventActivity,
                                 "Something went wrong, try again later",
@@ -203,7 +184,6 @@ class EventActivity : AppCompatActivity() {
 
     private fun addListenerForLikes() {
         likes_icon.setOnClickListener {
-            Log.d("Aaa", "KKKKKKKKKKKKKKKK")
             if (isCheckingLike.compareAndSet(false, true)) {
                 if (isLikeSet) {
                     viewModel.deleteLike(data.id)
@@ -211,8 +191,6 @@ class EventActivity : AppCompatActivity() {
                         if (response1.isSuccessful) {
                             isLikeSet = false
                             changeLikeColor()
-                        } else {
-                            Log.d("Delete Like", response1.toString())
                         }
                         isCheckingLike.set(false)
                     })
@@ -222,8 +200,6 @@ class EventActivity : AppCompatActivity() {
                         if (response1.isSuccessful) {
                             isLikeSet = true
                             changeLikeColor()
-                        } else {
-                            Log.d("Post Like", response1.toString())
                         }
                         isCheckingLike.set(false)
                     })
@@ -236,7 +212,7 @@ class EventActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         nik_name.text = data.name
         description.text = data.description
-        date.text = data.date.toString().substring(0, 10)
+        date.text = data.date.substring(0, 10)
         specialization.text = data.specialization
         ratio.text = data.rating.toString()
         geo.text = data.geoData
@@ -259,8 +235,7 @@ class EventActivity : AppCompatActivity() {
     }
 
     private fun changeLikeColor() {
-        var likesString = ""
-        likesString = if (isLikeSet) {
+        val likesString: String = if (isLikeSet) {
             ImageViewCompat.setImageTintList(
                 likes_icon,
                 ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
@@ -283,27 +258,19 @@ class EventActivity : AppCompatActivity() {
         viewModel.eventResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 data = response.body()!!
-                Log.d("PPPPPPPPPPPP", response.body()?.organizerId.toString())
-                Log.d("PPPPPPPPPPPP", response.body()?.name.toString())
-                Log.d("OOOOOOOOOOOO", data.organizerId.toString())
                 getOrganizer()
                 checkLike()
-            } else {
-                Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAA", "BBBBB")
             }
         })
 
     }
 
     private fun getOrganizer() {
-        Log.d("IIIIIIIIIIIIIIIIIII", data.organizerId.toString())
         viewModel.getUser(data.organizerId)
         TMP_USER_ID = data.organizerId
         viewModel.userResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 organizer_nik.text = response.body()?.username
-            } else {
-                Log.d("AAAAAAA", response.toString())
             }
         })
     }
@@ -313,14 +280,12 @@ class EventActivity : AppCompatActivity() {
         viewModel.checkLikeResponse.observe(this, { response ->
             if (response.isSuccessful) {
                 isLikeSet = response.body()!!
-                if (isLikeSet) {
-                    likeDelta = 0
+                likeDelta = if (isLikeSet) {
+                    0
                 } else {
-                    likeDelta = 1
+                    1
                 }
                 update()
-            } else {
-                Log.d("AAAAAAAAAAAAAAAAAAAAAAA", conver(response))
             }
         })
     }
@@ -329,25 +294,5 @@ class EventActivity : AppCompatActivity() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-    }
-
-    private fun conver(response: Response<Boolean>): String {
-        var reader: BufferedReader? = null
-        val sb = StringBuilder()
-        try {
-            reader = BufferedReader(InputStreamReader(response.errorBody()?.byteStream()))
-            var line: String?
-            try {
-                while (reader.readLine().also { line = it } != null) {
-                    sb.append(line)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return sb.toString()
     }
 }
